@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bfiac716ihthq"]
+
+[ext_resource type="Texture2D" uid="uid://djv0uafr77ian" path="res://83793.png" id="1_tmks1"]
+[ext_resource type="PackedScene" uid="uid://m7a4j1a14a3s" path="res://player.tscn" id="2_1kv5l"]
+[ext_resource type="PackedScene" uid="uid://jnn2t36qfeko" path="res://example.tscn" id="3_1kv5l"]
+
+[node name="mapa_ejemplo" type="Node2D" unique_id=1468982748]
+
+[node name="mapa" type="Node2D" parent="." unique_id=59599246]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="mapa" unique_id=2028750368]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="mapa/StaticBody2D" unique_id=5740918]
+polygon = PackedVector2Array(-28, 69, -28, 61, 110, 61, 112, -69, -70, -69, -69, 120, -30, 120, -28, 69, -9, 82, -8, 130, -98, 125, -89, 120, -88, -101, 131, -98, 130, 79, -9, 82)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=878212157]
+texture_filter = 1
+texture = ExtResource("1_tmks1")
+
+[node name="Node2D" type="Node2D" parent="." unique_id=1719357000]
+y_sort_enabled = true
+
+[node name="player" parent="Node2D" unique_id=1006129407 instance=ExtResource("2_1kv5l")]
+position = Vector2(1, -12)
+
+[node name="example" parent="Node2D" unique_id=1571645508 groups=["objetos interactuables"] instance=ExtResource("3_1kv5l")]
+position = Vector2(-194, -180)

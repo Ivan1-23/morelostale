@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://bn8golrlojcd3"]
+
+[ext_resource type="Script" uid="uid://d4lux3iifc6qi" path="res://menu.gd" id="1_4hy44"]
+[ext_resource type="Texture2D" uid="uid://bkha7alahqgsd" path="res://sprites/menu.png" id="1_lti8b"]
+[ext_resource type="FontFile" uid="uid://bh72o0b2molck" path="res://fonts/8bitoperator_jve.ttf" id="3_ytr4m"]
+[ext_resource type="Texture2D" uid="uid://kai3owmaaunr" path="res://sprites/almaRoja.png" id="4_l48gv"]
+
+[node name="menu" type="CanvasLayer" unique_id=166901061]
+script = ExtResource("1_4hy44")
+
+[node name="Control" type="Control" parent="." unique_id=81564043]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Control" unique_id=451316320]
+texture_filter = 1
+layout_mode = 0
+offset_left = 25.0
+offset_top = 145.0
+offset_right = 150.0
+offset_bottom = 301.0
+texture = ExtResource("1_lti8b")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/NinePatchRect" unique_id=1800562390]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 16.0
+offset_right = 110.0
+offset_bottom = 147.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/NinePatchRect/VBoxContainer" unique_id=1986080234]
+custom_minimum_size = Vector2(60, 41)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("3_ytr4m")
+theme_override_font_sizes/normal_font_size = 40
+text = "OBJT"
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="Control/NinePatchRect/VBoxContainer" unique_id=1977235997]
+custom_minimum_size = Vector2(60, 41)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("3_ytr4m")
+theme_override_font_sizes/normal_font_size = 40
+text = "STAT"
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="Control/NinePatchRect/VBoxContainer" unique_id=1584440614]
+custom_minimum_size = Vector2(60, 41)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("3_ytr4m")
+theme_override_font_sizes/normal_font_size = 40
+text = "TELF"
+
+[node name="TextureRect" type="TextureRect" parent="Control/NinePatchRect" unique_id=303352134]
+texture_filter = 1
+layout_mode = 0
+offset_left = 15.0
+offset_top = 28.0
+offset_right = 34.0
+offset_bottom = 47.0
+texture = ExtResource("4_l48gv")
+stretch_mode = 2

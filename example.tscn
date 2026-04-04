@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://jnn2t36qfeko"]
+
+[ext_resource type="Script" uid="uid://jxwqxbd7h5iv" path="res://example.gd" id="1_n51mc"]
+[ext_resource type="Texture2D" uid="uid://d2kr1o32welva" path="res://npc de ejemplo.png" id="2_8lvy3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wcwec"]
+size = Vector2(9, 10)
+
+[node name="example" type="CharacterBody2D" unique_id=1571645508]
+script = ExtResource("1_n51mc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1240441161]
+position = Vector2(282.5, 164)
+shape = SubResource("RectangleShape2D_wcwec")
+
+[node name="NpcDeEjemplo" type="Sprite2D" parent="CollisionShape2D" unique_id=1547621269]
+position = Vector2(-0.5, 0)
+scale = Vector2(0.05084747, 0.058685444)
+texture = ExtResource("2_8lvy3")
