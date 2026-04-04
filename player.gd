@@ -8,18 +8,13 @@ var animación = ""
 var hp:int = 20
 @onready var animaciones = $CollisionShape2D/AnimatedSprite2D
 @onready var mira = $CollisionShape2D/RayCast2D
+@onready var menu = $menu
 
 
 #------------movimiento
 @warning_ignore("unused_parameter")
 func _physics_process(delta):
-	# Si el juego está en pausa, no procesar movimiento
-	if get_tree().paused:
-		return
 	
-	if mira.is_colliding() and Input.is_action_just_pressed("acción"):
-		pass
-		
 	var direccion = Vector2.ZERO
 	
 	if Input.is_action_pressed("ui_up"):
@@ -50,7 +45,6 @@ func _physics_process(delta):
 	elif mira.target_position == Vector2(50,0):
 		animación = "idle_right"
 	
-	# --- NUEVA LÓGICA DE CORRER ---
 	var velocidad_actual = velocidad
 	
 	if Input.is_action_pressed("correr"):

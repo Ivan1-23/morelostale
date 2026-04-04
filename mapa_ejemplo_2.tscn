@@ -35,4 +35,4 @@ texture = ExtResource("2_nk6g5")
 y_sort_enabled = true
 
 [node name="player" parent="Node2D" unique_id=1006129407 instance=ExtResource("3_r3vdj")]
-position = Vector2(-129, 143)
+position = Vector2(-256, 53)
