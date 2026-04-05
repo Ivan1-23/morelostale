@@ -5,6 +5,7 @@ extends CanvasLayer
 @onready var objetos = $Control/NinePatchRect/objeto
 @onready var estadisticas = $Control/NinePatchRect/Estadisticas
 @onready var telefono = $Control/NinePatchRect/Telefono
+@onready var info = $Control2/info
 var select_x = 18
 var select_y = 28
 var px_d = 45
@@ -65,12 +66,12 @@ func _unhandled_input(event):
 				select_arrow.position = Vector2(188 + (selected_option3 % 3) * 100,195)
 				screen_loaded = ScreenLoaded.OBJETO2
 		ScreenLoaded.OBJETO2:
-			if event.is_action_pressed("acción") or event.is_action_pressed("correr") or event.is_action_pressed("menu"):
+			if  event.is_action_pressed("correr") or event.is_action_pressed("menu"):
 				menu.visible = false
 				objetos.visible = false
 				select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 				screen_loaded = ScreenLoaded.NOTHING
-			elif event.is_action_pressed("acción") and selected_option3 == 2:
+			elif event.is_action_pressed("acción") and selected_option3 == 1:
 				menu.visible = false
 				objetos.visible = false
 				select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
@@ -84,6 +85,11 @@ func _unhandled_input(event):
 				else:
 					selected_option3 -=1
 					select_arrow.position = Vector2(188 + (selected_option3 % 3) * 100,195)
+		ScreenLoaded.INFO:
+			info.visible = true
+			if event.is_action_pressed("acción"):
+				info.visible = false
+				screen_loaded = ScreenLoaded.NOTHING
 		ScreenLoaded.ESTADISTICAS:
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
 				estadisticas.visible = false
