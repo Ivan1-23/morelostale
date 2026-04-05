@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bkha7alahqgsd" path="res://sprites/menu.png" id="1_lti8b"]
 [ext_resource type="FontFile" uid="uid://bh72o0b2molck" path="res://fonts/8bitoperator_jve.ttf" id="3_ytr4m"]
 [ext_resource type="Texture2D" uid="uid://kai3owmaaunr" path="res://sprites/almaRoja.png" id="4_l48gv"]
+[ext_resource type="Script" uid="uid://djui812ppjdxv" path="res://rich_text_label.gd" id="5_ytr4m"]
 
 [node name="menu" type="CanvasLayer" unique_id=166901061]
 script = ExtResource("1_4hy44")
@@ -68,24 +69,12 @@ theme_override_fonts/normal_font = ExtResource("3_ytr4m")
 theme_override_font_sizes/normal_font_size = 40
 text = "TELF"
 
-[node name="TextureRect" type="TextureRect" parent="Control/NinePatchRect" unique_id=303352134]
-texture_filter = 1
-layout_mode = 0
-offset_left = 15.0
-offset_top = 28.0
-offset_right = 34.0
-offset_bottom = 47.0
-scale = Vector2(1.3, 1.3)
-texture = ExtResource("4_l48gv")
-stretch_mode = 2
-
 [node name="objeto" type="NinePatchRect" parent="Control/NinePatchRect" unique_id=2019806032]
-visible = false
 layout_mode = 0
 offset_left = 162.0
 offset_top = -125.0
-offset_right = 513.0
-offset_bottom = 326.0
+offset_right = 549.0
+offset_bottom = 255.0
 texture = ExtResource("1_lti8b")
 patch_margin_left = 2
 patch_margin_top = 2
@@ -94,25 +83,40 @@ patch_margin_bottom = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/NinePatchRect/objeto" unique_id=665378215]
 layout_mode = 0
-offset_left = 35.0
-offset_top = 36.0
-offset_right = 319.0
-offset_bottom = 357.0
+offset_left = 60.0
+offset_top = 20.0
+offset_right = 344.0
+offset_bottom = 300.0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Control/NinePatchRect/objeto/VBoxContainer" unique_id=1758196618]
-custom_minimum_size = Vector2(70, 41)
+custom_minimum_size = Vector2(70, 288)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
-theme_override_font_sizes/normal_font_size = 40
-text = "objetos"
+theme_override_font_sizes/normal_font_size = 35
+bbcode_enabled = true
+script = ExtResource("5_ytr4m")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/NinePatchRect/objeto" unique_id=452800882]
+layout_mode = 0
+offset_left = 51.0
+offset_top = 311.0
+offset_right = 341.0
+offset_bottom = 364.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/NinePatchRect/objeto/VBoxContainer2" unique_id=131331023]
+custom_minimum_size = Vector2(100, 36)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("3_ytr4m")
+theme_override_font_sizes/normal_font_size = 35
+text = "USAR      INFO      TIRAR"
 
 [node name="Estadisticas" type="NinePatchRect" parent="Control/NinePatchRect" unique_id=65267315]
 visible = false
 layout_mode = 0
 offset_left = 162.0
 offset_top = -125.0
-offset_right = 513.0
-offset_bottom = 326.0
+offset_right = 502.0
+offset_bottom = 255.0
 texture = ExtResource("1_lti8b")
 patch_margin_left = 2
 patch_margin_top = 2
@@ -138,8 +142,8 @@ visible = false
 layout_mode = 0
 offset_left = 162.0
 offset_top = -125.0
-offset_right = 513.0
-offset_bottom = 326.0
+offset_right = 502.0
+offset_bottom = 255.0
 texture = ExtResource("1_lti8b")
 patch_margin_left = 2
 patch_margin_top = 2
@@ -159,3 +163,14 @@ layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
 theme_override_font_sizes/normal_font_size = 40
 text = "telefono"
+
+[node name="TextureRect" type="TextureRect" parent="Control/NinePatchRect" unique_id=303352134]
+texture_filter = 1
+layout_mode = 0
+offset_left = 18.0
+offset_top = 28.0
+offset_right = 37.0
+offset_bottom = 47.0
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("4_l48gv")
+stretch_mode = 2
