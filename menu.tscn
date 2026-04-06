@@ -3,7 +3,9 @@
 [ext_resource type="Script" uid="uid://d4lux3iifc6qi" path="res://menu.gd" id="1_4hy44"]
 [ext_resource type="Texture2D" uid="uid://bkha7alahqgsd" path="res://sprites/menu.png" id="1_lti8b"]
 [ext_resource type="FontFile" uid="uid://bh72o0b2molck" path="res://fonts/8bitoperator_jve.ttf" id="3_ytr4m"]
+[ext_resource type="Texture2D" uid="uid://bll6rtr7cwkjf" path="res://sprites/textura_menu2.png" id="4_ecwwl"]
 [ext_resource type="Texture2D" uid="uid://kai3owmaaunr" path="res://sprites/almaRoja.png" id="4_l48gv"]
+[ext_resource type="Script" uid="uid://2j8igaw7qe60" path="res://stats.gd" id="5_l48gv"]
 [ext_resource type="Script" uid="uid://djui812ppjdxv" path="res://rich_text_label.gd" id="5_ytr4m"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ytr4m"]
@@ -77,13 +79,9 @@ visible = false
 layout_mode = 0
 offset_left = 162.0
 offset_top = -125.0
-offset_right = 549.0
+offset_right = 526.0
 offset_bottom = 255.0
-texture = ExtResource("1_lti8b")
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
+texture = ExtResource("4_ecwwl")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/NinePatchRect/objeto" unique_id=665378215]
 layout_mode = 0
@@ -115,31 +113,27 @@ theme_override_font_sizes/normal_font_size = 35
 text = "USAR      INFO      TIRAR"
 
 [node name="Estadisticas" type="NinePatchRect" parent="Control/NinePatchRect" unique_id=65267315]
-visible = false
 layout_mode = 0
 offset_left = 162.0
 offset_top = -125.0
-offset_right = 502.0
-offset_bottom = 255.0
-texture = ExtResource("1_lti8b")
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
+offset_right = 530.0
+offset_bottom = 316.0
+texture = ExtResource("4_ecwwl")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/NinePatchRect/Estadisticas" unique_id=741101631]
 layout_mode = 0
-offset_left = 35.0
-offset_top = 36.0
-offset_right = 319.0
-offset_bottom = 357.0
+offset_left = 39.0
+offset_top = 41.0
+offset_right = 354.0
+offset_bottom = 441.0
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="Control/NinePatchRect/Estadisticas/VBoxContainer" unique_id=658802011]
-custom_minimum_size = Vector2(70, 41)
+custom_minimum_size = Vector2(70, 400)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
 theme_override_font_sizes/normal_font_size = 40
-text = "estadisticas"
+bbcode_enabled = true
+script = ExtResource("5_l48gv")
 
 [node name="Telefono" type="NinePatchRect" parent="Control/NinePatchRect" unique_id=1874550849]
 visible = false
@@ -148,11 +142,7 @@ offset_left = 162.0
 offset_top = -125.0
 offset_right = 502.0
 offset_bottom = 255.0
-texture = ExtResource("1_lti8b")
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
+texture = ExtResource("4_ecwwl")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/NinePatchRect/Telefono" unique_id=728023040]
 layout_mode = 0
