@@ -4,8 +4,8 @@ extends CharacterBody2D
 var velocidad = 80
 var velocidad_correr = 120
 var animación = ""
-@export var max_hp:int = 92
 var hp:int = 20
+var puede_moverse: bool = true # <--- NUEVA VARIABLE
 @onready var animaciones = $CollisionShape2D/AnimatedSprite2D
 @onready var mira = $CollisionShape2D/RayCast2D
 @onready var menu = $menu
@@ -14,7 +14,9 @@ var hp:int = 20
 #------------movimiento
 @warning_ignore("unused_parameter")
 func _physics_process(delta):
-	
+	if not puede_moverse:
+		velocity = Vector2.ZERO
+		move_and_slide()
 	var direccion = Vector2.ZERO
 	
 	if Input.is_action_pressed("ui_up"):
