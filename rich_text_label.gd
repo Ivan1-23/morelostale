@@ -1,6 +1,6 @@
 extends RichTextLabel
 
-
+#texto del menu de objetos
 func _ready():
 	text += Global.lista_objetos[0] + "\n" +\
 	Global.lista_objetos[1] + "\n" +\

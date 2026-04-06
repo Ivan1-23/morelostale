@@ -54,7 +54,7 @@ func _physics_process(delta):
 	velocity = direccion.normalized() * velocidad_actual
 	
 	move_and_slide()
-	
+	#reproducir animaciones
 	if animación == "mov_top":
 		animaciones.play("mov_top")
 	if animación == "mov_down":

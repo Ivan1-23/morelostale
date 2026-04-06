@@ -7,9 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://kai3owmaaunr" path="res://sprites/almaRoja.png" id="4_l48gv"]
 [ext_resource type="Script" uid="uid://2j8igaw7qe60" path="res://stats.gd" id="5_l48gv"]
 [ext_resource type="Script" uid="uid://djui812ppjdxv" path="res://rich_text_label.gd" id="5_ytr4m"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ytr4m"]
-load_path = "res://.godot/imported/menu.png-bb4705ea8cc08760d772d27f5a895ad0.ctex"
+[ext_resource type="Script" uid="uid://46t5jk4hh67j" path="res://oro.gd" id="7_kk3ma"]
 
 [node name="menu" type="CanvasLayer" unique_id=166901061]
 script = ExtResource("1_4hy44")
@@ -23,10 +21,10 @@ offset_bottom = 40.0
 [node name="NinePatchRect2" type="NinePatchRect" parent="Control" unique_id=448882761]
 texture_filter = 1
 layout_mode = 0
-offset_left = 25.0
-offset_top = 20.0
-offset_right = 164.0
-offset_bottom = 137.0
+offset_left = 32.0
+offset_top = 52.0
+offset_right = 174.0
+offset_bottom = 162.0
 texture = ExtResource("1_lti8b")
 patch_margin_left = 2
 patch_margin_top = 2
@@ -36,10 +34,10 @@ patch_margin_bottom = 2
 [node name="NinePatchRect" type="NinePatchRect" parent="Control" unique_id=451316320]
 texture_filter = 1
 layout_mode = 0
-offset_left = 25.0
-offset_top = 145.0
-offset_right = 164.0
-offset_bottom = 301.0
+offset_left = 32.0
+offset_top = 168.0
+offset_right = 174.0
+offset_bottom = 316.0
 texture = ExtResource("1_lti8b")
 patch_margin_left = 2
 patch_margin_top = 2
@@ -48,124 +46,145 @@ patch_margin_bottom = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/NinePatchRect" unique_id=1800562390]
 layout_mode = 0
-offset_left = 51.0
-offset_top = 16.0
-offset_right = 131.0
-offset_bottom = 181.0
+offset_left = 52.0
+offset_top = 28.0
+offset_right = 106.0
+offset_bottom = 126.0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Control/NinePatchRect/VBoxContainer" unique_id=1986080234]
-custom_minimum_size = Vector2(70, 41)
+custom_minimum_size = Vector2(54, 30)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
-theme_override_font_sizes/normal_font_size = 40
+theme_override_font_sizes/normal_font_size = 29
 text = "OBJT"
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="Control/NinePatchRect/VBoxContainer" unique_id=1977235997]
-custom_minimum_size = Vector2(60, 41)
+custom_minimum_size = Vector2(54, 30)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
-theme_override_font_sizes/normal_font_size = 40
+theme_override_font_sizes/normal_font_size = 29
 text = "STAT"
 
 [node name="RichTextLabel3" type="RichTextLabel" parent="Control/NinePatchRect/VBoxContainer" unique_id=1584440614]
-custom_minimum_size = Vector2(60, 41)
+custom_minimum_size = Vector2(54, 30)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
-theme_override_font_sizes/normal_font_size = 40
+theme_override_font_sizes/normal_font_size = 29
 text = "TELF"
 
 [node name="objeto" type="NinePatchRect" parent="Control/NinePatchRect" unique_id=2019806032]
 visible = false
 layout_mode = 0
-offset_left = 162.0
-offset_top = -125.0
-offset_right = 526.0
-offset_bottom = 255.0
+offset_left = 156.0
+offset_top = -116.0
+offset_right = 502.0
+offset_bottom = 246.0
 texture = ExtResource("4_ecwwl")
+patch_margin_left = 1
+patch_margin_top = 1
+patch_margin_right = 1
+patch_margin_bottom = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/NinePatchRect/objeto" unique_id=665378215]
 layout_mode = 0
-offset_left = 60.0
-offset_top = 20.0
-offset_right = 344.0
-offset_bottom = 300.0
+offset_left = 44.0
+offset_top = 36.0
+offset_right = 328.0
+offset_bottom = 276.0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Control/NinePatchRect/objeto/VBoxContainer" unique_id=1758196618]
-custom_minimum_size = Vector2(70, 288)
+custom_minimum_size = Vector2(70, 240)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
-theme_override_font_sizes/normal_font_size = 35
+theme_override_font_sizes/normal_font_size = 29
 bbcode_enabled = true
 script = ExtResource("5_ytr4m")
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Control/NinePatchRect/objeto" unique_id=452800882]
 layout_mode = 0
-offset_left = 51.0
-offset_top = 311.0
-offset_right = 341.0
-offset_bottom = 364.0
+offset_left = 44.0
+offset_top = 293.0
+offset_right = 322.0
+offset_bottom = 323.0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Control/NinePatchRect/objeto/VBoxContainer2" unique_id=131331023]
-custom_minimum_size = Vector2(100, 36)
+custom_minimum_size = Vector2(100, 30)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
-theme_override_font_sizes/normal_font_size = 35
-text = "USAR      INFO      TIRAR"
+theme_override_font_sizes/normal_font_size = 29
+text = "USAR           INFO           TIRAR"
 
 [node name="Estadisticas" type="NinePatchRect" parent="Control/NinePatchRect" unique_id=65267315]
+visible = false
 layout_mode = 0
-offset_left = 162.0
-offset_top = -125.0
-offset_right = 530.0
-offset_bottom = 316.0
+offset_left = 156.0
+offset_top = -116.0
+offset_right = 502.0
+offset_bottom = 302.0
 texture = ExtResource("4_ecwwl")
+patch_margin_left = 1
+patch_margin_top = 1
+patch_margin_right = 1
+patch_margin_bottom = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/NinePatchRect/Estadisticas" unique_id=741101631]
 layout_mode = 0
 offset_left = 39.0
 offset_top = 41.0
 offset_right = 354.0
-offset_bottom = 441.0
+offset_bottom = 361.0
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="Control/NinePatchRect/Estadisticas/VBoxContainer" unique_id=658802011]
-custom_minimum_size = Vector2(70, 400)
+custom_minimum_size = Vector2(70, 300)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
-theme_override_font_sizes/normal_font_size = 40
+theme_override_font_sizes/normal_font_size = 29
 bbcode_enabled = true
 script = ExtResource("5_l48gv")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/NinePatchRect/Estadisticas/VBoxContainer" unique_id=1381465314]
+custom_minimum_size = Vector2(70, 30)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("3_ytr4m")
+theme_override_font_sizes/normal_font_size = 29
+script = ExtResource("7_kk3ma")
 
 [node name="Telefono" type="NinePatchRect" parent="Control/NinePatchRect" unique_id=1874550849]
 visible = false
 layout_mode = 0
-offset_left = 162.0
-offset_top = -125.0
+offset_left = 156.0
+offset_top = -116.0
 offset_right = 502.0
-offset_bottom = 255.0
+offset_bottom = 154.0
 texture = ExtResource("4_ecwwl")
+patch_margin_left = 1
+patch_margin_top = 1
+patch_margin_right = 1
+patch_margin_bottom = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/NinePatchRect/Telefono" unique_id=728023040]
 layout_mode = 0
-offset_left = 35.0
+offset_left = 44.0
 offset_top = 36.0
-offset_right = 319.0
+offset_right = 328.0
 offset_bottom = 357.0
 
 [node name="RichTextLabel3" type="RichTextLabel" parent="Control/NinePatchRect/Telefono/VBoxContainer" unique_id=1541227024]
-custom_minimum_size = Vector2(70, 41)
+custom_minimum_size = Vector2(70, 60)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
-theme_override_font_sizes/normal_font_size = 40
-text = "telefono"
+theme_override_font_sizes/normal_font_size = 29
+text = "Caja Dimenional A
+Caja Dimenional B"
 
 [node name="TextureRect" type="TextureRect" parent="Control/NinePatchRect" unique_id=303352134]
 texture_filter = 1
 layout_mode = 0
-offset_left = 18.0
-offset_top = 28.0
-offset_right = 37.0
-offset_bottom = 47.0
-scale = Vector2(1.3, 1.3)
+offset_left = 28.0
+offset_top = 35.0
+offset_right = 44.0
+offset_bottom = 51.0
+scale = Vector2(1.125, 1.125)
 texture = ExtResource("4_l48gv")
 stretch_mode = 2
 
@@ -179,11 +198,11 @@ offset_bottom = 40.0
 visible = false
 texture_filter = 1
 layout_mode = 0
-offset_left = 1.0
-offset_top = 253.0
-offset_right = 641.0
-offset_bottom = 479.0
-texture = SubResource("CompressedTexture2D_ytr4m")
-region_rect = Rect2(0, 0, 32, 32)
-patch_margin_left = 2
-patch_margin_right = 2
+offset_left = 32.0
+offset_top = 320.0
+offset_right = 610.0
+offset_bottom = 472.0
+texture = ExtResource("4_ecwwl")
+region_rect = Rect2(0, 0, 64, 64)
+patch_margin_left = 1
+patch_margin_right = 1
