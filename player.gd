@@ -16,8 +16,16 @@ var puede_moverse: bool = true # <--- NUEVA VARIABLE
 func _physics_process(delta):
 	if not puede_moverse:
 		velocity = Vector2.ZERO
+		if animaciones.animation.begins_with("mov_"):
+			var anim_idle = animaciones.animation.replace("mov_", "idle_")
+			animaciones.play(anim_idle)
+		else:
+			animaciones.stop()
+		return
+		@warning_ignore("unreachable_code")
 		move_and_slide()
 	var direccion = Vector2.ZERO
+	
 	
 	if Input.is_action_pressed("ui_up"):
 		direccion.y -= 1

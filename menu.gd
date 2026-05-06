@@ -26,11 +26,13 @@ func _unhandled_input(event):
 			if event.is_action_pressed("menu"):
 				menu.visible = true
 				screen_loaded = ScreenLoaded.JUST_MENU
+				get_parent().puede_moverse = false # Bloquea al jugador
 #----------------------------------
 		ScreenLoaded.JUST_MENU:
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
 				menu.visible = false
 				screen_loaded = ScreenLoaded.NOTHING
+				get_parent().puede_moverse = true # Libera al jugador
 			elif event.is_action_pressed("ui_down"):
 				selected_option +=1
 				select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
@@ -75,6 +77,7 @@ func _unhandled_input(event):
 				objetos.visible = false
 				select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 				screen_loaded = ScreenLoaded.NOTHING
+				get_parent().puede_moverse = true # Libera al jugador
 			elif event.is_action_pressed("acción") and selected_option3 == 1:
 				objetos.visible = false
 				select_arrow.visible = false
@@ -97,6 +100,7 @@ func _unhandled_input(event):
 				select_arrow.visible = true
 				menu.visible = false
 				screen_loaded = ScreenLoaded.NOTHING
+				get_parent().puede_moverse = true # Libera al jugador
 #----------------------------------
 		ScreenLoaded.ESTADISTICAS:
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
