@@ -6,6 +6,7 @@ extends CanvasLayer
 @onready var estadisticas = $Control/NinePatchRect/Estadisticas
 @onready var telefono = $Control/NinePatchRect/Telefono
 @onready var info = $Control2/info
+@onready var button1 = $Control/NinePatchRect/OBJT
 var select_x = 28
 var select_y = 35
 var px_d = 33
@@ -29,6 +30,7 @@ func _unhandled_input(event):
 				get_parent().puede_moverse = false # Bloquea al jugador
 #----------------------------------
 		ScreenLoaded.JUST_MENU:
+			
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
 				menu.visible = false
 				screen_loaded = ScreenLoaded.NOTHING

@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://rich_text_label.gd" id="5_ytr4m"]
 [ext_resource type="Script" uid="uid://wpukf6g80caa" path="res://rich_text_label_3.gd" id="6_dwrpx"]
 [ext_resource type="Script" path="res://oro.gd" id="7_kk3ma"]
+[ext_resource type="Script" uid="uid://dbvm43chqvmw0" path="res://objt.gd" id="12_dwrpx"]
 
 [node name="menu" type="CanvasLayer" unique_id=166901061]
 script = ExtResource("1_4hy44")
@@ -213,6 +214,30 @@ offset_bottom = 51.0
 scale = Vector2(1.125, 1.125)
 texture = ExtResource("4_l48gv")
 stretch_mode = 2
+
+[node name="OBJT" type="TextureButton" parent="Control/NinePatchRect" unique_id=2111247909]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 29.0
+offset_right = 103.0
+offset_bottom = 59.0
+action_mode = 0
+button_mask = 3
+script = ExtResource("12_dwrpx")
+
+[node name="STAT" type="TextureButton" parent="Control/NinePatchRect" unique_id=1437476979]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 64.0
+offset_right = 103.0
+offset_bottom = 94.0
+
+[node name="TELF" type="TextureButton" parent="Control/NinePatchRect" unique_id=1462577746]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 98.0
+offset_right = 103.0
+offset_bottom = 128.0
 
 [node name="Control2" type="Control" parent="." unique_id=1818843445]
 layout_mode = 3
