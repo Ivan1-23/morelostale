@@ -1,3 +1,53 @@
 [gd_scene format=3 uid="uid://ck4ten6hyfkyf"]
 
+[ext_resource type="Texture2D" uid="uid://b0v5rqgxyk2v3" path="res://sprites/button_texture-Sheet (1).png" id="1_egfa4"]
+[ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://addons/virtual_joystick/virtual_joystick_scene.tscn" id="1_ur3y5"]
+[ext_resource type="Texture2D" uid="uid://ya0hiuwmtq7o" path="res://sprites/button_texture-Sheet (4).png" id="2_ipc6k"]
+[ext_resource type="Texture2D" uid="uid://yrnh5u0hxuao" path="res://sprites/button_texture-Sheet (2).png" id="3_33ua2"]
+[ext_resource type="Texture2D" uid="uid://dr5yf715ibclm" path="res://sprites/button_texture-Sheet (5).png" id="4_5gowg"]
+[ext_resource type="Texture2D" uid="uid://7lw52i734pjb" path="res://sprites/button_texture-Sheet (3).png" id="5_byvrp"]
+[ext_resource type="Texture2D" uid="uid://blvn6jiymyy36" path="res://sprites/button_texture-Sheet (6).png" id="6_df6t0"]
+
 [node name="touch_button" type="CanvasLayer" unique_id=230050980]
+
+[node name="Virtual Joystick" parent="." unique_id=1562062367 instance=ExtResource("1_ur3y5")]
+modulate = Color(1, 1, 1, 0.34117648)
+self_modulate = Color(1, 1, 1, 0.34117648)
+texture_filter = 1
+offset_left = 10.0
+offset_top = -160.0
+offset_right = 310.0
+offset_bottom = 140.0
+scale = Vector2(0.5, 0.5)
+deadzone_size = 34.0
+joystick_mode = 2
+
+[node name="A" type="TouchScreenButton" parent="." unique_id=1454957627]
+self_modulate = Color(1, 1, 1, 0.34117648)
+y_sort_enabled = true
+texture_filter = 1
+position = Vector2(327, 354)
+scale = Vector2(3, 3)
+texture_normal = ExtResource("1_egfa4")
+texture_pressed = ExtResource("2_ipc6k")
+action = "acción"
+
+[node name="B" type="TouchScreenButton" parent="." unique_id=306242886]
+self_modulate = Color(1, 1, 1, 0.34117648)
+y_sort_enabled = true
+texture_filter = 1
+position = Vector2(442.00003, 307)
+scale = Vector2(3, 3)
+texture_normal = ExtResource("3_33ua2")
+texture_pressed = ExtResource("4_5gowg")
+action = "correr"
+
+[node name="Y" type="TouchScreenButton" parent="." unique_id=509437966]
+self_modulate = Color(1, 1, 1, 0.34117648)
+y_sort_enabled = true
+texture_filter = 1
+position = Vector2(549, 260)
+scale = Vector2(3, 3)
+texture_normal = ExtResource("5_byvrp")
+texture_pressed = ExtResource("6_df6t0")
+action = "menu"

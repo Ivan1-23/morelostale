@@ -30,36 +30,32 @@ func _physics_process(delta):
 		return
 		@warning_ignore("unreachable_code")
 		move_and_slide()
-	var direccion = Vector2.ZERO
+	var direccion = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
-	
-	if Input.is_action_pressed("ui_up"):
-		direccion.y -= 1
-		mira.target_position = Vector2(0,-50)
-		animación = "mov_top"
-	elif mira.target_position == Vector2(0,-50):
-		animación = "idle_top"
+	if direccion != Vector2.ZERO:
+		# Calculamos hacia dónde mira el jugador basándonos en el ángulo del vector
+		# El ángulo se mide en radianes, así que usamos rangos de 45 grados.
 		
-	if Input.is_action_pressed("ui_down"):
-		direccion.y += 1
-		mira.target_position = Vector2(0,50)
-		animación = "mov_down"
-	elif mira.target_position == Vector2(0,50):
-		animación = "idle_down"
-		
-	if Input.is_action_pressed("ui_left"):
-		direccion.x -= 1
-		mira.target_position = Vector2(-50,0)
-		animación = "mov_left"
-	elif mira.target_position == Vector2(-50,0):
-		animación = "idle_left"
-		
-	if Input.is_action_pressed("ui_right"):
-		direccion.x += 1
-		mira.target_position = Vector2(50,0)
-		animación = "mov_right"
-	elif mira.target_position == Vector2(50,0):
-		animación = "idle_right"
+		if abs(direccion.x) > abs(direccion.y):
+			# Movimiento predominantemente horizontal
+			if direccion.x > 0:
+				animación = "mov_right"
+				mira.target_position = Vector2(50, 0)
+			else:
+				animación = "mov_left"
+				mira.target_position = Vector2(-50, 0)
+		else:
+			# Movimiento predominantemente vertical
+			if direccion.y > 0:
+				animación = "mov_down"
+				mira.target_position = Vector2(0, 50)
+			else:
+				animación = "mov_top"
+				mira.target_position = Vector2(0, -50)
+	else:
+		# Lógica de IDLE: Convertimos la última animación de "mov" a "idle"
+		if animación.begins_with("mov_"):
+			animación = animación.replace("mov_", "idle_")
 	
 	var velocidad_actual = velocidad
 	
