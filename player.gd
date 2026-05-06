@@ -14,6 +14,12 @@ var puede_moverse: bool = true # <--- NUEVA VARIABLE
 #------------movimiento
 @warning_ignore("unused_parameter")
 func _physics_process(delta):
+	# --- INTERACCIÓN ---
+	if Input.is_action_just_pressed("acción") and puede_moverse:
+		if mira.is_colliding():
+			var objeto = mira.get_collider()
+			if objeto.has_method("hablar"): # Verifica si es un NPC con el que se puede hablar
+				objeto.hablar()
 	if not puede_moverse:
 		velocity = Vector2.ZERO
 		if animaciones.animation.begins_with("mov_"):
