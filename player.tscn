@@ -183,6 +183,6 @@ collision_mask = 3
 [node name="Camera2D" type="Camera2D" parent="CollisionShape2D" unique_id=1823459010]
 zoom = Vector2(2.5, 2.5)
 
-[node name="menu" parent="." unique_id=166901061 instance=ExtResource("3_hqtel")]
-
 [node name="touch_button" parent="." unique_id=230050980 instance=ExtResource("4_hqtel")]
+
+[node name="menu" parent="." unique_id=166901061 instance=ExtResource("3_hqtel")]

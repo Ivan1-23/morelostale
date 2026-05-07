@@ -11,7 +11,8 @@
 [ext_resource type="Script" path="res://rich_text_label.gd" id="5_ytr4m"]
 [ext_resource type="Script" uid="uid://wpukf6g80caa" path="res://rich_text_label_3.gd" id="6_dwrpx"]
 [ext_resource type="Script" path="res://oro.gd" id="7_kk3ma"]
-[ext_resource type="Script" uid="uid://dbvm43chqvmw0" path="res://objt.gd" id="12_dwrpx"]
+
+[sub_resource type="GDScript" id="GDScript_h1wq0"]
 
 [node name="menu" type="CanvasLayer" unique_id=166901061]
 script = ExtResource("1_4hy44")
@@ -223,7 +224,7 @@ offset_right = 103.0
 offset_bottom = 59.0
 action_mode = 0
 button_mask = 3
-script = ExtResource("12_dwrpx")
+script = SubResource("GDScript_h1wq0")
 
 [node name="STAT" type="TextureButton" parent="Control/NinePatchRect" unique_id=1437476979]
 layout_mode = 0
