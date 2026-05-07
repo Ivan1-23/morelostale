@@ -123,3 +123,24 @@ func _unhandled_input(event):
 				else:
 					selected_option2 -= 1
 					select_arrow.position = Vector2(176,-70 + (selected_option2 % 2 * 30))
+
+func _on_boton_objeto_pressed():
+	if screen_loaded == ScreenLoaded.JUST_MENU:
+		selected_option = 0
+		select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
+		objetos.visible = true
+		screen_loaded = ScreenLoaded.OBJECTO
+
+func _on_boton_estadisticas_pressed():
+	if screen_loaded == ScreenLoaded.JUST_MENU:
+		selected_option = 1
+		select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
+		estadisticas.visible = true
+		screen_loaded = ScreenLoaded.ESTADISTICAS
+
+func _on_boton_telefono_pressed():
+	if screen_loaded == ScreenLoaded.JUST_MENU:
+		selected_option = 2
+		select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
+		telefono.visible = true
+		screen_loaded = ScreenLoaded.TELEFONO

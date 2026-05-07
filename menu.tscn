@@ -216,7 +216,7 @@ scale = Vector2(1.125, 1.125)
 texture = ExtResource("4_l48gv")
 stretch_mode = 2
 
-[node name="OBJT" type="TextureButton" parent="Control/NinePatchRect" unique_id=2111247909]
+[node name="objetos" type="TextureButton" parent="Control/NinePatchRect" unique_id=2111247909]
 layout_mode = 0
 offset_left = 33.0
 offset_top = 29.0
@@ -226,14 +226,14 @@ action_mode = 0
 button_mask = 3
 script = SubResource("GDScript_h1wq0")
 
-[node name="STAT" type="TextureButton" parent="Control/NinePatchRect" unique_id=1437476979]
+[node name="estadisticas" type="TextureButton" parent="Control/NinePatchRect" unique_id=1437476979]
 layout_mode = 0
 offset_left = 33.0
 offset_top = 64.0
 offset_right = 103.0
 offset_bottom = 94.0
 
-[node name="TELF" type="TextureButton" parent="Control/NinePatchRect" unique_id=1462577746]
+[node name="telefono" type="TextureButton" parent="Control/NinePatchRect" unique_id=1462577746]
 layout_mode = 0
 offset_left = 33.0
 offset_top = 98.0
