@@ -9,7 +9,7 @@ var puede_moverse: bool = true # <--- NUEVA VARIABLE
 @onready var animaciones = $CollisionShape2D/AnimatedSprite2D
 @onready var mira = $CollisionShape2D/RayCast2D
 @onready var menu = $menu
-
+@onready var controles = $touch_button
 
 #------------movimiento
 @warning_ignore("unused_parameter")

@@ -12,10 +12,9 @@
 [ext_resource type="Script" uid="uid://wpukf6g80caa" path="res://rich_text_label_3.gd" id="6_dwrpx"]
 [ext_resource type="Script" path="res://oro.gd" id="7_kk3ma"]
 
-[sub_resource type="GDScript" id="GDScript_h1wq0"]
-
 [node name="menu" type="CanvasLayer" unique_id=166901061]
 script = ExtResource("1_4hy44")
+metadata/_edit_horizontal_guides_ = [94.0]
 
 [node name="Control" type="Control" parent="." unique_id=81564043]
 layout_mode = 3
@@ -30,6 +29,7 @@ offset_left = 32.0
 offset_top = 52.0
 offset_right = 174.0
 offset_bottom = 162.0
+mouse_filter = 0
 texture = ExtResource("1_lti8b")
 patch_margin_left = 2
 patch_margin_top = 2
@@ -142,6 +142,117 @@ theme_override_fonts/normal_font = ExtResource("3_ytr4m")
 theme_override_font_sizes/normal_font_size = 29
 text = "USAR           INFO           TIRAR"
 
+[node name="BotonItem1" type="Button" parent="Control/NinePatchRect/objeto" unique_id=387630533]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 42.0
+offset_right = 337.0
+offset_bottom = 67.0
+button_mask = 3
+flat = true
+
+[node name="BotonItem2" type="Button" parent="Control/NinePatchRect/objeto" unique_id=1703717014]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 14.0
+offset_top = 71.0
+offset_right = 326.0
+offset_bottom = 95.0
+button_mask = 3
+flat = true
+
+[node name="BotonItem3" type="Button" parent="Control/NinePatchRect/objeto" unique_id=1695468983]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 13.0
+offset_top = 101.0
+offset_right = 327.0
+offset_bottom = 126.0
+button_mask = 3
+flat = true
+
+[node name="BotonItem4" type="Button" parent="Control/NinePatchRect/objeto" unique_id=210490047]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 14.0
+offset_top = 131.0
+offset_right = 327.0
+offset_bottom = 157.0
+button_mask = 3
+flat = true
+
+[node name="BotonItem5" type="Button" parent="Control/NinePatchRect/objeto" unique_id=1878934260]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 14.0
+offset_top = 161.0
+offset_right = 326.0
+offset_bottom = 185.0
+button_mask = 3
+flat = true
+
+[node name="BotonItem6" type="Button" parent="Control/NinePatchRect/objeto" unique_id=484405562]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 13.0
+offset_top = 194.0
+offset_right = 334.0
+offset_bottom = 217.0
+button_mask = 3
+flat = true
+
+[node name="BotonItem7" type="Button" parent="Control/NinePatchRect/objeto" unique_id=1795056547]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 7.0
+offset_top = 221.0
+offset_right = 334.0
+offset_bottom = 245.0
+button_mask = 3
+flat = true
+
+[node name="BotonItem8" type="Button" parent="Control/NinePatchRect/objeto" unique_id=412374255]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 9.0
+offset_top = 255.0
+offset_right = 333.0
+offset_bottom = 276.0
+button_mask = 3
+flat = true
+
+[node name="BotonUsar" type="Button" parent="Control/NinePatchRect/objeto" unique_id=164344345]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 17.0
+offset_top = 296.0
+offset_right = 94.0
+offset_bottom = 323.0
+action_mode = 0
+button_mask = 3
+flat = true
+
+[node name="BotonInfo" type="Button" parent="Control/NinePatchRect/objeto" unique_id=208462606]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 103.0
+offset_top = 297.0
+offset_right = 203.0
+offset_bottom = 324.0
+button_mask = 3
+flat = true
+
+[node name="BotonTirar" type="Button" parent="Control/NinePatchRect/objeto" unique_id=1771832875]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 218.0
+offset_top = 295.0
+offset_right = 321.0
+offset_bottom = 323.0
+button_mask = 3
+flat = true
+
 [node name="Estadisticas" type="NinePatchRect" parent="Control/NinePatchRect" unique_id=65267315]
 visible = false
 layout_mode = 0
@@ -216,29 +327,37 @@ scale = Vector2(1.125, 1.125)
 texture = ExtResource("4_l48gv")
 stretch_mode = 2
 
-[node name="objetos" type="TextureButton" parent="Control/NinePatchRect" unique_id=2111247909]
+[node name="BotonObjeto" type="Button" parent="Control/NinePatchRect" unique_id=1783517519]
+self_modulate = Color(1, 1, 1, 0)
 layout_mode = 0
-offset_left = 33.0
-offset_top = 29.0
-offset_right = 103.0
-offset_bottom = 59.0
+offset_left = 26.0
+offset_top = 28.0
+offset_right = 104.0
+offset_bottom = 58.0
 action_mode = 0
 button_mask = 3
-script = SubResource("GDScript_h1wq0")
+flat = true
 
-[node name="estadisticas" type="TextureButton" parent="Control/NinePatchRect" unique_id=1437476979]
+[node name="BotonEstadisticas" type="Button" parent="Control/NinePatchRect" unique_id=1832772782]
+self_modulate = Color(1, 1, 1, 0)
 layout_mode = 0
-offset_left = 33.0
-offset_top = 64.0
-offset_right = 103.0
+offset_left = 27.0
+offset_top = 68.0
+offset_right = 107.0
 offset_bottom = 94.0
+action_mode = 0
+button_mask = 3
+flat = true
 
-[node name="telefono" type="TextureButton" parent="Control/NinePatchRect" unique_id=1462577746]
+[node name="BotonTelefono" type="Button" parent="Control/NinePatchRect" unique_id=658953423]
+self_modulate = Color(1, 1, 1, 0)
 layout_mode = 0
-offset_left = 33.0
-offset_top = 98.0
-offset_right = 103.0
-offset_bottom = 128.0
+offset_left = 30.0
+offset_top = 102.0
+offset_right = 104.0
+offset_bottom = 124.0
+button_mask = 3
+flat = true
 
 [node name="Control2" type="Control" parent="." unique_id=1818843445]
 layout_mode = 3
@@ -258,3 +377,18 @@ texture = ExtResource("4_ecwwl")
 region_rect = Rect2(0, 0, 64, 64)
 patch_margin_left = 1
 patch_margin_right = 1
+
+[connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem1" to="." method="_on_boton_item_1_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem2" to="." method="_on_boton_item_2_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem3" to="." method="_on_boton_item_3_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem4" to="." method="_on_boton_item_4_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem5" to="." method="_on_boton_item_5_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem6" to="." method="_on_boton_item_6_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem7" to="." method="_on_boton_item_7_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem8" to="." method="_on_boton_item_8_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/objeto/BotonUsar" to="." method="_on_boton_usar_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/objeto/BotonInfo" to="." method="_on_boton_info_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/objeto/BotonTirar" to="." method="_on_boton_tirar_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/BotonObjeto" to="." method="_on_boton_objeto_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/BotonEstadisticas" to="." method="_on_boton_estadisticas_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/BotonTelefono" to="." method="_on_boton_telefono_pressed"]

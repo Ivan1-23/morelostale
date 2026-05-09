@@ -15,7 +15,7 @@ polygon = PackedVector2Array(-107, 164, -107, 146, -106, 146, -106, 145, -105, 1
 
 [node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="mapa/StaticBody2D" unique_id=224412758]
 position = Vector2(-1, 1)
-polygon = PackedVector2Array(-137, 45, -115, 45, -115, 56, -137, 56)
+polygon = PackedVector2Array(-138, 45, -115, 45, -115, 56, -138, 56)
 
 [node name="Sprite2D" type="Sprite2D" parent="mapa" unique_id=498239675]
 
