@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://blvn6jiymyy36" path="res://sprites/button_texture-Sheet (6).png" id="6_df6t0"]
 
 [node name="touch_button" type="CanvasLayer" unique_id=230050980]
+visible = false
 script = ExtResource("1_nwf1f")
 
 [node name="Control" type="Control" parent="." unique_id=73866901]
@@ -25,42 +26,52 @@ z_index = 2
 texture_filter = 1
 layout_mode = 1
 offset_left = -20.0
-offset_top = 251.0
+offset_top = 157.0
 offset_right = 288.0
-offset_bottom = 565.0
-scale = Vector2(0.7, 0.7)
+offset_bottom = 471.0
+scale = Vector2(1.1, 1.1)
 deadzone_size = 34.0
 joystick_mode = 2
 
-[node name="A" type="TouchScreenButton" parent="Control" unique_id=1454957627]
+[node name="Control2" type="Control" parent="." unique_id=1306170937]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 422.0
+offset_top = -475.0
+offset_right = 1352.0
+grow_vertical = 0
+
+[node name="A" type="TouchScreenButton" parent="Control2" unique_id=1578553738]
 self_modulate = Color(1, 1, 1, 0.34117648)
 z_index = 10
 y_sort_enabled = true
 texture_filter = 1
 position = Vector2(335, 364)
-scale = Vector2(3, 3)
+scale = Vector2(4, 4)
 texture_normal = ExtResource("1_egfa4")
 texture_pressed = ExtResource("2_ipc6k")
 action = "acción"
 
-[node name="B" type="TouchScreenButton" parent="Control" unique_id=306242886]
+[node name="B" type="TouchScreenButton" parent="Control2" unique_id=2084323758]
 self_modulate = Color(1, 1, 1, 0.34117648)
 z_index = 10
 y_sort_enabled = true
 texture_filter = 1
-position = Vector2(450, 322)
-scale = Vector2(3, 3)
+position = Vector2(472, 317)
+scale = Vector2(4, 4)
 texture_normal = ExtResource("3_33ua2")
 texture_pressed = ExtResource("4_5gowg")
 action = "correr"
 
-[node name="Y" type="TouchScreenButton" parent="Control" unique_id=509437966]
+[node name="Y" type="TouchScreenButton" parent="Control2" unique_id=438998156]
 self_modulate = Color(1, 1, 1, 0.34117648)
 z_index = 10
 y_sort_enabled = true
 texture_filter = 1
-position = Vector2(552, 275)
-scale = Vector2(3, 3)
+position = Vector2(619, 275)
+scale = Vector2(4, 4)
 texture_normal = ExtResource("5_byvrp")
 texture_pressed = ExtResource("6_df6t0")
 action = "menu"
