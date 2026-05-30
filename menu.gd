@@ -198,42 +198,50 @@ func _on_boton_item_1_pressed() -> void:
 	if screen_loaded == ScreenLoaded.OBJECTO:
 		selected_option2 = 0
 		select_arrow.position = Vector2(176, -70 + (selected_option2 % 8 * 30))
-		
+		select_arrow.position = Vector2(176 + (selected_option3 % 3) * 105,184)
+		screen_loaded = ScreenLoaded.OBJETO2
 func _on_boton_item_2_pressed():
 	if screen_loaded == ScreenLoaded.OBJECTO:
 		selected_option2 = 1
 		select_arrow.position = Vector2(176, -70 + (selected_option2 % 8 * 30))
-		
+		select_arrow.position = Vector2(176 + (selected_option3 % 3) * 105,184)
+		screen_loaded = ScreenLoaded.OBJETO2
 func _on_boton_item_3_pressed() -> void:
 	if screen_loaded == ScreenLoaded.OBJECTO:
 		selected_option2 = 2
 		select_arrow.position = Vector2(176, -70 + (selected_option2 % 8 * 30))
-		
+		select_arrow.position = Vector2(176 + (selected_option3 % 3) * 105,184)
+		screen_loaded = ScreenLoaded.OBJETO2
 func _on_boton_item_4_pressed() -> void:
 	if screen_loaded == ScreenLoaded.OBJECTO:
 		selected_option2 = 3
 		select_arrow.position = Vector2(176, -70 + (selected_option2 % 8 * 30))
-		
+		select_arrow.position = Vector2(176 + (selected_option3 % 3) * 105,184)
+		screen_loaded = ScreenLoaded.OBJETO2
 func _on_boton_item_5_pressed() -> void:
 	if screen_loaded == ScreenLoaded.OBJECTO:
 		selected_option2 = 4
 		select_arrow.position = Vector2(176, -70 + (selected_option2 % 8 * 30))
-		
+		select_arrow.position = Vector2(176 + (selected_option3 % 3) * 105,184)
+		screen_loaded = ScreenLoaded.OBJETO2
 func _on_boton_item_6_pressed() -> void:
 	if screen_loaded == ScreenLoaded.OBJECTO:
 		selected_option2 = 5
 		select_arrow.position = Vector2(176, -70 + (selected_option2 % 8 * 30))
-		
+		select_arrow.position = Vector2(176 + (selected_option3 % 3) * 105,184)
+		screen_loaded = ScreenLoaded.OBJETO2
 func _on_boton_item_7_pressed() -> void:
 	if screen_loaded == ScreenLoaded.OBJECTO:
 		selected_option2 = 6
 		select_arrow.position = Vector2(176, -70 + (selected_option2 % 8 * 30))
-		
+		select_arrow.position = Vector2(176 + (selected_option3 % 3) * 105,184)
+		screen_loaded = ScreenLoaded.OBJETO2
 func _on_boton_item_8_pressed() -> void:
 	if screen_loaded == ScreenLoaded.OBJECTO:
 		selected_option2 = 7
 		select_arrow.position = Vector2(176, -70 + (selected_option2 % 8 * 30))
-		
+		select_arrow.position = Vector2(176 + (selected_option3 % 3) * 105,184)
+		screen_loaded = ScreenLoaded.OBJETO2
 func _on_boton_usar_pressed():
 	if screen_loaded == ScreenLoaded.OBJETO2:
 		selected_option3 = 0

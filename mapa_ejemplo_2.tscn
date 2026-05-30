@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://dayhvxyoy8u1u"]
 
+[ext_resource type="Script" uid="uid://dghhe4s2gs8lr" path="res://mapa_ejemplo_2.gd" id="1_r3vdj"]
 [ext_resource type="Texture2D" uid="uid://b1y0wsjlrhhq6" path="res://sprites/example.png" id="1_s0m5t"]
 [ext_resource type="Texture2D" uid="uid://di7x0n3aagnef" path="res://sprites/Sprite10.png" id="2_nk6g5"]
 [ext_resource type="PackedScene" uid="uid://m7a4j1a14a3s" path="res://player.tscn" id="3_r3vdj"]
 [ext_resource type="PackedScene" uid="uid://dsexmuqal45mo" path="res://zona_camera.tscn" id="4_nk6g5"]
 
 [node name="mapa ejemplo 2" type="Node2D" unique_id=701696987]
+script = ExtResource("1_r3vdj")
 
 [node name="mapa" type="Node2D" parent="." unique_id=1668685004]
 
@@ -40,4 +42,5 @@ z_index = 1
 position = Vector2(-256, 53)
 
 [node name="ZonaCamera" parent="." unique_id=294356047 instance=ExtResource("4_nk6g5")]
+visible = false
 position = Vector2(-10, 60)
