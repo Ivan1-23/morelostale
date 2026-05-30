@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://b1y0wsjlrhhq6" path="res://sprites/example.png" id="1_s0m5t"]
 [ext_resource type="Texture2D" uid="uid://di7x0n3aagnef" path="res://sprites/Sprite10.png" id="2_nk6g5"]
 [ext_resource type="PackedScene" uid="uid://m7a4j1a14a3s" path="res://player.tscn" id="3_r3vdj"]
+[ext_resource type="PackedScene" uid="uid://dsexmuqal45mo" path="res://zona_camera.tscn" id="4_nk6g5"]
 
 [node name="mapa ejemplo 2" type="Node2D" unique_id=701696987]
 
@@ -25,7 +26,7 @@ position = Vector2(116, 49)
 texture = ExtResource("1_s0m5t")
 
 [node name="Sprite10" type="Sprite2D" parent="mapa/Sprite2D" unique_id=73974081]
-z_index = 1
+z_index = 2
 texture_filter = 1
 position = Vector2(-127, 45.249996)
 scale = Vector2(1, 1.2)
@@ -35,4 +36,8 @@ texture = ExtResource("2_nk6g5")
 y_sort_enabled = true
 
 [node name="player" parent="Node2D" unique_id=1006129407 instance=ExtResource("3_r3vdj")]
+z_index = 1
 position = Vector2(-256, 53)
+
+[node name="ZonaCamera" parent="." unique_id=294356047 instance=ExtResource("4_nk6g5")]
+position = Vector2(-10, 60)
