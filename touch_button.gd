@@ -1,5 +1,5 @@
 extends CanvasLayer
-@onready var controles = $Control
+@onready var controles = $touch_button
 var proxima_posicion_jugador: Vector2 = Vector2.ZERO
 
 func _ready():
@@ -10,4 +10,5 @@ func _ready():
 			else:
 			# Si es PC (Windows, Mac, Linux, Web de escritorio), forzamos KEEP para mantener el 4:3
 				get_tree().root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
+			#if not DisplayServer.is_touchscreen_available():
 				controles.visible = false

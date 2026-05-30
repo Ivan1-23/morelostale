@@ -10,7 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://blvn6jiymyy36" path="res://sprites/button_texture-Sheet (6).png" id="6_df6t0"]
 
 [node name="touch_button" type="CanvasLayer" unique_id=230050980]
-visible = false
 script = ExtResource("1_nwf1f")
 
 [node name="Control" type="Control" parent="." unique_id=73866901]
