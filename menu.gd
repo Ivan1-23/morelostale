@@ -20,6 +20,7 @@ extends CanvasLayer
 @onready var botonUsar = $Control/NinePatchRect/objeto/BotonUsar
 @onready var botonInfo = $Control/NinePatchRect/objeto/BotonInfo
 @onready var botonTirar= $Control/NinePatchRect/objeto/BotonTirar
+@onready var controls = $touch_button
 var select_x = 28
 var select_y = 35
 var px_d = 33
@@ -47,22 +48,6 @@ func _ready():
 		botonUsar.visible = false
 		botonInfo.visible = false
 		botonTelefono.visible = false
- 
-#func desactivar_botones_menu_pc():
-	## Esto evita que el mouse active las señales en PC
-	#var botones = [
-		#$Control/BotonObjeto, $Control/BotonEstadisticas, $Control/BotonTelefono,
-		#$Control/BotonUsar, $Control/BotonInfo, $Control/BotonTirar,
-		#$Control/NinePatchRect/objeto/BotonItem1, $Control/NinePatchRect/objeto/BotonItem2,
-		#$Control/NinePatchRect/objeto/BotonItem3, $Control/NinePatchRect/objeto/BotonItem4,
-		#$Control/NinePatchRect/objeto/BotonItem5, $Control/NinePatchRect/objeto/BotonItem6,
-		#$Control/NinePatchRect/objeto/BotonItem7, $Control/NinePatchRect/objeto/BotonItem8
-	#]
-	#for b in botones:
-		#if b:
-			#b.process_mode = Node.PROCESS_MODE_DISABLED
-
-
 	#opciones del menu
 func _unhandled_input(event):
 	match screen_loaded:
@@ -71,6 +56,7 @@ func _unhandled_input(event):
 			if event.is_action_pressed("menu"):
 				menu.visible = true
 				screen_loaded = ScreenLoaded.JUST_MENU
+				controls.visible = false
 				get_parent().puede_moverse = false # Bloquea al jugador
 #----------------------------------
 		ScreenLoaded.JUST_MENU:
@@ -78,6 +64,7 @@ func _unhandled_input(event):
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
 				menu.visible = false
 				screen_loaded = ScreenLoaded.NOTHING
+				controls.visible = true
 				get_parent().puede_moverse = true # Libera al jugador
 			elif event.is_action_pressed("ui_menu_down"):
 				selected_option +=1
@@ -123,12 +110,14 @@ func _unhandled_input(event):
 				objetos.visible = false
 				select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 				screen_loaded = ScreenLoaded.NOTHING
+				controls.visible = true
 				get_parent().puede_moverse = true # Libera al jugador
 			elif event.is_action_pressed("acción") and selected_option3 == 0:
 				menu.visible = false
 				objetos.visible = false
 				select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 				screen_loaded = ScreenLoaded.NOTHING
+				controls.visible = true
 				get_parent().puede_moverse = true # Libera al jugador
 			elif event.is_action_pressed("acción") and selected_option3 == 1:
 				objetos.visible = false
@@ -140,6 +129,7 @@ func _unhandled_input(event):
 				objetos.visible = false
 				select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 				screen_loaded = ScreenLoaded.NOTHING
+				controls.visible = true
 				get_parent().puede_moverse = true # Libera al jugador
 			elif event.is_action_pressed("ui_menu_right"):
 				selected_option3 += 1
@@ -157,6 +147,7 @@ func _unhandled_input(event):
 				info.visible = false
 				select_arrow.visible = true
 				menu.visible = false
+				controls.visible = true
 				get_parent().puede_moverse = true
 				screen_loaded = ScreenLoaded.NOTHING # Libera al jugador
 #----------------------------------
@@ -250,6 +241,7 @@ func _on_boton_usar_pressed():
 		menu.visible = false
 		objetos.visible = false
 		select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
+		controls.visible = true
 		get_parent().puede_moverse = true
 		screen_loaded = ScreenLoaded.NOTHING
 		# Aquí iría la lógica de usar el objeto
@@ -271,5 +263,6 @@ func _on_boton_tirar_pressed():
 		menu.visible = false
 		objetos.visible = false
 		select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
+		controls.visible = true
 		get_parent().puede_moverse = true
 		screen_loaded = ScreenLoaded.NOTHING

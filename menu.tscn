@@ -11,12 +11,14 @@
 [ext_resource type="Script" path="res://rich_text_label.gd" id="5_ytr4m"]
 [ext_resource type="Script" uid="uid://wpukf6g80caa" path="res://rich_text_label_3.gd" id="6_dwrpx"]
 [ext_resource type="Script" path="res://oro.gd" id="7_kk3ma"]
+[ext_resource type="PackedScene" uid="uid://ck4ten6hyfkyf" path="res://touch_button.tscn" id="12_dwrpx"]
 
 [node name="menu" type="CanvasLayer" unique_id=166901061]
 script = ExtResource("1_4hy44")
 metadata/_edit_horizontal_guides_ = [94.0]
 
 [node name="Control" type="Control" parent="." unique_id=81564043]
+y_sort_enabled = true
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -377,6 +379,8 @@ texture = ExtResource("4_ecwwl")
 region_rect = Rect2(0, 0, 64, 64)
 patch_margin_left = 1
 patch_margin_right = 1
+
+[node name="touch_button" parent="." unique_id=230050980 instance=ExtResource("12_dwrpx")]
 
 [connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem1" to="." method="_on_boton_item_1_pressed"]
 [connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem2" to="." method="_on_boton_item_2_pressed"]
