@@ -123,6 +123,7 @@ func _unhandled_input(event):
 				objetos.visible = false
 				select_arrow.visible = false
 				select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
+				info.visible = true
 				screen_loaded = ScreenLoaded.INFO
 			elif event.is_action_pressed("acción") and selected_option3 == 2:
 				menu.visible = false
@@ -142,14 +143,14 @@ func _unhandled_input(event):
 					select_arrow.position = Vector2(176 + (selected_option3 % 3) * 105,184)
 #----------------------------------
 		ScreenLoaded.INFO:
-			info.visible = true
-			if event.is_action_pressed("acción"):
+			# Si el evento es la acción de aceptar/interactuar O una pulsación física en la pantalla táctil
+			if event.is_action_pressed("acción") or (event is InputEventScreenTouch and event.pressed):
 				info.visible = false
 				select_arrow.visible = true
 				menu.visible = false
 				controls.visible = true
 				get_parent().puede_moverse = true
-				screen_loaded = ScreenLoaded.NOTHING # Libera al jugador
+				screen_loaded = ScreenLoaded.NOTHING # Regresa al juego libre
 #----------------------------------
 		ScreenLoaded.ESTADISTICAS:
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):

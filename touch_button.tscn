@@ -37,9 +37,10 @@ layout_mode = 3
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 422.0
-offset_top = -475.0
-offset_right = 1352.0
+offset_left = 264.0
+offset_top = -470.0
+offset_right = 1019.0
+offset_bottom = 5.0
 grow_vertical = 0
 
 [node name="A" type="TouchScreenButton" parent="Control2" unique_id=1578553738]

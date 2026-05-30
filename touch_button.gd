@@ -1,5 +1,6 @@
 extends CanvasLayer
-@onready var controles = $touch_button
+@onready var controles = $Control
+@onready var controles2 = $Control2
 var proxima_posicion_jugador: Vector2 = Vector2.ZERO
 
 func _ready():
@@ -12,3 +13,4 @@ func _ready():
 				get_tree().root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
 			#if not DisplayServer.is_touchscreen_available():
 				controles.visible = false
+				controles2.visible = false
