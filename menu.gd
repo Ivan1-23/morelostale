@@ -263,6 +263,7 @@ func _on_boton_info_pressed():
 		objetos.visible = false
 		select_arrow.visible = false
 		select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
+		info.visible = true
 		screen_loaded = ScreenLoaded.INFO
 
 func _on_boton_tirar_pressed():
