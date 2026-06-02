@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://d32bww5ccae5h"]
+
+[ext_resource type="Script" uid="uid://b32sdgkdqgns5" path="res://letrero_ejemplo.gd" id="1_fha4e"]
+[ext_resource type="Texture2D" uid="uid://cv3nfm33ld0ib" path="res://sprites/letrero_debug.png" id="2_qgg07"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1p176"]
+
+[node name="StaticBody2D" type="StaticBody2D" unique_id=11653250]
+script = ExtResource("1_fha4e")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1507325485]
+shape = SubResource("RectangleShape2D_1p176")
+
+[node name="Sprite2D" type="Sprite2D" parent="CollisionShape2D" unique_id=729022875]
+texture = ExtResource("2_qgg07")

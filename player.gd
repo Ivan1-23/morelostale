@@ -10,17 +10,29 @@ var puede_moverse: bool = true
 @onready var animaciones = $CollisionShape2D/AnimatedSprite2D
 @onready var mira = $CollisionShape2D/RayCast2D
 @onready var menu = $menu
+@onready var escenario_dialogo = preload("res://cuadro_dialogo.tscn")
+var cuadro_dialogo_instancia = null
 
 #------------movimiento
 @warning_ignore("unused_parameter")
 func _physics_process(delta):
-	# --- INTERACCIÓN ---
+# --- INTERACCIÓN ---
 	if Input.is_action_just_pressed("acción") and puede_moverse:
 		if mira.is_colliding():
 			var objeto = mira.get_collider()
 			if objeto.has_method("hablar"): 
-				objeto.hablar()
+				# Pausamos el movimiento del jugador
+				puede_moverse = false
 				
+				# Instanciamos el cuadro de diálogo si no existe
+				if cuadro_dialogo_instancia == null:
+					cuadro_dialogo_instancia = escenario_dialogo.instantiate()
+					get_tree().current_scene.add_child(cuadro_dialogo_instancia)
+					# Nos conectamos a su señal para saber cuándo termina
+					cuadro_dialogo_instancia.dialogo_terminado.connect(_on_dialogo_terminado)
+				
+				# Le pasamos los diálogos que el objeto/PNJ tiene guardados
+				cuadro_dialogo_instancia.iniciar_dialogo(objeto.hablar())
 	# --- CONTROL DE PAUSA / MENÚ ---
 	if not puede_moverse:
 		velocity = Vector2.ZERO
@@ -47,17 +59,17 @@ func _physics_process(delta):
 		if abs(direccion.x) > abs(direccion.y):
 			if direccion.x > 0:
 				sufijo_direccion = "right"
-				mira.target_position = Vector2(50, 0)
+				mira.target_position = Vector2(20, 0)
 			else:
 				sufijo_direccion = "left"
-				mira.target_position = Vector2(-50, 0)
+				mira.target_position = Vector2(-20, 0)
 		else:
 			if direccion.y > 0:
 				sufijo_direccion = "down"
-				mira.target_position = Vector2(0, 50)
+				mira.target_position = Vector2(0, 20)
 			else:
 				sufijo_direccion = "top"
-				mira.target_position = Vector2(0, -50)
+				mira.target_position = Vector2(0, -20)
 				
 		# --- EL TRUCO DE LA ANIMACIÓN ---
 		# Si corre, el prefijo cambia a "run_", si camina se queda en "mov_"
@@ -76,3 +88,6 @@ func _physics_process(delta):
 	# --- MOVIMIENTO FÍSICO ---
 	velocity = direccion * velocidad_actual
 	move_and_slide()
+	# Agrega esta nueva función al final de tu player.gd
+func _on_dialogo_terminado():
+	puede_moverse = true

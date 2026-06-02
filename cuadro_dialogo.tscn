@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://cqn82hrcqlf1j"]
+
+[ext_resource type="Script" uid="uid://djg0bfifvpqdh" path="res://cuadro_dialogo.gd" id="1_c6uhv"]
+[ext_resource type="Texture2D" uid="uid://bll6rtr7cwkjf" path="res://sprites/textura_menu2.png" id="2_0yen5"]
+[ext_resource type="FontFile" uid="uid://bh72o0b2molck" path="res://fonts/8bitoperator_jve.ttf" id="3_0yen5"]
+
+[node name="cuadro_dialogo" type="CanvasLayer" unique_id=1836545299]
+script = ExtResource("1_c6uhv")
+
+[node name="Fondo" type="NinePatchRect" parent="." unique_id=1992983721]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 31.0
+offset_top = -162.0
+offset_right = -31.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("2_0yen5")
+patch_margin_left = 1
+patch_margin_right = 1
+
+[node name="Contenedor" type="HBoxContainer" parent="Fondo" unique_id=1110454879]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 14.0
+offset_right = 563.0
+offset_bottom = 140.0
+
+[node name="Retrato" type="TextureRect" parent="Fondo/Contenedor" unique_id=97292185]
+texture_filter = 1
+custom_minimum_size = Vector2(120, 16)
+layout_mode = 2
+
+[node name="Texto" type="RichTextLabel" parent="Fondo/Contenedor" unique_id=1740690361]
+custom_minimum_size = Vector2(500, 25)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("3_0yen5")
+bbcode_enabled = true
+horizontal_alignment = 3
+
+[node name="TimerEfecto" type="Timer" parent="Fondo" unique_id=2106946908]
+wait_time = 0.3
+one_shot = true
+
+[node name="AudioVoz" type="AudioStreamPlayer2D" parent="Fondo" unique_id=441363253]
+max_polyphony = 3
+
+[connection signal="timeout" from="Fondo/TimerEfecto" to="." method="_on_timer_efecto_timeout"]

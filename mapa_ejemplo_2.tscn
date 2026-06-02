@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://di7x0n3aagnef" path="res://sprites/Sprite10.png" id="2_nk6g5"]
 [ext_resource type="PackedScene" uid="uid://m7a4j1a14a3s" path="res://player.tscn" id="3_r3vdj"]
 [ext_resource type="PackedScene" uid="uid://dsexmuqal45mo" path="res://zona_camera.tscn" id="4_nk6g5"]
+[ext_resource type="Texture2D" uid="uid://cv3nfm33ld0ib" path="res://sprites/letrero_debug.png" id="5_btvci"]
 
 [node name="mapa ejemplo 2" type="Node2D" unique_id=701696987]
 script = ExtResource("1_r3vdj")
@@ -30,7 +31,7 @@ texture = ExtResource("1_s0m5t")
 [node name="Sprite10" type="Sprite2D" parent="mapa/Sprite2D" unique_id=73974081]
 z_index = 2
 texture_filter = 1
-position = Vector2(-127, 45.249996)
+position = Vector2(-127, 46.249996)
 scale = Vector2(1, 1.2)
 texture = ExtResource("2_nk6g5")
 
@@ -39,7 +40,12 @@ y_sort_enabled = true
 
 [node name="player" parent="Node2D" unique_id=1006129407 instance=ExtResource("3_r3vdj")]
 z_index = 1
-position = Vector2(-256, 53)
+position = Vector2(-258, 54)
+
+[node name="LetreroDebug" type="Sprite2D" parent="Node2D" unique_id=2103864633]
+z_index = 2
+position = Vector2(-127, 53)
+texture = ExtResource("5_btvci")
 
 [node name="ZonaCamera" parent="." unique_id=294356047 instance=ExtResource("4_nk6g5")]
 visible = false
