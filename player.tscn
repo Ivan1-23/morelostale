@@ -334,4 +334,4 @@ limit_right = 200
 limit_bottom = 200
 
 [node name="menu" parent="." unique_id=166901061 instance=ExtResource("3_hqtel")]
-visible = false
+visible = true
