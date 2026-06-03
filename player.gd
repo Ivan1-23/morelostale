@@ -90,4 +90,5 @@ func _physics_process(delta):
 	move_and_slide()
 	# Agrega esta nueva función al final de tu player.gd
 func _on_dialogo_terminado():
+	await get_tree().create_timer(0.15).timeout
 	puede_moverse = true

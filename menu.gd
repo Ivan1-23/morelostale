@@ -61,7 +61,7 @@ func _unhandled_input(event):
 #----------------------------------
 		ScreenLoaded.JUST_MENU:
 			
-			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
+			if event.is_action_pressed("menu") or event.is_action_pressed("correr") or (event is InputEventScreenTouch and event.pressed):
 				menu.visible = false
 				screen_loaded = ScreenLoaded.NOTHING
 				controls.visible = true
@@ -105,7 +105,7 @@ func _unhandled_input(event):
 				screen_loaded = ScreenLoaded.OBJETO2
 #----------------------------------
 		ScreenLoaded.OBJETO2:
-			if  event.is_action_pressed("correr") or event.is_action_pressed("menu"):
+			if  event.is_action_pressed("correr") or event.is_action_pressed("menu") or (event is InputEventScreenTouch and event.pressed):
 				menu.visible = false
 				objetos.visible = false
 				select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
@@ -153,13 +153,13 @@ func _unhandled_input(event):
 				screen_loaded = ScreenLoaded.NOTHING # Regresa al juego libre
 #----------------------------------
 		ScreenLoaded.ESTADISTICAS:
-			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
+			if event.is_action_pressed("menu") or event.is_action_pressed("correr") or (event is InputEventScreenTouch and event.pressed):
 				estadisticas.visible = false
 				screen_loaded = ScreenLoaded.JUST_MENU
 #----------------------------------
 		ScreenLoaded.TELEFONO:
 			select_arrow.position = Vector2(176,-70 + (selected_option2 % 2 * 30))
-			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
+			if event.is_action_pressed("menu") or event.is_action_pressed("correr") or (event is InputEventScreenTouch and event.pressed):
 				telefono.visible = false
 				select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 				screen_loaded = ScreenLoaded.JUST_MENU

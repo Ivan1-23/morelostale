@@ -13,3 +13,5 @@ var NV = 1
 var PE = 0
 var oro = 0
 var sig = 10
+var inicio_correcto: bool = false
+var moviste_archivos_para_estar_en_la_habitación_debug: bool = false
