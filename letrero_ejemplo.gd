@@ -6,7 +6,6 @@ var voz = null
 func hablar() -> Array:
 	if not Global.moviste_archivos_para_estar_en_la_habitación_debug:
 		# ACTIVAMOS LA CONDICIÓN: La próxima vez que hable, irá al 'else'
-		Global.moviste_archivos_para_estar_en_la_habitación_debug = true
 		
 		return [
 			{
