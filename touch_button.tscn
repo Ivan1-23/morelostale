@@ -6,8 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://ya0hiuwmtq7o" path="res://sprites/button_texture-Sheet (4).png" id="2_ipc6k"]
 [ext_resource type="Texture2D" uid="uid://yrnh5u0hxuao" path="res://sprites/button_texture-Sheet (2).png" id="3_33ua2"]
 [ext_resource type="Texture2D" uid="uid://dr5yf715ibclm" path="res://sprites/button_texture-Sheet (5).png" id="4_5gowg"]
-[ext_resource type="Texture2D" uid="uid://7lw52i734pjb" path="res://sprites/button_texture-Sheet (3).png" id="5_byvrp"]
 [ext_resource type="Texture2D" uid="uid://blvn6jiymyy36" path="res://sprites/button_texture-Sheet (6).png" id="6_df6t0"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ur3y5"]
+load_path = "res://.godot/imported/button_texture-Sheet (3).png-a83dda7344199856d125cd3b1d2b0a26.ctex"
 
 [node name="touch_button" type="CanvasLayer" unique_id=230050980]
 script = ExtResource("1_nwf1f")
@@ -34,13 +36,16 @@ joystick_mode = 2
 
 [node name="Control2" type="Control" parent="." unique_id=1306170937]
 layout_mode = 3
-anchors_preset = 2
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 264.0
+offset_left = -732.0
 offset_top = -470.0
-offset_right = 1019.0
+offset_right = 12.0
 offset_bottom = 5.0
+grow_horizontal = 0
 grow_vertical = 0
 
 [node name="A" type="TouchScreenButton" parent="Control2" unique_id=1578553738]
@@ -65,13 +70,14 @@ texture_normal = ExtResource("3_33ua2")
 texture_pressed = ExtResource("4_5gowg")
 action = "correr"
 
-[node name="Y" type="TouchScreenButton" parent="Control2" unique_id=438998156]
+[node name="Y" type="TouchScreenButton" parent="Control2" unique_id=137272548]
 self_modulate = Color(1, 1, 1, 0.34117648)
 z_index = 10
 y_sort_enabled = true
 texture_filter = 1
-position = Vector2(619, 275)
+position = Vector2(614, 263)
 scale = Vector2(4, 4)
-texture_normal = ExtResource("5_byvrp")
+texture_normal = SubResource("CompressedTexture2D_ur3y5")
 texture_pressed = ExtResource("6_df6t0")
-action = "menu"
+
+[connection signal="pressed" from="Control2/Y" to="." method="_on_y_pressed"]

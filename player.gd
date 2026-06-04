@@ -1,94 +1,61 @@
 extends CharacterBody2D
 
-#------------variables
-var velocidad = 80
-var velocidad_correr = 120
-var animación = "mov_down" # Guarda la dirección actual
-var hp:int = 20
-var puede_moverse: bool = true 
+# Ajustamos las velocidades exactas que me pediste
+@export var velocidad_caminar: float = 60.0
+@export var velocidad_correr: float = 120.0
 
 @onready var animaciones = $CollisionShape2D/AnimatedSprite2D
-@onready var mira = $CollisionShape2D/RayCast2D
-@onready var menu = $menu
-@onready var escenario_dialogo = preload("res://cuadro_dialogo.tscn")
-var cuadro_dialogo_instancia = null
 
-#------------movimiento
-@warning_ignore("unused_parameter")
-func _physics_process(delta):
-# --- INTERACCIÓN ---
-	if Input.is_action_just_pressed("acción") and puede_moverse:
-		if mira.is_colliding():
-			var objeto = mira.get_collider()
-			if objeto.has_method("hablar"): 
-				# Pausamos el movimiento del jugador
-				puede_moverse = false
-				
-				# Instanciamos el cuadro de diálogo si no existe
-				if cuadro_dialogo_instancia == null:
-					cuadro_dialogo_instancia = escenario_dialogo.instantiate()
-					get_tree().current_scene.add_child(cuadro_dialogo_instancia)
-					# Nos conectamos a su señal para saber cuándo termina
-					cuadro_dialogo_instancia.dialogo_terminado.connect(_on_dialogo_terminado)
-				
-				# Le pasamos los diálogos que el objeto/PNJ tiene guardados
-				cuadro_dialogo_instancia.iniciar_dialogo(objeto.hablar())
-	# --- CONTROL DE PAUSA / MENÚ ---
+# Esta es la variable clave que lee el menú
+var puede_moverse: bool = true
+
+func _ready():
+	# Añadimos al jugador al grupo "player" automáticamente para que el menú lo encuentre siempre
+	add_to_group("player")
+
+func _physics_process(_delta):
+	# Si el menú bloqueó al jugador, lo detenemos por completo y salimos
 	if not puede_moverse:
 		velocity = Vector2.ZERO
-		if animaciones.animation.begins_with("mov_") or animaciones.animation.begins_with("run_"):
-			# Si se pausa mientras corre o camina, lo mandamos a su respectivo idle
-			var anim_idle = animaciones.animation.replace("mov_", "idle_").replace("run_", "idle_")
-			animaciones.play(anim_idle)
-		else:
-			animaciones.stop()
 		move_and_slide()
 		return
-		
-	# --- OBTENER DIRECCIÓN ---
-	var direccion = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	
-	# Detectamos si el jugador quiere correr
-	var esta_corriendo = Input.is_action_pressed("correr")
-	var velocidad_actual = velocidad_correr if esta_corriendo else velocidad
+
+	# Movimiento normal en 4 direcciones
+	var direccion = Vector2.ZERO
+	direccion.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	direccion.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 	
 	if direccion != Vector2.ZERO:
-		# Determinar el sufijo de dirección (right, left, down, top)
-		var sufijo_direccion = ""
+		direccion = direccion.normalized()
+		
+		# Detectamos si está corriendo
+		var es_corriendo = Input.is_action_pressed("correr")
+		# Aplicamos tus velocidades exactas (60 o 120)
+		var velocidad_actual = velocidad_correr if es_corriendo else velocidad_caminar
+			
+		velocity = direccion * velocidad_actual
+		
+		# Control de animaciones con tus nombres exactos
+		var prefijo = "run_" if es_corriendo else "mov_"
 		
 		if abs(direccion.x) > abs(direccion.y):
 			if direccion.x > 0:
-				sufijo_direccion = "right"
-				mira.target_position = Vector2(20, 0)
+				animaciones.play(prefijo + "right")
 			else:
-				sufijo_direccion = "left"
-				mira.target_position = Vector2(-20, 0)
+				animaciones.play(prefijo + "left")
 		else:
 			if direccion.y > 0:
-				sufijo_direccion = "down"
-				mira.target_position = Vector2(0, 20)
+				animaciones.play(prefijo + "down")
 			else:
-				sufijo_direccion = "top"
-				mira.target_position = Vector2(0, -20)
-				
-		# --- EL TRUCO DE LA ANIMACIÓN ---
-		# Si corre, el prefijo cambia a "run_", si camina se queda en "mov_"
-		var prefijo = "run_" if esta_corriendo else "mov_"
-		animación = prefijo + sufijo_direccion
-		
-		animaciones.play(animación)
+				animaciones.play(prefijo + "top")
 	else:
-		# --- LÓGICA DE IDLE AUTOMÁTICO ---
-		# Convierte cualquier estado de movimiento ("mov_" o "run_") a su versión "idle_"
-		if animación.begins_with("mov_") or animación.begins_with("run_"):
-			animación = animación.replace("mov_", "idle_").replace("run_", "idle_")
+		velocity = Vector2.ZERO
 		
-		animaciones.play(animación)
-	
-	# --- MOVIMIENTO FÍSICO ---
-	velocity = direccion * velocidad_actual
+		# Control de animaciones Idle al soltar los controles
+		var anim_actual = animaciones.animation
+		if "right" in anim_actual: animaciones.play("idle_right")
+		elif "left" in anim_actual: animaciones.play("idle_left")
+		elif "down" in anim_actual: animaciones.play("idle_down")
+		elif "top" in anim_actual: animaciones.play("idle_top")
+
 	move_and_slide()
-	# Agrega esta nueva función al final de tu player.gd
-func _on_dialogo_terminado():
-	await get_tree().create_timer(0.15).timeout
-	puede_moverse = true

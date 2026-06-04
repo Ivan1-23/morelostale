@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://b7s1e5fee0sir"]
+
+[ext_resource type="Script" uid="uid://6ruw35vlp3k3" path="res://logo_inicio.gd" id="1_gtaon"]
+[ext_resource type="Texture2D" uid="uid://bgdlui7k42is8" path="res://sprites/1f9424f4cdee5a0697325dd3598b1a12.png" id="1_sxo67"]
+[ext_resource type="PackedScene" uid="uid://ck4ten6hyfkyf" path="res://touch_button.tscn" id="3_j6hqy"]
+
+[sub_resource type="Animation" id="Animation_sxo67"]
+length = 3.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5, 2.5, 3.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_0qrxy"]
+resource_name = "aparecer"
+length = 3.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5, 2.5, 3.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gtaon"]
+_data = {
+&"RESET": SubResource("Animation_sxo67"),
+&"aparecer": SubResource("Animation_0qrxy")
+}
+
+[node name="LogoInicio" type="Control" unique_id=1512810445]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gtaon")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1825402175]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1215322248]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 34.00001
+offset_top = 174.0
+offset_right = 115.0
+offset_bottom = -163.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("1_sxo67")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1251049822]
+libraries/ = SubResource("AnimationLibrary_gtaon")
+
+[node name="touch_button" parent="." unique_id=230050980 instance=ExtResource("3_j6hqy")]
