@@ -48,7 +48,6 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="ZonaCamera" parent="." unique_id=294356047 instance=ExtResource("4_nk6g5")]
-visible = false
 position = Vector2(-10, 60)
 
 [node name="cuadro_dialogo" parent="." unique_id=1836545299 instance=ExtResource("4_wyeen")]

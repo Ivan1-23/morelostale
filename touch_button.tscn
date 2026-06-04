@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://yrnh5u0hxuao" path="res://sprites/button_texture-Sheet (2).png" id="3_33ua2"]
 [ext_resource type="Texture2D" uid="uid://dr5yf715ibclm" path="res://sprites/button_texture-Sheet (5).png" id="4_5gowg"]
 [ext_resource type="Texture2D" uid="uid://blvn6jiymyy36" path="res://sprites/button_texture-Sheet (6).png" id="6_df6t0"]
+[ext_resource type="Script" uid="uid://bb5yyrw5rjijl" path="res://y.gd" id="8_nwf1f"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ur3y5"]
 load_path = "res://.godot/imported/button_texture-Sheet (3).png-a83dda7344199856d125cd3b1d2b0a26.ctex"
@@ -79,5 +80,6 @@ position = Vector2(614, 263)
 scale = Vector2(4, 4)
 texture_normal = SubResource("CompressedTexture2D_ur3y5")
 texture_pressed = ExtResource("6_df6t0")
+script = ExtResource("8_nwf1f")
 
 [connection signal="pressed" from="Control2/Y" to="." method="_on_y_pressed"]

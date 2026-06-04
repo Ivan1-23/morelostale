@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://wpukf6g80caa" path="res://rich_text_label_3.gd" id="6_dwrpx"]
 [ext_resource type="Script" uid="uid://46t5jk4hh67j" path="res://oro.gd" id="7_kk3ma"]
 [ext_resource type="PackedScene" uid="uid://ck4ten6hyfkyf" path="res://touch_button.tscn" id="12_dwrpx"]
+[ext_resource type="AudioStream" uid="uid://4i4dv4dhhv04" path="res://audio/Interfaz/undertale-select-sound.wav" id="13_g7jxm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dwrpx"]
 bg_color = Color(0, 0, 0, 1)
@@ -422,6 +423,10 @@ patch_margin_left = 1
 patch_margin_right = 1
 
 [node name="touch_button" parent="." unique_id=230050980 instance=ExtResource("12_dwrpx")]
+layer = 3
+
+[node name="sonido_cambio" type="AudioStreamPlayer2D" parent="." unique_id=787457103]
+stream = ExtResource("13_g7jxm")
 
 [connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem1" to="." method="_on_boton_item_1_pressed"]
 [connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem2" to="." method="_on_boton_item_2_pressed"]
