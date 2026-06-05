@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dnweuob15nimk"]
+
+[ext_resource type="Script" uid="uid://d18oapki0ij28" path="res://main_reproductor.gd" id="1_nf13v"]
+[ext_resource type="PackedScene" uid="uid://ck4ten6hyfkyf" path="res://touch_button.tscn" id="1_wo0jh"]
+
+[node name="main_reproductor" type="Node" unique_id=267717632]
+script = ExtResource("1_nf13v")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1288948853]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 294.0
+offset_top = 117.0
+offset_right = -346.0
+offset_bottom = -123.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1275090272]
+handle_input_locally = false
+size = Vector2i(640, 480)
+render_target_update_mode = 4
+
+[node name="touch_button" parent="." unique_id=230050980 instance=ExtResource("1_wo0jh")]

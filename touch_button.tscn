@@ -17,9 +17,12 @@ script = ExtResource("1_nwf1f")
 
 [node name="Control" type="Control" parent="." unique_id=73866901]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
 offset_right = 40.0
-offset_bottom = 40.0
+grow_vertical = 0
 
 [node name="Virtual Joystick" parent="Control" unique_id=1562062367 instance=ExtResource("1_ur3y5")]
 modulate = Color(1, 1, 1, 0.34117648)
@@ -27,10 +30,10 @@ self_modulate = Color(1, 1, 1, 0.34117648)
 z_index = 2
 texture_filter = 1
 layout_mode = 1
-offset_left = -20.0
-offset_top = 157.0
-offset_right = 288.0
-offset_bottom = 471.0
+offset_left = -32.0
+offset_top = -324.0
+offset_right = 276.0
+offset_bottom = -10.0
 scale = Vector2(1.1, 1.1)
 deadzone_size = 34.0
 joystick_mode = 2

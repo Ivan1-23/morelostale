@@ -12,7 +12,7 @@ config_version=5
 
 config/name="morelostale"
 config/version="test 1.3.1"
-run/main_scene="uid://b7s1e5fee0sir"
+run/main_scene="uid://dnweuob15nimk"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
@@ -24,9 +24,9 @@ Global="*uid://cluuiq6m58nil"
 
 [display]
 
-window/size/viewport_width=640
-window/size/viewport_height=480
-window/stretch/mode="canvas_items"
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="viewport"
 window/stretch/scale_mode="integer"
 
 [editor]
