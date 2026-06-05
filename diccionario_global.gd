@@ -5,9 +5,7 @@ var inicio_correcto: bool = true
 var moviste_archivos_para_estar_en_la_habitación_debug: bool = false
 
 # --- INVENTARIO ACTUAL ---
-# El jugador inicia con un "plumon_negro" y una "curita" (puedes cambiarlo)
-var inventario: Array = ["plumon_negro", "curita"] 
-
+var inventario: Array = ["sandwich_normal", "gorra_ilegal"]
 # --- BASE DE DATOS DE OBJETOS COMPLETA ---
 const BASE_DE_DATOS_OBJETOS = {
 	"torta": {
@@ -15,7 +13,7 @@ const BASE_DE_DATOS_OBJETOS = {
 		"hp": 30,
 		"precio": 50,
 		"tipo": "objeto curativo",
-		"descripcion": "Cura 30 HP.\nUna deliciosa torta."
+		"descripcion": "Cura 30 HP.\nEs de jamón."
 	},
 	"lata_jugo": {
 		"nombre": "LataJugo",
@@ -29,7 +27,7 @@ const BASE_DE_DATOS_OBJETOS = {
 		"hp": 10,
 		"precio": 10,
 		"tipo": "objeto curativo",
-		"descripcion": "Cura 10 HP.\nAumenta velocidad."
+		"descripcion": "Cura 10 HP.\nTe da energía."
 	},
 	"pluma_azul": {
 		"nombre": "PlumaAzul",
@@ -59,14 +57,14 @@ const BASE_DE_DATOS_OBJETOS = {
 		"hp": 12,
 		"precio": 0, # n/a en tu lista, le ponemos 0 por defecto
 		"tipo": "objetivo curativo",
-		"descripcion": "Cura 12 HP.\nSolo si uno está caído\n(0 hp o menos)."
+		"descripcion": "Cura 12 HP.\nEl sabor te desagrada."
 	},
 	"sandwich_normal": {
 		"nombre": "SandwichNormal",
 		"hp": 8,
 		"precio": 25,
 		"tipo": "objetivo curativo",
-		"descripcion": "Cura 8 HP.\nCura todo el equipo."
+		"descripcion": "Cura 8 HP.\nSe puede partir en 3."
 	},
 	"lonche_raro": {
 		"nombre": "LoncheRaro",
@@ -81,9 +79,9 @@ const BASE_DE_DATOS_OBJETOS = {
 		"def": 2,
 		"precio": 40,
 		"tipo": "Arma",
-		"descripcion": "Arma (ATQ +8, DEF +2).\nTijeras afiladas."
+		"descripcion": "Arma (ATQ +8, DEF +2).\nSon afiladas."
 	},
-	"sudadera_aband": {
+	"sudadera_olvidada": {
 		"nombre": "SudaderaAband",
 		"atq": 0,
 		"def": 20,
@@ -103,7 +101,7 @@ const BASE_DE_DATOS_OBJETOS = {
 		"hp": 14,
 		"precio": 20,
 		"tipo": "objeto curativo",
-		"descripcion": "Cura 14 HP.\nCrujientes papitas."
+		"descripcion": "Cura 14 HP\nCrujientes papitas"
 	},
 	"plumon_negro": {
 		"nombre": "PlumónNegro",
@@ -111,7 +109,7 @@ const BASE_DE_DATOS_OBJETOS = {
 		"def": 0,
 		"precio": 35,
 		"tipo": "Arma",
-		"descripcion": "Arma (ATQ +5).\nTinta permanente."
+		"descripcion": "Arma (ATQ +5)\nTinta permanente"
 	},
 	"gorra_ilegal": {
 		"nombre": "GorraIlegal",
@@ -119,7 +117,15 @@ const BASE_DE_DATOS_OBJETOS = {
 		"def": 6,
 		"precio": 50,
 		"tipo": "Armadura",
-		"descripcion": "Armadura (DEF +6).\nTe da estilo criminal."
+		"descripcion": "Armadura (DEF +6)\nTe da estilo criminal"
+	},
+	"lapiz_inicial":{
+		"nombre": "lapiz",
+		"atq": 3,
+		"def": 0,
+		"precio": 0,
+		"tipo": "Arma",
+		"descripcion": "Arma (ATQ +3)\nEs mejor para bocetos"
 	}
 }
 

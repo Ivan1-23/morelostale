@@ -10,8 +10,12 @@
 [ext_resource type="Script" uid="uid://2j8igaw7qe60" path="res://stats.gd" id="5_l48gv"]
 [ext_resource type="Script" uid="uid://djui812ppjdxv" path="res://rich_text_label.gd" id="5_ytr4m"]
 [ext_resource type="Script" uid="uid://wpukf6g80caa" path="res://rich_text_label_3.gd" id="6_dwrpx"]
-[ext_resource type="Script" uid="uid://46t5jk4hh67j" path="res://oro.gd" id="7_kk3ma"]
+[ext_resource type="Script" path="res://oro.gd" id="7_kk3ma"]
+[ext_resource type="Script" uid="uid://cy2lj5e6omkkx" path="res://boton_cerrar.gd" id="12_g7jxm"]
 [ext_resource type="AudioStream" uid="uid://4i4dv4dhhv04" path="res://audio/Interfaz/undertale-select-sound.wav" id="13_g7jxm"]
+[ext_resource type="AudioStream" uid="uid://bcw6x2gpibkp3" path="res://audio/Interfaz/snd_heal_c.wav" id="14_oxnod"]
+[ext_resource type="AudioStream" uid="uid://dqbgpt0l1jfyh" path="res://audio/Interfaz/snd_squeak.wav" id="15_gd0jp"]
+[ext_resource type="AudioStream" uid="uid://eq6jr7bi7kyh" path="res://audio/voces/SND_TXT1.wav" id="16_gd0jp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dwrpx"]
 bg_color = Color(0, 0, 0, 1)
@@ -48,7 +52,7 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="NinePatchRect2" type="NinePatchRect" parent="Control" unique_id=448882761]
+[node name="mini_stats" type="NinePatchRect" parent="Control" unique_id=448882761]
 texture_filter = 1
 layout_mode = 0
 offset_left = 32.0
@@ -62,14 +66,14 @@ patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/NinePatchRect2" unique_id=1882859204]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/mini_stats" unique_id=1882859204]
 layout_mode = 0
 offset_left = 14.0
 offset_top = 16.0
 offset_right = 98.0
 offset_bottom = 94.0
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Control/NinePatchRect2/VBoxContainer" unique_id=1829111294]
+[node name="nombre" type="RichTextLabel" parent="Control/mini_stats/VBoxContainer" unique_id=1829111294]
 custom_minimum_size = Vector2(90, 38)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
@@ -77,7 +81,7 @@ theme_override_font_sizes/normal_font_size = 29
 bbcode_enabled = true
 script = ExtResource("4_nrnbx")
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="Control/NinePatchRect2/VBoxContainer" unique_id=2015063292]
+[node name="MiniStatsLabel" type="RichTextLabel" parent="Control/mini_stats/VBoxContainer" unique_id=2015063292]
 custom_minimum_size = Vector2(100, 44)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("5_h1wq0")
@@ -299,7 +303,7 @@ offset_top = 41.0
 offset_right = 354.0
 offset_bottom = 361.0
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="Control/NinePatchRect/Estadisticas/VBoxContainer" unique_id=658802011]
+[node name="stats" type="RichTextLabel" parent="Control/NinePatchRect/Estadisticas/VBoxContainer" unique_id=658802011]
 custom_minimum_size = Vector2(70, 300)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
@@ -307,7 +311,7 @@ theme_override_font_sizes/normal_font_size = 29
 bbcode_enabled = true
 script = ExtResource("5_l48gv")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Control/NinePatchRect/Estadisticas/VBoxContainer" unique_id=1381465314]
+[node name="oro" type="RichTextLabel" parent="Control/NinePatchRect/Estadisticas/VBoxContainer" unique_id=1381465314]
 custom_minimum_size = Vector2(70, 30)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
@@ -405,6 +409,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_dwrpx")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_g7jxm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_jspdm")
 text = "Atrás"
+script = ExtResource("12_g7jxm")
 
 [node name="Control2" type="Control" parent="." unique_id=1818843445]
 layout_mode = 3
@@ -425,8 +430,31 @@ region_rect = Rect2(0, 0, 64, 64)
 patch_margin_left = 1
 patch_margin_right = 1
 
+[node name="Label" type="Label" parent="Control2/info" unique_id=1385836537]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.035
+anchor_bottom = 0.11800001
+offset_left = 39.0
+offset_top = 14.0
+offset_right = 518.77
+offset_bottom = 122.063995
+theme_override_fonts/font = ExtResource("3_ytr4m")
+theme_override_font_sizes/font_size = 31
+
 [node name="sonido_cambio" type="AudioStreamPlayer" parent="." unique_id=662287742]
 stream = ExtResource("13_g7jxm")
+max_polyphony = 5
+
+[node name="sonido_curacion" type="AudioStreamPlayer" parent="." unique_id=1767943051]
+stream = ExtResource("14_oxnod")
+
+[node name="sonido_squeak" type="AudioStreamPlayer" parent="." unique_id=1865720669]
+stream = ExtResource("15_gd0jp")
+
+[node name="sonido_texto" type="AudioStreamPlayer" parent="." unique_id=1137342611]
+stream = ExtResource("16_gd0jp")
 max_polyphony = 5
 
 [connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem1" to="." method="_on_boton_item_1_pressed"]
