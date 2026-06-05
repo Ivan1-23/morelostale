@@ -7,8 +7,7 @@ var proxima_posicion_jugador: Vector2 = Vector2.ZERO
 func _ready():
 	# Detectamos si el jugador está en Android, iOS, Web Móvil o si hay pantalla táctil real
 	if OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios") or DisplayServer.is_touchscreen_available():
-		# Si es celular, forzamos el modo EXPAND para liberar los controles táctiles
-		get_tree().root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+		# Si es celular, forzamos el modo EXPAND para liberar los controles táctile
 		controles.visible = true
 		controles2.visible = true
 	else:

@@ -35,7 +35,7 @@ var select_x = 28
 var select_y = 35
 var px_d = 33
 
-# Ajustado select_y2 a -70 como solicitaste
+# Ajustado select_y2 a -70
 var select_x2 = 176
 var select_y2 = -70
 
@@ -75,6 +75,23 @@ func _ready():
 		botonItem8.visible = false
 		botonUsar.visible = false
 		botonInfo.visible = false
+		botonCerrar.visible = false
+
+# --- FUNCIÓN: ACTUALIZA LOS BOTONES CON EL INVENTARIO REAL ---
+func actualizar_visualizacion_inventario():
+	var lista_botones = [botonItem1, botonItem2, botonItem3, botonItem4, botonItem5, botonItem6, botonItem7, botonItem8]
+	var tamano_inventario = diccionario_global.inventario.size()
+	
+	for i in range(8):
+		if i < tamano_inventario:
+			var id_item = diccionario_global.inventario[i]
+			var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {})
+			
+			lista_botones[i].text = datos_item.get("nombre", "Desconocido")
+			lista_botones[i].visible = true
+		else:
+			lista_botones[i].text = ""
+			lista_botones[i].visible = false
 
 func abrir_desde_celular():
 	if screen_loaded == ScreenLoaded.NOTHING:
@@ -141,7 +158,6 @@ func regresar_un_paso_atras():
 
 func _input(event):
 	# --- CONTROL DE AUDIO SEGURO ---
-	# Solo reproduce el sonido si el menú ya está abierto, O si está cerrado pero se presiona la tecla para abrirlo
 	if screen_loaded != ScreenLoaded.NOTHING:
 		if event.is_action_pressed("menu") or event.is_action_pressed("correr") or event.is_action_pressed("acción"):
 			reproducir_sonido_seleccion()
@@ -176,27 +192,26 @@ func _input(event):
 		ScreenLoaded.OBJECTO:
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
 				regresar_un_paso_atras()
-			elif event.is_action_pressed("ui_menu_down") and selected_option2 < 7:
+			elif event.is_action_pressed("ui_menu_down") and selected_option2 < diccionario_global.inventario.size() - 1:
 				selected_option2 += 1
 				select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
 			elif event.is_action_pressed("ui_menu_up") and selected_option2 > 0:
 				selected_option2 -= 1
 				select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
 			elif event.is_action_pressed("acción"):
-				select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
-				screen_loaded = ScreenLoaded.OBJETO2
+				if selected_option2 < diccionario_global.inventario.size():
+					select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
+					screen_loaded = ScreenLoaded.OBJETO2
 
 		ScreenLoaded.OBJETO2:
 			if event.is_action_pressed("correr") or event.is_action_pressed("menu"):
 				regresar_un_paso_atras()
 			elif event.is_action_pressed("acción") and selected_option3 == 0:
-				screen_loaded = ScreenLoaded.JUST_MENU
-				regresar_un_paso_atras()
+				_on_boton_usar_pressed()
 			elif event.is_action_pressed("acción") and selected_option3 == 1:
 				_on_boton_info_pressed()
 			elif event.is_action_pressed("acción") and selected_option3 == 2:
-				screen_loaded = ScreenLoaded.JUST_MENU
-				regresar_un_paso_atras()
+				_on_boton_tirar_pressed()
 			elif event.is_action_pressed("ui_menu_right"):
 				selected_option3 += 1
 				select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
@@ -218,7 +233,6 @@ func _input(event):
 # --- SEÑAL DEL BOTÓN TÁCTIL "Y" ---
 func _on_boton_y_pressed() -> void:
 	reproducir_sonido_seleccion()
-	
 	var jugador = get_tree().get_first_node_in_group("player")
 	if menu.visible:
 		menu.visible = false
@@ -238,11 +252,29 @@ func _on_boton_y_pressed() -> void:
 
 # --- SEÑAL DEL BOTÓN "ATRÁS" (CERRAR EN LA ESQUINA) ---
 func _on_boton_cerrar_pressed() -> void:
+	reproducir_sonido_seleccion()
+	var estado_antes = screen_loaded
 	regresar_un_paso_atras()
+	
+	if estado_antes == ScreenLoaded.JUST_MENU:
+		menu.visible = false
+		info.visible = false
+		screen_loaded = ScreenLoaded.NOTHING
+		
+		var jugador = get_tree().get_first_node_in_group("player")
+		if jugador:
+			jugador.puede_moverse = true
+		if controls:
+			controls.visible = true
+			controls.process_mode = PROCESS_MODE_INHERIT
 
 # --- BOTONES TÁCTILES PRINCIPALES ---
 func _on_boton_objeto_pressed():
+	reproducir_sonido_seleccion()
+	actualizar_visualizacion_inventario()
+	
 	selected_option = 0
+	selected_option2 = 0
 	select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 	objetos.visible = true
 	estadisticas.visible = false
@@ -253,6 +285,7 @@ func _on_boton_objeto_pressed():
 	screen_loaded = ScreenLoaded.OBJECTO
 
 func _on_boton_estadisticas_pressed():
+	reproducir_sonido_seleccion()
 	selected_option = 1
 	select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 	objetos.visible = false
@@ -262,6 +295,7 @@ func _on_boton_estadisticas_pressed():
 	screen_loaded = ScreenLoaded.ESTADISTICAS
 
 func _on_boton_telefono_pressed():
+	reproducir_sonido_seleccion()
 	selected_option = 2
 	select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 	objetos.visible = false
@@ -272,56 +306,64 @@ func _on_boton_telefono_pressed():
 
 # --- SELECCIÓN DE ITEMS TÁCTILES ---
 func _on_boton_item_1_pressed() -> void:
-	if screen_loaded == ScreenLoaded.OBJECTO:
+	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 0:
+		reproducir_sonido_seleccion()
 		selected_option2 = 0
 		selected_option3 = 0
 		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
 		screen_loaded = ScreenLoaded.OBJETO2
 
 func _on_boton_item_2_pressed():
-	if screen_loaded == ScreenLoaded.OBJECTO:
+	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 1:
+		reproducir_sonido_seleccion()
 		selected_option2 = 1
 		selected_option3 = 0
 		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
 		screen_loaded = ScreenLoaded.OBJETO2
 
 func _on_boton_item_3_pressed() -> void:
-	if screen_loaded == ScreenLoaded.OBJECTO:
+	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 2:
+		reproducir_sonido_seleccion()
 		selected_option2 = 2
 		selected_option3 = 0
 		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
 		screen_loaded = ScreenLoaded.OBJETO2
 
 func _on_boton_item_4_pressed() -> void:
-	if screen_loaded == ScreenLoaded.OBJECTO:
+	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 3:
+		reproducir_sonido_seleccion()
 		selected_option2 = 3
 		selected_option3 = 0
 		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
 		screen_loaded = ScreenLoaded.OBJETO2
 
 func _on_boton_item_5_pressed() -> void:
-	if screen_loaded == ScreenLoaded.OBJECTO:
+	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 4:
+		reproducir_sonido_seleccion()
 		selected_option2 = 4
 		selected_option3 = 0
 		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
 		screen_loaded = ScreenLoaded.OBJETO2
 
 func _on_boton_item_6_pressed() -> void:
-	if screen_loaded == ScreenLoaded.OBJECTO:
+	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 5:
+		reproducir_sonido_seleccion()
 		selected_option2 = 5
 		selected_option3 = 0
 		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
 		screen_loaded = ScreenLoaded.OBJETO2
 
 func _on_boton_item_7_pressed() -> void:
-	if screen_loaded == ScreenLoaded.OBJECTO:
+	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 6:
+		reproducir_sonido_seleccion()
 		selected_option2 = 6
 		selected_option3 = 0
 		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
 		screen_loaded = ScreenLoaded.OBJETO2
 
 func _on_boton_item_8_pressed() -> void:
-	if screen_loaded == ScreenLoaded.OBJECTO:
+	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 7:
+		reproducir_sonido_seleccion()
 		selected_option2 = 7
 		selected_option3 = 0
 		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
@@ -330,13 +372,32 @@ func _on_boton_item_8_pressed() -> void:
 # --- ACCIONES DE LOS ITEMS ---
 func _on_boton_usar_pressed():
 	if screen_loaded == ScreenLoaded.OBJETO2:
+		reproducir_sonido_seleccion()
+		
+		var id_item = diccionario_global.inventario[selected_option2]
+		var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {})
+		
+		print("Usaste: ", datos_item.get("nombre"))
+		
+		if datos_item.get("tipo") == "objeto curativo" or datos_item.get("tipo") == "objetivo curativo":
+			diccionario_global.eliminar_objeto_por_indice(selected_option2)
+		
 		screen_loaded = ScreenLoaded.JUST_MENU
 		regresar_un_paso_atras()
 
 func _on_boton_info_pressed():
 	if screen_loaded == ScreenLoaded.OBJETO2:
+		reproducir_sonido_seleccion()
 		selected_option3 = 1
 		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
+		
+		if selected_option2 < diccionario_global.inventario.size():
+			var id_item = diccionario_global.inventario[selected_option2]
+			var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {})
+			
+			var label_info = info.get_node_or_null("Label")
+			if label_info:
+				label_info.text = datos_item.get("descripcion", "* No hay información disponible.")
 		objetos.visible = false
 		estadisticas.visible = false
 		telefono.visible = false
@@ -346,10 +407,18 @@ func _on_boton_info_pressed():
 
 func _on_boton_tirar_pressed():
 	if screen_loaded == ScreenLoaded.OBJETO2:
+		reproducir_sonido_seleccion()
+		
+		diccionario_global.eliminar_objeto_por_indice(selected_option2)
+		
 		screen_loaded = ScreenLoaded.JUST_MENU
 		regresar_un_paso_atras()
 
-# --- FUNCIÓN AUXILIAR DE AUDIO ---
+# --- FUNCIÓN DE AUDIO ---
 func reproducir_sonido_seleccion():
-	if sonido_cambio and is_inside_tree():
-		sonido_cambio.play()
+	if sonido_cambio:
+		if sonido_cambio.stream:
+			sonido_cambio.play()
+		else:
+			sonido_cambio.stream = load("res://audio/Interfaz/undertale-select-sound.wav")
+			sonido_cambio.play()

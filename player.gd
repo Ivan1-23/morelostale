@@ -71,27 +71,28 @@ func _physics_process(_delta):
 	move_and_slide()
 
 	# --- INTERACCIÓN CON EL LETRERO ---
-	# Cuando el jugador presione el botón de Acción (Z / Enter)...
 	if Input.is_action_just_pressed("acción"):
-		# Verificamos si tu RayCast2D está colisionando con el letrero
 		if detector.is_colliding():
 			var objeto_chocado = detector.get_collider()
 			
-			# Si el objeto al que miras tiene el método para entregar texto (letrero_ejemplo.gd)
 			if objeto_chocado and objeto_chocado.has_method("hablar"):
-				# Buscamos el cuadro_dialogo que tienes instanciado en mapa_ejemplo_2.tscn
-				var cuadro_dialogo = get_tree().current_scene.get_node_or_null("cuadro_dialogo")
+				
+				# CORREGIDO: Buscamos el cuadro usando al dueño del jugador (el mapa actual)
+				# en lugar de la escena raíz global del árbol.
+				var cuadro_dialogo = owner.get_node_or_null("cuadro_dialogo")
+				
+				# RESPALDO: Si por alguna razón 'owner' falla, lo buscamos en el grupo universal
+				if not cuadro_dialogo:
+					cuadro_dialogo = get_tree().get_first_node_in_group("dialogo")
 				
 				if cuadro_dialogo:
-					# Congelamos al jugador inmediatamente al estilo Undertale
 					puede_moverse = false 
 					
-					# Conectamos la señal para enterarnos de cuándo el jugador cierra el texto
 					if not cuadro_dialogo.dialogo_terminado.is_connected(_on_dialogo_terminado):
 						cuadro_dialogo.dialogo_terminado.connect(_on_dialogo_terminado)
 					
-					# Activamos el cuadro de diálogo pasándole el Array de datos de tu letrero
 					cuadro_dialogo.iniciar_dialogo(objeto_chocado.hablar())
+
 
 # --- FUNCIÓN DE RETORNO (CALLBACK) ---
 # Esta función reacciona en automático cuando el script 'cuadro_dialogo.gd' emite el 'signal dialogo_terminado'

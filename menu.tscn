@@ -7,10 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://kai3owmaaunr" path="res://sprites/almaRoja.png" id="4_l48gv"]
 [ext_resource type="Script" uid="uid://duqiv5a6s1hf7" path="res://rich_text_label2.gd" id="4_nrnbx"]
 [ext_resource type="FontFile" uid="uid://2xce36q5ycda" path="res://fonts/crypt-of-tomorrow-ut-font-no-rus.ttf" id="5_h1wq0"]
-[ext_resource type="Script" path="res://stats.gd" id="5_l48gv"]
-[ext_resource type="Script" path="res://rich_text_label.gd" id="5_ytr4m"]
+[ext_resource type="Script" uid="uid://2j8igaw7qe60" path="res://stats.gd" id="5_l48gv"]
+[ext_resource type="Script" uid="uid://djui812ppjdxv" path="res://rich_text_label.gd" id="5_ytr4m"]
 [ext_resource type="Script" uid="uid://wpukf6g80caa" path="res://rich_text_label_3.gd" id="6_dwrpx"]
-[ext_resource type="Script" path="res://oro.gd" id="7_kk3ma"]
+[ext_resource type="Script" uid="uid://46t5jk4hh67j" path="res://oro.gd" id="7_kk3ma"]
 [ext_resource type="AudioStream" uid="uid://4i4dv4dhhv04" path="res://audio/Interfaz/undertale-select-sound.wav" id="13_g7jxm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dwrpx"]
@@ -387,11 +387,15 @@ flat = true
 
 [node name="BotonCerrar" type="Button" parent="Control" unique_id=364707536]
 z_index = 2
-layout_mode = 0
-offset_left = 642.0
-offset_top = 47.0
-offset_right = 748.0
-offset_bottom = 104.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 341.0
+offset_top = 28.0
+offset_right = 447.0
+offset_bottom = 85.0
+grow_horizontal = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 0, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 1, 1, 1)
@@ -421,8 +425,9 @@ region_rect = Rect2(0, 0, 64, 64)
 patch_margin_left = 1
 patch_margin_right = 1
 
-[node name="sonido_cambio" type="AudioStreamPlayer2D" parent="." unique_id=787457103]
+[node name="sonido_cambio" type="AudioStreamPlayer" parent="." unique_id=662287742]
 stream = ExtResource("13_g7jxm")
+max_polyphony = 5
 
 [connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem1" to="." method="_on_boton_item_1_pressed"]
 [connection signal="pressed" from="Control/NinePatchRect/objeto/BotonItem2" to="." method="_on_boton_item_2_pressed"]
