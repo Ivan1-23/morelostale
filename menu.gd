@@ -112,6 +112,7 @@ func actualizar_visualizacion_inventario():
 func abrir_desde_celular():
 	if screen_loaded == ScreenLoaded.NOTHING:
 		menu.visible = true
+		botonCerrar = true
 		objetos.visible = false
 		estadisticas.visible = false
 		telefono.visible = false

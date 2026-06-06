@@ -76,3 +76,5 @@ offset_bottom = 134.0
 flat = true
 
 [connection signal="timeout" from="Fondo/TimerEfecto" to="." method="_on_timer_efecto_timeout"]
+[connection signal="pressed" from="Fondo/BotonSi" to="." method="_on_boton_si_pressed"]
+[connection signal="pressed" from="Fondo/BotonNo" to="." method="_on_boton_no_pressed"]
