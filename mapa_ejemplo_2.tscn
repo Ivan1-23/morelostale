@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b1y0wsjlrhhq6" path="res://sprites/example.png" id="1_s0m5t"]
 [ext_resource type="Texture2D" uid="uid://di7x0n3aagnef" path="res://sprites/Sprite10.png" id="2_nk6g5"]
 [ext_resource type="PackedScene" uid="uid://m7a4j1a14a3s" path="res://player.tscn" id="3_r3vdj"]
+[ext_resource type="PackedScene" uid="uid://byiyxq1tmuggv" path="res://objeto_suelo.tscn" id="4_m8mv3"]
 [ext_resource type="PackedScene" uid="uid://dsexmuqal45mo" path="res://zona_camera.tscn" id="4_nk6g5"]
 [ext_resource type="PackedScene" uid="uid://cqn82hrcqlf1j" path="res://cuadro_dialogo.tscn" id="4_wyeen"]
 [ext_resource type="PackedScene" uid="uid://d32bww5ccae5h" path="res://letrero_ejemplo.tscn" id="7_wyeen"]
@@ -54,3 +55,6 @@ position = Vector2(-10, 60)
 
 [node name="StaticBody2D" parent="." unique_id=11653250 instance=ExtResource("7_wyeen")]
 position = Vector2(-127, 53)
+
+[node name="objeto_suelto" parent="." unique_id=832773371 instance=ExtResource("4_m8mv3")]
+position = Vector2(401, 129)

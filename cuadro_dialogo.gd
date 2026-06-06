@@ -1,21 +1,35 @@
 extends CanvasLayer
 
 signal dialogo_terminado
+signal respuesta_pregunta(acepto: bool)
 
-# Asegúrate de que los nombres de estos nodos coincidan exactamente con tu escena
 @onready var texto_label = $Fondo/Contenedor/Texto
 @onready var retrato = $Fondo/Contenedor/Retrato
 @onready var timer = $Fondo/TimerEfecto
 @onready var audio_voz = $Fondo/AudioVoz
+@onready var corazon_pregunta = $Fondo/AlmaPregunta
+
+var sonido_squeak = AudioStreamPlayer.new()
 
 var lineas_dialogo: Array = []
 var linea_actual: int = 0
 var escribiendo: bool = false
+var es_pregunta: bool = false
+
+var opcion_pregunta: int = 0 # 0 = SÍ, 1 = NO
+var posicion_x_si: float = 70 
+var posicion_x_no: float = 170
+var posicion_y_opciones: float = 100
 
 func _ready():
 	visible = false
 	timer.wait_time = 0.03
-	visible = false
+	corazon_pregunta.visible = false
+	add_child(sound_setup())
+
+func sound_setup() -> AudioStreamPlayer:
+	sonido_squeak.stream = load("res://audio/Interfaz/snd_squeak.wav")
+	return sonido_squeak
 
 func iniciar_dialogo(datos_dialogo: Array):
 	lineas_dialogo = datos_dialogo
@@ -24,19 +38,19 @@ func iniciar_dialogo(datos_dialogo: Array):
 	mostrar_linea()
 
 func mostrar_linea():
-	# Si ya pasamos la última frase, cerramos el cuadro
 	if linea_actual >= lineas_dialogo.size():
 		finalizar_dialogo()
 		return
 		
 	escribiendo = true
 	texto_label.visible_characters = 0
+	corazon_pregunta.visible = false
 	
-	# Extraemos la información de la línea actual
 	var datos = lineas_dialogo[linea_actual]
 	texto_label.text = datos.get("texto", "")
+	es_pregunta = datos.get("es_pregunta", false)
 	
-	# --- LÓGICA DINÁMICA DE RETRATO ---
+	# --- LÓGICA DINÁMICA DE RETRATO CORREGIDA ---
 	var contenedor = $Fondo/Contenedor
 	if datos.get("retrato") != null:
 		retrato.texture = datos["retrato"]
@@ -50,46 +64,70 @@ func mostrar_linea():
 	if datos.get("voz") != null:
 		audio_voz.stream = datos["voz"]
 	else:
-		# Si el objeto no define una voz, carga el sonido de máquina de escribir por defecto
-		# IMPORTANTE: Asegúrate de poner la ruta correcta de tu archivo de audio genérico aquí abajo
 		audio_voz.stream = load("res://audio/voces/SND_TXT1.wav")
 	
-	# Encendemos el reloj para empezar a escribir letra por letra
 	timer.start()
 
 func _on_timer_efecto_timeout():
 	if texto_label.visible_characters < texto_label.get_total_character_count():
 		texto_label.visible_characters += 1
-		
-		# Hacemos sonar la voz, evitando que haga bips molestos en los espacios en blanco
 		if texto_label.text[texto_label.visible_characters - 1] != " " and audio_voz.stream:
 			audio_voz.play()
 	else:
-		# Si terminó de escribir toda la frase, detenemos el reloj
 		timer.stop()
 		escribiendo = false
+		
+		if es_pregunta:
+			opcion_pregunta = 0
+			actualizar_posicion_corazon()
+			corazon_pregunta.visible = true
+
+func actualizar_posicion_corazon():
+	if opcion_pregunta == 0:
+		corazon_pregunta.position = Vector2(posicion_x_si, posicion_y_opciones)
+	else:
+		corazon_pregunta.position = Vector2(posicion_x_no, posicion_y_opciones)
 
 func _input(event):
-	# Si el cuadro no está en pantalla, ignoramos cualquier botón del teclado
 	if not visible:
 		return
 
-	# --- BOTÓN CORRER (X): Únicamente completa el texto ---
-	if event.is_action_pressed("correr"):
-		if escribiendo:
+	if escribiendo:
+		if event.is_action_pressed("correr"):
 			timer.stop()
 			texto_label.visible_characters = -1
 			escribiendo = false
-		return # Corta el flujo aquí para que "correr" no haga nada más
+			
+			if es_pregunta:
+				opcion_pregunta = 0
+				actualizar_posicion_corazon()
+				corazon_pregunta.visible = true
+		return
 
-	# --- BOTÓN ACCIÓN (Z): Pasa de página o cierra ---
-	elif event.is_action_pressed("acción"):
-		# Si está escribiendo, ignoramos la Z (así no se puede saltar el texto con este botón)
-		if not escribiendo:
+	if es_pregunta:
+		if event.is_action_pressed("ui_menu_right") and opcion_pregunta == 0:
+			if sonido_squeak: sonido_squeak.play()
+			opcion_pregunta = 1
+			actualizar_posicion_corazon()
+			
+		elif event.is_action_pressed("ui_menu_left") and opcion_pregunta == 1:
+			if sonido_squeak: sonido_squeak.play()
+			opcion_pregunta = 0
+			actualizar_posicion_corazon()
+			
+		elif event.is_action_pressed("acción"):
+			corazon_pregunta.visible = false
+			if opcion_pregunta == 0:
+				emit_signal("respuesta_pregunta", true)
+			else:
+				emit_signal("respuesta_pregunta", false)
+			finalizar_dialogo()
+	else:
+		if event.is_action_pressed("acción"):
 			linea_actual += 1
 			mostrar_linea()
-		return
 
 func finalizar_dialogo():
 	visible = false
+	corazon_pregunta.visible = false
 	emit_signal("dialogo_terminado")

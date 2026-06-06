@@ -65,7 +65,7 @@ func _ready():
 		menu.mouse_filter = Control.MOUSE_FILTER_PASS
 
 	if not DisplayServer.is_touchscreen_available():
-		#botonCerrar.visible = false
+		botonCerrar.visible = false
 		botonObjeto.visible = false
 		botonEstadisticas.visible = false
 		botonTelefono.visible = false
@@ -119,6 +119,9 @@ func abrir_desde_celular():
 		select_arrow.visible = true
 		botonCerrar.visible = true 
 		screen_loaded = ScreenLoaded.JUST_MENU
+		
+		if botonCerrar:
+			botonCerrar.visible = DisplayServer.is_touchscreen_available()
 		
 		var jugador = get_tree().get_first_node_in_group("player")
 		if jugador:
@@ -293,7 +296,7 @@ func _input(event):
 				select_arrow.position = Vector2(select_x2 + selected_option3 * 105, 184)
 
 		ScreenLoaded.INFO:
-			if event.is_action_pressed("correr"):
+			if event.is_action_pressed("correr") or event.is_action_pressed("accion"):
 				
 				# === INTERRUMPIMOS EL TEXTO Y EL AUDIO ===
 				texto_escribiendo = false

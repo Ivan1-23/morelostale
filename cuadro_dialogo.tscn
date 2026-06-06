@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://djg0bfifvpqdh" path="res://cuadro_dialogo.gd" id="1_c6uhv"]
 [ext_resource type="Texture2D" uid="uid://bll6rtr7cwkjf" path="res://sprites/textura_menu2.png" id="2_0yen5"]
 [ext_resource type="FontFile" uid="uid://bh72o0b2molck" path="res://fonts/8bitoperator_jve.ttf" id="3_0yen5"]
+[ext_resource type="Texture2D" uid="uid://kai3owmaaunr" path="res://sprites/almaRoja.png" id="4_e5d4q"]
 
 [node name="cuadro_dialogo" type="CanvasLayer" unique_id=1836545299]
 script = ExtResource("1_c6uhv")
@@ -48,5 +49,14 @@ wait_time = 0.12
 
 [node name="AudioVoz" type="AudioStreamPlayer2D" parent="Fondo" unique_id=441363253]
 max_polyphony = 4
+
+[node name="AlmaPregunta" type="TextureRect" parent="Fondo" unique_id=1137330629]
+visible = false
+layout_mode = 0
+offset_left = -350.0
+offset_top = -568.0
+offset_right = -334.0
+offset_bottom = -552.0
+texture = ExtResource("4_e5d4q")
 
 [connection signal="timeout" from="Fondo/TimerEfecto" to="." method="_on_timer_efecto_timeout"]

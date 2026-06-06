@@ -3,6 +3,8 @@ extends Node
 # --- CONFIGURACIÓN DE PARTIDA ---
 var inicio_correcto: bool = true
 var moviste_archivos_para_estar_en_la_habitación_debug: bool = false
+var caja_a: Array = []
+var caja_b: Array = []
 
 # --- INVENTARIO ACTUAL ---
 var inventario: Array = ["sandwich_normal", "gorra_ilegal"]

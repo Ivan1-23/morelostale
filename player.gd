@@ -7,8 +7,6 @@ extends CharacterBody2D
 @onready var animaciones = $CollisionShape2D/AnimatedSprite2D
 
 # --- TU RAYCAST EXISTENTE ---
-# Vinculamos el nodo RayCast2D que ya tienes en tu escena.
-# IMPORTANTE: Asegúrate de que en el Inspector del RayCast2D la opción "Enabled" esté marcada.
 @onready var detector = $CollisionShape2D/RayCast2D 
 
 # Esta es la variable clave que lee el menú y controla el estado del juego
@@ -41,7 +39,6 @@ func _physics_process(_delta):
 		velocity = direccion * velocidad_actual
 		
 		# --- ROTACIÓN DINÁMICA DE TU RAYCAST ---
-		# Hacemos que la punta del RayCast mire exactamente hacia la dirección del movimiento
 		if abs(direccion.x) > abs(direccion.y):
 			detector.target_position = Vector2(15 if direccion.x > 0 else -15, 0)
 		else:
@@ -70,32 +67,42 @@ func _physics_process(_delta):
 			
 	move_and_slide()
 
-	# --- INTERACCIÓN CON EL LETRERO ---
+	# --- INTERACCIÓN MODIFICADA (LETREROS Y OBJETOS DEL SUELO) ---
 	if Input.is_action_just_pressed("acción"):
 		if detector.is_colliding():
 			var objeto_chocado = detector.get_collider()
 			
-			if objeto_chocado and objeto_chocado.has_method("hablar"):
+			if objeto_chocado:
+				# CASO 1: Es un objeto recolectable (como el dulce)
+				if objeto_chocado.has_method("interactuar"):
+					# Buscamos el cuadro de diálogo para asegurar la conexión de cierre
+					var cuadro_dialogo = owner.get_node_or_null("cuadro_dialogo")
+					if not cuadro_dialogo:
+						cuadro_dialogo = get_tree().get_first_node_in_group("dialogo")
+						
+					if cuadro_dialogo:
+						# Nos conectamos a la señal para saber cuándo reactivar al jugador al terminar
+						if not cuadro_dialogo.dialogo_terminado.is_connected(_on_dialogo_terminado):
+							cuadro_dialogo.dialogo_terminado.connect(_on_dialogo_terminado)
+						
+						objeto_chocado.interactuar(self)
 				
-				# CORREGIDO: Buscamos el cuadro usando al dueño del jugador (el mapa actual)
-				# en lugar de la escena raíz global del árbol.
-				var cuadro_dialogo = owner.get_node_or_null("cuadro_dialogo")
-				
-				# RESPALDO: Si por alguna razón 'owner' falla, lo buscamos en el grupo universal
-				if not cuadro_dialogo:
-					cuadro_dialogo = get_tree().get_first_node_in_group("dialogo")
-				
-				if cuadro_dialogo:
-					puede_moverse = false 
+				# CASO 2: Es un letrero o NPC común
+				elif objeto_chocado.has_method("hablar"):
+					var cuadro_dialogo = owner.get_node_or_null("cuadro_dialogo")
+					if not cuadro_dialogo:
+						cuadro_dialogo = get_tree().get_first_node_in_group("dialogo")
 					
-					if not cuadro_dialogo.dialogo_terminado.is_connected(_on_dialogo_terminado):
-						cuadro_dialogo.dialogo_terminado.connect(_on_dialogo_terminado)
-					
-					cuadro_dialogo.iniciar_dialogo(objeto_chocado.hablar())
+					if cuadro_dialogo:
+						puede_moverse = false 
+						
+						if not cuadro_dialogo.dialogo_terminado.is_connected(_on_dialogo_terminado):
+							cuadro_dialogo.dialogo_terminado.connect(_on_dialogo_terminado)
+						
+						cuadro_dialogo.iniciar_dialogo(objeto_chocado.hablar())
 
 
 # --- FUNCIÓN DE RETORNO (CALLBACK) ---
-# Esta función reacciona en automático cuando el script 'cuadro_dialogo.gd' emite el 'signal dialogo_terminado'
 func _on_dialogo_terminado():
 	await get_tree().create_timer(0.15).timeout
 	puede_moverse = true

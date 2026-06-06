@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://byiyxq1tmuggv"]
+
+[ext_resource type="Script" uid="uid://cmdcxbjcdri7p" path="res://objeto_suelo.gd" id="1_o8nsq"]
+[ext_resource type="Texture2D" uid="uid://conhr1gpv0jvd" path="res://sprites/tijeras (1).png" id="2_62gpu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o8nsq"]
+size = Vector2(16, 16)
+
+[node name="objeto_suelto" type="StaticBody2D" unique_id=832773371]
+script = ExtResource("1_o8nsq")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="." unique_id=1225004040]
+shape = SubResource("RectangleShape2D_o8nsq")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=574452485]
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_62gpu")
