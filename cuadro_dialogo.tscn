@@ -59,4 +59,14 @@ offset_right = -334.0
 offset_bottom = -552.0
 texture = ExtResource("4_e5d4q")
 
+[node name="BotonSi" type="Button" parent="Fondo" unique_id=1697576613]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="BotonNo" type="Button" parent="Fondo" unique_id=1323166864]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
 [connection signal="timeout" from="Fondo/TimerEfecto" to="." method="_on_timer_efecto_timeout"]

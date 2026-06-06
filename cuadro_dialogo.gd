@@ -8,7 +8,8 @@ signal respuesta_pregunta(acepto: bool)
 @onready var timer = $Fondo/TimerEfecto
 @onready var audio_voz = $Fondo/AudioVoz
 @onready var corazon_pregunta = $Fondo/AlmaPregunta
-
+@onready var boton_si = $Fondo/BotonSi
+@onready var boton_no = $Fondo/BotonNo
 var sonido_squeak = AudioStreamPlayer.new()
 
 var lineas_dialogo: Array = []
@@ -26,7 +27,9 @@ func _ready():
 	timer.wait_time = 0.03
 	corazon_pregunta.visible = false
 	add_child(sound_setup())
-
+	if DisplayServer.is_touchscreen_available():
+		boton_si.visible = false
+		boton_no.visible = false
 func sound_setup() -> AudioStreamPlayer:
 	sonido_squeak.stream = load("res://audio/Interfaz/snd_squeak.wav")
 	return sonido_squeak
@@ -81,7 +84,25 @@ func _on_timer_efecto_timeout():
 			opcion_pregunta = 0
 			actualizar_posicion_corazon()
 			corazon_pregunta.visible = true
+# --- FUNCIONES DE LOS BOTONES TÁCTILES ---
+func _on_boton_si_pressed():
+	if not escribiendo and es_pregunta:
+		opcion_pregunta = 0
+		actualizar_posicion_corazon()
+		confirmar_respuesta(true)
 
+func _on_boton_no_pressed():
+	if not escribiendo and es_pregunta:
+		opcion_pregunta = 1
+		actualizar_posicion_corazon()
+		confirmar_respuesta(false)
+
+func confirmar_respuesta(acepto: bool):
+	corazon_pregunta.visible = false
+	boton_si.visible = false
+	boton_no.visible = false
+	emit_signal("respuesta_pregunta", acepto)
+	finalizar_dialogo()
 func actualizar_posicion_corazon():
 	if opcion_pregunta == 0:
 		corazon_pregunta.position = Vector2(posicion_x_si, posicion_y_opciones)

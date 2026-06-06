@@ -30,7 +30,7 @@ var texto_escribiendo = false
 @onready var sonido_texto = $sonido_texto
 
 # Tu botón inteligente de la esquina para cerrar/volver
-@onready var botonCerrar = $Control/BotonCerrar
+@onready var botonCerrar = $Control2/BotonCerrar
 
 @onready var controls = get_tree().current_scene.find_child("touch_button", true, false) if is_inside_tree() else null
 

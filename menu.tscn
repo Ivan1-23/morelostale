@@ -389,28 +389,6 @@ offset_bottom = 124.0
 button_mask = 3
 flat = true
 
-[node name="BotonCerrar" type="Button" parent="Control" unique_id=364707536]
-z_index = 2
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = 341.0
-offset_top = 28.0
-offset_right = 447.0
-offset_bottom = 85.0
-grow_horizontal = 0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("3_ytr4m")
-theme_override_font_sizes/font_size = 40
-theme_override_styles/normal = SubResource("StyleBoxFlat_dwrpx")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_g7jxm")
-theme_override_styles/hover = SubResource("StyleBoxFlat_jspdm")
-text = "Atrás"
-script = ExtResource("12_g7jxm")
-
 [node name="Control2" type="Control" parent="." unique_id=1818843445]
 layout_mode = 3
 anchors_preset = 0
@@ -443,6 +421,28 @@ offset_bottom = 122.063995
 theme_override_fonts/font = ExtResource("3_ytr4m")
 theme_override_font_sizes/font_size = 31
 
+[node name="BotonCerrar" type="Button" parent="Control2" unique_id=364707536]
+z_index = 2
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 341.0
+offset_top = 28.0
+offset_right = 447.0
+offset_bottom = 85.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_ytr4m")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_dwrpx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_g7jxm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jspdm")
+text = "Atrás"
+script = ExtResource("12_g7jxm")
+
 [node name="sonido_cambio" type="AudioStreamPlayer" parent="." unique_id=662287742]
 stream = ExtResource("13_g7jxm")
 max_polyphony = 5
@@ -471,4 +471,4 @@ max_polyphony = 5
 [connection signal="pressed" from="Control/NinePatchRect/BotonObjeto" to="." method="_on_boton_objeto_pressed"]
 [connection signal="pressed" from="Control/NinePatchRect/BotonEstadisticas" to="." method="_on_boton_estadisticas_pressed"]
 [connection signal="pressed" from="Control/NinePatchRect/BotonTelefono" to="." method="_on_boton_telefono_pressed"]
-[connection signal="pressed" from="Control/BotonCerrar" to="." method="_on_boton_cerrar_pressed"]
+[connection signal="pressed" from="Control2/BotonCerrar" to="." method="_on_boton_cerrar_pressed"]
