@@ -30,7 +30,7 @@ var texto_escribiendo = false
 @onready var sonido_texto = $sonido_texto
 
 # Tu botón inteligente de la esquina para cerrar/volver
-@onready var botonCerrar = $Control2/BotonCerrar
+@onready var botonCerrar = $Control/BotonCerrar
 
 @onready var controls = get_tree().current_scene.find_child("touch_button", true, false) if is_inside_tree() else null
 
@@ -43,12 +43,16 @@ var px_d = 33
 var select_x2 = 176
 var select_y2 = -70
 
+# Añadidos nuevos estados para el control de la caja dimensional
 enum ScreenLoaded {NOTHING, JUST_MENU, OBJECTO, ESTADISTICAS, TELEFONO, OBJETO2, INFO, CAJAa, CAJAb}
 var screen_loaded = ScreenLoaded.NOTHING
 
 var selected_option: int = 0
 var selected_option2: int = 0
 var selected_option3: int = 0
+
+# === VARIABLES NUEVAS PARA CAJAS DIMENSIONALES ===
+var caja_actual_referencia: Array = []
 
 func _ready():
 	add_to_group("menu_sistema")
@@ -65,7 +69,7 @@ func _ready():
 		menu.mouse_filter = Control.MOUSE_FILTER_PASS
 
 	if not DisplayServer.is_touchscreen_available():
-		botonCerrar.visible = false
+		if botonCerrar: botonCerrar.visible = false
 		botonObjeto.visible = false
 		botonEstadisticas.visible = false
 		botonTelefono.visible = false
@@ -88,7 +92,7 @@ func _ready():
 		sonido_squeak.stream = load("res://audio/Interfaz/snd_squeak.wav")
 	if sonido_texto:
 		sonido_texto.stream = load("res://audio/voces/SND_TXT1.wav")
-# --- FUNCIÓN: ACTUALIZA LOS BOTONES CON EL INVENTARIO REAL ---
+
 func actualizar_visualizacion_inventario():
 	var lista_botones = [botonItem1, botonItem2, botonItem3, botonItem4, botonItem5, botonItem6, botonItem7, botonItem8]
 	var tamano_inventario = diccionario_global.inventario.size()
@@ -104,7 +108,6 @@ func actualizar_visualizacion_inventario():
 			lista_botones[i].text = ""
 			lista_botones[i].visible = false
 
-	# Sincroniza también el texto del RichTextLabel gigante del inventario de objetos si existe
 	var texto_gigante = $Control/NinePatchRect/objeto/VBoxContainer/RichTextLabel
 	if texto_gigante and texto_gigante.has_method("actualizar_texto_inventario"):
 		texto_gigante.actualizar_texto_inventario()
@@ -112,17 +115,18 @@ func actualizar_visualizacion_inventario():
 func abrir_desde_celular():
 	if screen_loaded == ScreenLoaded.NOTHING:
 		menu.visible = true
-		botonCerrar = true
+		
+		# === ¡CORREGIDO AQUÍ! ===
+		# Cambiamos 'botonCerrar = true' por la propiedad correcta '.visible' para no romper el nodo
+		if botonCerrar:
+			botonCerrar.visible = DisplayServer.is_touchscreen_available()
+			
 		objetos.visible = false
 		estadisticas.visible = false
 		telefono.visible = false
 		info.visible = false
 		select_arrow.visible = true
-		botonCerrar.visible = true 
 		screen_loaded = ScreenLoaded.JUST_MENU
-		
-		if botonCerrar:
-			botonCerrar.visible = DisplayServer.is_touchscreen_available()
 		
 		var jugador = get_tree().get_first_node_in_group("player")
 		if jugador:
@@ -178,6 +182,14 @@ func regresar_un_paso_atras():
 			objetos.visible = true
 			select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
 			screen_loaded = ScreenLoaded.OBJETO2
+			
+		# Regresar desde las interfaces de las cajas dimensionales al panel Teléfono
+		ScreenLoaded.CAJAa, ScreenLoaded.CAJAb:
+			# Aquí ocultas visualmente tus paneles de caja si los tienes
+			telefono.visible = true
+			selected_option2 = 0
+			select_arrow.position = Vector2(select_x2, select_y2)
+			screen_loaded = ScreenLoaded.TELEFONO
 
 func _input(event):
 	match screen_loaded:
@@ -191,41 +203,36 @@ func _input(event):
 
 		ScreenLoaded.JUST_MENU:
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
-				if sonido_squeak: sonido_squeak.play() # CORREGIDO: Sonido Squeak al cerrar el menú completo
+				if sonido_squeak: sonido_squeak.play()
 				regresar_un_paso_atras()
 			
-			# Movimientos en el menú principal
 			elif event.is_action_pressed("ui_menu_down"):
 				if sonido_squeak: sonido_squeak.play()
 				selected_option = (selected_option + 1) % 3
 				select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 			elif event.is_action_pressed("ui_menu_up"):
 				if sonido_squeak: sonido_squeak.play()
-				# Restamos 1, sumamos 3 para evitar números negativos, y limitamos con % 3
 				selected_option = (selected_option - 1 + 3) % 3
-				# Modificado para usar el valor directo y limpio de la variable
 				select_arrow.position = Vector2(select_x, select_y + selected_option * px_d)
 				
-			# Confirmaciones de opciones del menú principal
 			elif event.is_action_pressed("acción") and selected_option == 0:
-				if sonido_cambio: sonido_cambio.play() # SELECT al entrar
+				if sonido_cambio: sonido_cambio.play()
 				_on_boton_objeto_pressed()
 			elif event.is_action_pressed("acción") and selected_option == 1:
-				if sonido_cambio: sonido_cambio.play() # SELECT al entrar
+				if sonido_cambio: sonido_cambio.play()
 				_on_boton_estadisticas_pressed()
 				var label_stats = $Control/NinePatchRect/Estadisticas/VBoxContainer/stats
 				if label_stats and label_stats.has_method("actualizar_estadisticas"):
 					label_stats.actualizar_estadisticas()
 			elif event.is_action_pressed("acción") and selected_option == 2:
-				if sonido_cambio: sonido_cambio.play() # SELECT al entrar
+				if sonido_cambio: sonido_cambio.play()
 				_on_boton_telefono_pressed()
 
 		ScreenLoaded.OBJECTO:
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
-				if sonido_cambio: sonido_cambio.play() # SELECT al regresar al menú principal
+				if sonido_cambio: sonido_cambio.play()
 				regresar_un_paso_atras()
 			
-			# Movimientos verticales en la lista del inventario
 			elif event.is_action_pressed("ui_menu_down") and selected_option2 < diccionario_global.inventario.size() - 1:
 				if sonido_squeak: sonido_squeak.play()
 				selected_option2 += 1
@@ -236,105 +243,148 @@ func _input(event):
 				select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
 				
 			elif event.is_action_pressed("acción"):
-				# Protección contra inventario vacío o fuera de rango
 				if selected_option2 < diccionario_global.inventario.size() and diccionario_global.inventario.size() > 0:
-					if sonido_cambio: sonido_cambio.play() # SELECT al abrir las opciones del ítem
+					if sonido_cambio: sonido_cambio.play()
 					select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
 					screen_loaded = ScreenLoaded.OBJETO2
 
 		ScreenLoaded.OBJETO2:
-			# Si el jugador presiona cancelar (X / atrás), cierra todo el menú de golpe estilo Undertale
 			if event.is_action_pressed("correr") or event.is_action_pressed("menu"):
 				if sonido_cambio: sonido_cambio.play()
+				cerrar_todo_el_menu_de_golpe()
 				
-				# Ocultamos absolutamente todos los paneles de la interfaz
-				menu.visible = false
-				objetos.visible = false
-				estadisticas.visible = false
-				telefono.visible = false
-				info.visible = false
-				select_arrow.visible = false
-				if botonCerrar: botonCerrar.visible = false
-				
-				# Devolvemos el control de la pantalla táctil si aplica
-				if controls:
-					controls.visible = true
-					controls.process_mode = PROCESS_MODE_INHERIT
-				
-				# Le devolvemos el movimiento al personaje en el mapa
-				var jugador = get_tree().get_first_node_in_group("player")
-				if jugador and jugador.has_method("set_physics_process"):
-					jugador.set_physics_process(true)
-				
-				# Reiniciamos los índices de selección para la siguiente apertura
-				selected_option = 0
-				selected_option2 = 0
-				selected_option3 = 0
-				
-				# Cambiamos el estado directamente al modo exploración
-				screen_loaded = ScreenLoaded.NOTHING
-				
-			# Confirmar la opción seleccionada con el botón de Acción (Z / Enter)
 			elif event.is_action_pressed("acción") and selected_option3 == 0:
-				_on_boton_usar_pressed() # Maneja sus propios sonidos internamente (heal o item)
+				_on_boton_usar_pressed()
 			elif event.is_action_pressed("acción") and selected_option3 == 1:
-				#if sonido_cambio: sonido_cambio.play()
 				_on_boton_info_pressed()
 			elif event.is_action_pressed("acción") and selected_option3 == 2:
-				#if sonido_cambio: sonido_cambio.play()
 				_on_boton_tirar_pressed()
 				
-			# Movimiento del cursor hacia la derecha
 			elif event.is_action_pressed("ui_menu_right"):
 				if sonido_squeak: sonido_squeak.play()
 				selected_option3 = (selected_option3 + 1) % 3
 				select_arrow.position = Vector2(select_x2 + selected_option3 * 105, 184)
 				
-			# Movimiento del cursor hacia la izquierda
 			elif event.is_action_pressed("ui_menu_left"):
 				if sonido_squeak: sonido_squeak.play()
 				selected_option3 = (selected_option3 - 1 + 3) % 3
 				select_arrow.position = Vector2(select_x2 + selected_option3 * 105, 184)
 
 		ScreenLoaded.INFO:
-			if event.is_action_pressed("correr") or event.is_action_pressed("accion"):
-				
-				# === INTERRUMPIMOS EL TEXTO Y EL AUDIO ===
+			if event.is_action_pressed("correr") or event.is_action_pressed("acción"):
 				texto_escribiendo = false
 				if sonido_texto: 
 					sonido_texto.stop()
-				
-				# Cerramos todo el menú de golpe estilo Undertale
-				menu.visible = false
-				objetos.visible = false
-				estadisticas.visible = false
-				telefono.visible = false
-				info.visible = false
-				select_arrow.visible = false
-				if botonCerrar: botonCerrar.visible = false
-				
-				if controls:
-					controls.visible = true
-					controls.process_mode = PROCESS_MODE_INHERIT
-				
-				var jugador = get_tree().get_first_node_in_group("player")
-				if jugador:
-					jugador.puede_moverse = true
-					if jugador.has_method("set_physics_process"):
-						jugador.set_physics_process(true)
-				
-				selected_option = 0
-				selected_option2 = 0
-				selected_option3 = 0
-				
-				screen_loaded = ScreenLoaded.NOTHING
+				cerrar_todo_el_menu_de_golpe()
 
-		ScreenLoaded.ESTADISTICAS, ScreenLoaded.TELEFONO:
+		ScreenLoaded.ESTADISTICAS:
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
-				if sonido_cambio: sonido_cambio.play() # SELECT al salir de estas pantallas completas
+				if sonido_cambio: sonido_cambio.play()
 				regresar_un_paso_atras()
 
-# --- SEÑAL DEL BOTÓN TÁCTIL "Y" ---
+		# === LOGICA DE NAVEGACION PARA CAJAS EN PANEL TELEFONO ===
+		ScreenLoaded.TELEFONO:
+			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
+				if sonido_cambio: sonido_cambio.play()
+				regresar_un_paso_atras()
+			
+			# Mover verticalmente entre 0 (Caja A) y 1 (Caja B)
+			elif event.is_action_pressed("ui_menu_down") and selected_option2 < 1:
+				if sonido_squeak: sonido_squeak.play()
+				selected_option2 += 1
+				select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
+			elif event.is_action_pressed("ui_menu_up") and selected_option2 > 0:
+				if sonido_squeak: sonido_squeak.play()
+				selected_option2 -= 1
+				select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
+				
+			# Seleccionar qué caja dimensional abrir presionando Z / Acción
+			elif event.is_action_pressed("acción"):
+				if sonido_cambio: sonido_cambio.play()
+				if selected_option2 == 0:
+					abrir_interfaz_caja(ScreenLoaded.CAJAa)
+				else:
+					abrir_interfaz_caja(ScreenLoaded.CAJAb)
+
+		# Control interno de las cajas (Puedes expandir esto según tus paneles visuales)
+		ScreenLoaded.CAJAa, ScreenLoaded.CAJAb:
+			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
+				if sonido_cambio: sonido_cambio.play()
+				regresar_un_paso_atras()
+
+func cerrar_todo_el_menu_de_golpe():
+	menu.visible = false
+	objetos.visible = false
+	estadisticas.visible = false
+	telefono.visible = false
+	info.visible = false
+	select_arrow.visible = false
+	if botonCerrar: botonCerrar.visible = false
+	
+	if controls:
+		controls.visible = true
+		controls.process_mode = PROCESS_MODE_INHERIT
+	
+	var jugador = get_tree().get_first_node_in_group("player")
+	if jugador:
+		jugador.puede_moverse = true
+		if jugador.has_method("set_physics_process"):
+			jugador.set_physics_process(true)
+	
+	selected_option = 0
+	selected_option2 = 0
+	selected_option3 = 0
+	screen_loaded = ScreenLoaded.NOTHING
+
+# --- LOGICA LOGICA DEL SISTEMA DE CAJAS DIMENSIONALES ---
+func abrir_interfaz_caja(tipo_caja):
+	screen_loaded = tipo_caja
+	selected_option3 = 0 # 0 = Modo Guardar, 1 = Modo Retirar
+	
+	if tipo_caja == ScreenLoaded.CAJAa:
+		caja_actual_referencia = diccionario_global.caja_a
+		print("--- CAJA DIMENSIONAL A ABIERTA ---")
+	else:
+		caja_actual_referencia = diccionario_global.caja_b
+		print("--- CAJA DIMENSIONAL B ABIERTA ---")
+		
+	# Aquí harías visible el panel específico de las cajas si cuentas con él
+	actualizar_visualizacion_caja()
+
+func guardar_objeto_en_caja(indice_inventario: int):
+	if diccionario_global.inventario.size() > indice_inventario:
+		if caja_actual_referencia.size() < diccionario_global.MAX_ESPACIO_CAJA:
+			var id_item = diccionario_global.inventario[indice_inventario]
+			
+			caja_actual_referencia.append(id_item)
+			diccionario_global.eliminar_objeto_por_indice(indice_inventario)
+			
+			actualizar_visualizacion_inventario()
+			actualizar_visualizacion_caja()
+			if sonido_cambio: sonido_cambio.play()
+		else:
+			print("La caja dimensional está llena.")
+
+func retirar_objeto_de_caja(indice_caja: int):
+	if caja_actual_referencia.size() > indice_caja:
+		if diccionario_global.inventario.size() < 8:
+			var id_item = caja_actual_referencia[indice_caja]
+			
+			diccionario_global.añadir_objeto(id_item)
+			caja_actual_referencia.remove_at(indice_caja)
+			
+			actualizar_visualizacion_inventario()
+			actualizar_visualizacion_caja()
+			if sonido_cambio: sonido_cambio.play()
+		else:
+			print("No puedes cargar más objetos, inventario lleno.")
+
+func actualizar_visualizacion_caja():
+	# En esta función puedes mapear las etiquetas de texto de la interfaz de la caja
+	# recorriendo los IDs almacenados en 'caja_actual_referencia'
+	pass
+
+# --- SEÑALES Y BOTONES ---
 func _on_boton_y_pressed() -> void:
 	reproducir_sonido_seleccion()
 	var jugador = get_tree().get_first_node_in_group("player")
@@ -354,7 +404,6 @@ func _on_boton_y_pressed() -> void:
 			select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 			get_viewport().set_input_as_handled()
 
-# --- SEÑAL DEL BOTÓN "ATRÁS" (CERRAR EN LA ESQUINA) ---
 func _on_boton_cerrar_pressed() -> void:
 	reproducir_sonido_seleccion()
 	var estado_antes = screen_loaded
@@ -372,11 +421,9 @@ func _on_boton_cerrar_pressed() -> void:
 			controls.visible = true
 			controls.process_mode = PROCESS_MODE_INHERIT
 
-# --- BOTONES TÁCTILES PRINCIPALES ---
 func _on_boton_objeto_pressed():
 	reproducir_sonido_seleccion()
 	actualizar_visualizacion_inventario()
-	
 	selected_option = 0
 	selected_option2 = 0
 	select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
@@ -412,7 +459,7 @@ func _on_boton_telefono_pressed():
 	info.visible = false
 	screen_loaded = ScreenLoaded.TELEFONO
 
-# --- SELECCIÓN DE ITEMS TÁCTILES CORREGIDOS ---
+# --- SELECCIÓN DE ITEMS TÁCTILES ---
 func _on_boton_item_1_pressed() -> void:
 	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 0:
 		reproducir_sonido_seleccion()
@@ -478,8 +525,6 @@ func _on_boton_item_8_pressed() -> void:
 		screen_loaded = ScreenLoaded.OBJETO2
 
 # --- ACCIONES DE LOS ITEMS ---
-# --- MODIFICACIÓN EN MENU.GD ---
-
 func _on_boton_usar_pressed():
 	if screen_loaded == ScreenLoaded.OBJETO2:
 		var id_item_nuevo = diccionario_global.inventario[selected_option2]
@@ -490,7 +535,6 @@ func _on_boton_usar_pressed():
 		var mensaje = ""
 		var es_equipable = false
 		
-		# === CASO A: OBJETO CURATIVO (CONSUMIBLE) ===
 		if tipo_objeto == "objeto curativo" or tipo_objeto == "objetivo curativo":
 			es_equipable = true
 			var puntos_curacion = datos_item.get("hp", 0)
@@ -507,10 +551,8 @@ func _on_boton_usar_pressed():
 					mensaje = "* Tus HP subieron al máximo."
 				else:
 					mensaje = "* Recuperaste " + str(puntos_curacion) + " HP."
+				diccionario_global.eliminar_objeto_por_indice(selected_option2)
 			
-			diccionario_global.eliminar_objeto_por_indice(selected_option2)
-			
-		# === CASO B: ES UN ARMA ===
 		elif tipo_objeto == "Arma":
 			es_equipable = true
 			if sonido_cambio:
@@ -529,7 +571,6 @@ func _on_boton_usar_pressed():
 				
 			sonido_cambio.stream = load("res://audio/Interfaz/undertale-select-sound.wav")
 				
-		# === CASO C: ES UNA ARMADURA ===
 		elif tipo_objeto == "Armadura":
 			es_equipable = true
 			if sonido_cambio:
@@ -548,12 +589,8 @@ func _on_boton_usar_pressed():
 				
 			sonido_cambio.stream = load("res://audio/Interfaz/undertale-select-sound.wav")
 
-		# === RESPUESTA VISUAL UNIFICADA ===
 		if es_equipable:
-			# Llamamos a la animación con el mensaje correspondiente (curación o equipamiento)
 			mostrar_texto_animado(mensaje)
-			
-			# Sincronizamos textos y datos en segundo plano de inmediato
 			actualizar_visualizacion_inventario()
 			var mini_stats = $Control/mini_stats/VBoxContainer/MiniStatsLabel
 			if mini_stats and mini_stats.has_method("actualizar_mini_stats"):
@@ -567,38 +604,26 @@ func _on_boton_usar_pressed():
 
 func _on_boton_info_pressed():
 	if screen_loaded == ScreenLoaded.OBJETO2:
-		# 1. Buscamos el objeto seleccionado en el inventario global
 		var id_item = diccionario_global.inventario[selected_option2]
 		var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {})
-		
-		# 2. Obtenemos su descripción (o un mensaje por defecto si no tiene)
 		var descripcion = datos_item.get("descripcion", "* No hay informacion disponible.")
-		
-		# 3. Lanzamos el texto animado (esta función oculta el menú, prende info y activa el sonido)
 		mostrar_texto_animado(descripcion)
-
 
 func _on_boton_tirar_pressed():
 	if screen_loaded == ScreenLoaded.OBJETO2:
-		# 1. Obtenemos los datos del objeto antes de borrarlo
 		var id_item = diccionario_global.inventario[selected_option2]
 		var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {})
 		var nombre_objeto = datos_item.get("nombre", "Objeto")
 		
-		# 2. Eliminamos el objeto del inventario del jugador
 		diccionario_global.eliminar_objeto_por_indice(selected_option2)
-		
-		# 3. Lanzamos la animación con el texto personalizado de desecho
 		mostrar_texto_animado("* El " + nombre_objeto + " ha sido desechado.")
-		
-		# 4. Actualizamos los elementos visuales de fondo para que ya no muestren el ítem
 		actualizar_visualizacion_inventario()
 		
 		var mini_stats = $Control/NinePatchRect/MiniStatsLabel
 		if mini_stats and mini_stats.has_method("actualizar_mini_stats"):
 			mini_stats.actualizar_mini_stats()
 
-# --- FUNCIÓN DE AUDIO ---
+# --- REPRODUCCIÓN AUDIO ---
 func reproducir_sonido_seleccion():
 	if sonido_cambio:
 		if sonido_cambio.stream:
@@ -606,35 +631,33 @@ func reproducir_sonido_seleccion():
 		else:
 			sonido_cambio.stream = load("res://audio/Interfaz/undertale-select-sound.wav")
 			sonido_cambio.play()
+
 func mostrar_texto_animado(texto_completo: String):
 	var label_info = info.get_node_or_null("Label")
 	if not label_info:
 		return
 		
 	label_info.text = "" 
-	
-	# === CONFIGURACIÓN VISUAL ===
 	menu.visible = false
 	info.visible = true
 	select_arrow.visible = false
 	screen_loaded = ScreenLoaded.INFO
 	
-	# Activamos la bandera de que se está escribiendo
+	# === ENCIENDE LOS CONTROLES TÁCTILES DEL MAPA AQUÍ ===
+	if controls:
+		controls.visible = true
+		controls.process_mode = PROCESS_MODE_INHERIT
+	
 	texto_escribiendo = true
 	
 	for i in range(texto_completo.length()):
-		# SI EL JUGADOR CERRÓ EL CUADRO, SE ROMPE EL BUCLE INMEDIATAMENTE
 		if not texto_escribiendo:
 			break
-			
 		label_info.text += texto_completo[i]
-		
 		if texto_completo[i] != " " and sonido_texto:
 			sonido_texto.play()
-			
 		await get_tree().create_timer(0.04).timeout
 
-	# Al terminar el texto (de forma natural o por interrupción), apagamos la bandera y el sonido
 	texto_escribiendo = false
 	if sonido_texto:
 		sonido_texto.stop()

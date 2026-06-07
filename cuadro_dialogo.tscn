@@ -5,6 +5,10 @@
 [ext_resource type="FontFile" uid="uid://bh72o0b2molck" path="res://fonts/8bitoperator_jve.ttf" id="3_0yen5"]
 [ext_resource type="Texture2D" uid="uid://kai3owmaaunr" path="res://sprites/almaRoja.png" id="4_e5d4q"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e5d4q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qc0bs"]
+
 [node name="cuadro_dialogo" type="CanvasLayer" unique_id=1836545299]
 script = ExtResource("1_c6uhv")
 
@@ -61,18 +65,20 @@ texture = ExtResource("4_e5d4q")
 
 [node name="BotonSi" type="Button" parent="Fondo" unique_id=1697576613]
 layout_mode = 0
-offset_left = 42.0
-offset_top = 30.0
-offset_right = 143.0
+offset_left = 15.0
+offset_top = 68.0
+offset_right = 116.0
 offset_bottom = 131.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_e5d4q")
 flat = true
 
 [node name="BotonNo" type="Button" parent="Fondo" unique_id=1323166864]
 layout_mode = 0
-offset_left = 221.0
-offset_top = 33.0
-offset_right = 322.0
-offset_bottom = 134.0
+offset_left = 160.0
+offset_top = 69.0
+offset_right = 261.0
+offset_bottom = 132.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_qc0bs")
 flat = true
 
 [connection signal="timeout" from="Fondo/TimerEfecto" to="." method="_on_timer_efecto_timeout"]

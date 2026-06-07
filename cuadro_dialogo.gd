@@ -27,7 +27,7 @@ func _ready():
 	timer.wait_time = 0.03
 	corazon_pregunta.visible = false
 	add_child(sound_setup())
-	if DisplayServer.is_touchscreen_available():
+	if not DisplayServer.is_touchscreen_available():
 		boton_si.visible = false
 		boton_no.visible = false
 func sound_setup() -> AudioStreamPlayer:
