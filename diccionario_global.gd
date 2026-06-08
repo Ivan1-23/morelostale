@@ -5,7 +5,7 @@ var inicio_correcto: bool = true
 var moviste_archivos_para_estar_en_la_habitación_debug: bool = false
 var caja_a: Array = []
 var caja_b: Array = []
-
+var MAX_ESPACIO_CAJA: int = 10
 # --- INVENTARIO ACTUAL ---
 var inventario: Array = ["sandwich_normal", "gorra_ilegal"]
 # --- BASE DE DATOS DE OBJETOS COMPLETA ---
