@@ -27,7 +27,7 @@ var texto_escribiendo = false
 @onready var interfaz_caja = $Control/NinePatchRect/InterfazCaja
 @onready var lista_mochila = $Control/NinePatchRect/InterfazCaja/ContenedorColumnas/ListaInventario
 @onready var lista_caja_dimensional = $Control/NinePatchRect/InterfazCaja/ContenedorColumnas/ListaCaja
-@onready var titulo_caja_label = $Control/NinePatchRect/InterfazCaja/TituloCaja
+@onready var titulo_caja_label = $Control/NinePatchRect/InterfazCaja/TituloCaja2
 @onready var texto_indicador = $Control/NinePatchRect/InterfazCaja/TextoIndicador
 
 # Sonidos
@@ -53,7 +53,7 @@ var caja_pos_x_mochila: float = 40.0   # Posición X columna Mochila (Izquierda)
 var caja_pos_x_caja: float = 320.0    # Posición X columna Caja (Derecha)
 var caja_pos_y_inicio: float = -70.0   # Posición Y del primer elemento
 var caja_separacion_y: float = 30.0   # Separación vertical por cada salto de renglón
-var caja_separacion_y_caja: float = 28.5
+var caja_separacion_y_caja: float = 29
 
 # Estados para el control de la interfaz
 enum ScreenLoaded {NOTHING, JUST_MENU, OBJECTO, ESTADISTICAS, TELEFONO, OBJETO2, INFO, CAJAa, CAJAb}
@@ -387,17 +387,17 @@ func abrir_interfaz_caja(tipo_caja):
 	# Mapear título dinámico y referencia global sin duplicar nodos
 	if tipo_caja == ScreenLoaded.CAJAa:
 		caja_actual_referencia = diccionario_global.caja_a
-		if titulo_caja_label: titulo_caja_label.text = "[ BOX A ]"
+		if titulo_caja_label: titulo_caja_label.text = " Caja A "
 	else:
 		caja_actual_referencia = diccionario_global.caja_b
-		if titulo_caja_label: titulo_caja_label.text = "[ BOX B ]"
+		if titulo_caja_label: titulo_caja_label.text = " Caja B "
 		
 	# Configurar el pie de página en amarillo y blanco mediante BBCode
 	if texto_indicador:
 		if DisplayServer.is_touchscreen_available():
 			texto_indicador.text = "[color=#ffff00][Tocar][/color] Guardar o Retirar objeto"
 		else:
-			texto_indicador.text = "[color=#ffff00][Z][/color] Guardar / Retirar      [color=#ffff00][X][/color] Salir"
+			texto_indicador.text = "[color=#ffff00][Z/ENTER][/color] Transferir      [color=#ffff00][X/SHIFT][/color] Salir"
 			
 	actualizar_visualizacion_caja()
 

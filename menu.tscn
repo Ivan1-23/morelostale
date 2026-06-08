@@ -347,8 +347,24 @@ custom_minimum_size = Vector2(70, 60)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
 theme_override_font_sizes/normal_font_size = 29
-text = "Caja Dimenional A
-Caja Dimenional B"
+text = "Caja Dimensional A
+Caja Dimensional B"
+
+[node name="BotonCajaA" type="Button" parent="Control/NinePatchRect/Telefono" unique_id=814935599]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 39.0
+offset_right = 275.0
+offset_bottom = 65.0
+flat = true
+
+[node name="BotonCajaB" type="Button" parent="Control/NinePatchRect/Telefono" unique_id=1231194004]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 68.0
+offset_right = 274.0
+offset_bottom = 98.0
+flat = true
 
 [node name="TextureRect" type="TextureRect" parent="Control/NinePatchRect" unique_id=303352134]
 z_index = 1
@@ -395,7 +411,6 @@ button_mask = 3
 flat = true
 
 [node name="InterfazCaja" type="NinePatchRect" parent="Control/NinePatchRect" unique_id=1409570270]
-visible = false
 layout_mode = 0
 offset_left = 2.0
 offset_top = -144.0
@@ -409,20 +424,20 @@ patch_margin_bottom = 1
 
 [node name="TituloCaja" type="RichTextLabel" parent="Control/NinePatchRect/InterfazCaja" unique_id=1286881338]
 layout_mode = 0
-offset_left = 98.0
-offset_top = 28.0
-offset_right = 243.0
-offset_bottom = 60.0
+offset_left = 75.0
+offset_top = 24.0
+offset_right = 220.0
+offset_bottom = 56.0
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
 theme_override_font_sizes/normal_font_size = 31
 text = "INVENTARIO"
 
 [node name="TituloCaja2" type="RichTextLabel" parent="Control/NinePatchRect/InterfazCaja" unique_id=1915457929]
 layout_mode = 0
-offset_left = 411.0
-offset_top = 28.0
-offset_right = 466.0
-offset_bottom = 60.0
+offset_left = 392.0
+offset_top = 24.0
+offset_right = 511.0
+offset_bottom = 56.0
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
 theme_override_font_sizes/normal_font_size = 31
 text = "CAJA"
@@ -442,6 +457,60 @@ offset_top = 58.0
 offset_right = 570.0
 offset_bottom = 60.0
 texture = ExtResource("13_5h80m")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/NinePatchRect/InterfazCaja" unique_id=1061978980]
+layout_mode = 0
+offset_left = 68.0
+offset_top = 68.0
+offset_right = 253.0
+offset_bottom = 308.0
+
+[node name="BotonInventario" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=329530467]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+flat = true
+
+[node name="BotonInventario2" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=681962436]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+flat = true
+
+[node name="BotonInventario3" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=2107129315]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+flat = true
+
+[node name="BotonInventario4" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=831118825]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+flat = true
+
+[node name="BotonInventario5" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=234150447]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+flat = true
+
+[node name="BotonInventario6" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=1950226695]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+flat = true
+
+[node name="BotonInventario7" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=1129783274]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+flat = true
+
+[node name="BotonInventario8" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=382556904]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+flat = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/NinePatchRect/InterfazCaja" unique_id=325794831]
+layout_mode = 0
+offset_left = 335.0
+offset_top = 68.0
+offset_right = 375.0
+offset_bottom = 108.0
 
 [node name="ContenedorColumnas" type="HBoxContainer" parent="Control/NinePatchRect/InterfazCaja" unique_id=1346436487]
 layout_mode = 0
