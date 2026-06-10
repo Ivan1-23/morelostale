@@ -15,8 +15,8 @@ config/version="test 1.3.1"
 run/main_scene="uid://dnweuob15nimk"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)
-boot_splash/show_image=false
 config/icon="res://icon.svg"
+boot_splash/show_image=false
 
 [autoload]
 
@@ -28,6 +28,7 @@ diccionario_global="*uid://nng11y1vmtyf"
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="viewport"
+window/stretch/aspect="expand"
 window/stretch/scale_mode="integer"
 
 [editor]
