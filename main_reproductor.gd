@@ -39,7 +39,6 @@ func ajustar_proporcion_pantalla():
 		nuevo_alto = nuevo_ancho / proporcion_deseada
 	
 	# 3. Forzar al SubViewport a medir SIEMPRE 640x480 píxeles exactos
-	# Esto evita que el juego se infle a 1280x720 internamente
 	sub_viewport.size = Vector2i(640, 480)
 	container.size = Vector2(640, 480)
 	
@@ -51,10 +50,21 @@ func ajustar_proporcion_pantalla():
 	# Aplicar la escala al contenedor exterior
 	container.scale = factor_escala
 	
-	# 5. Centrado absoluto en la pantalla por código
-	# Calculamos el centro de la pantalla y le restamos la mitad del tamaño escalado
-	var tamano_escalado = container.size * factor_escala
-	container.global_position = (tamano_pantalla - tamano_escalado) / 2.0
+	# 5. CENTRADO HÍBRIDO (PC vs Celular)
+	# Si está en Android o iOS, calculamos el margen real de la pantalla de forma absoluta
+	if DisplayServer.get_name() in ["Android", "iOS"]:
+		# Calculamos cuánto espacio libre queda a los lados en píxeles reales
+		var margen_x = (tamano_pantalla.x - (640.0 * escala_x)) / 2.0
+		var margen_y = (tamano_pantalla.y - (480.0 * escala_y)) / 2.0
+		
+		# Forzamos la posición global directamente en el píxel de inicio del juego,
+		# obligando a Godot a ignorar el desfase que provocan los joysticks virtuales.
+		container.global_position = Vector2(margen_x, margen_y)
+	else:
+		# En PC mantiene tu cálculo actual que ya funciona impecable
+		var tamano_escalado = container.size * factor_escala
+		container.global_position = (tamano_pantalla - tamano_escalado) / 2.0
+
 
 # Cambiar escena de forma diferida para evitar bloqueos
 func cambiar_escena_interna(ruta_escena: String):
