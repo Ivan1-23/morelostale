@@ -19,6 +19,7 @@ offset_right = -625.0
 offset_bottom = -358.0
 grow_horizontal = 2
 grow_vertical = 2
+stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1275090272]
 handle_input_locally = false

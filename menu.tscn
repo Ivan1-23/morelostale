@@ -10,7 +10,7 @@
 [ext_resource type="Script" uid="uid://2j8igaw7qe60" path="res://stats.gd" id="5_l48gv"]
 [ext_resource type="Script" uid="uid://djui812ppjdxv" path="res://rich_text_label.gd" id="5_ytr4m"]
 [ext_resource type="Script" uid="uid://wpukf6g80caa" path="res://rich_text_label_3.gd" id="6_dwrpx"]
-[ext_resource type="Script" uid="uid://46t5jk4hh67j" path="res://oro.gd" id="7_kk3ma"]
+[ext_resource type="Script" path="res://oro.gd" id="7_kk3ma"]
 [ext_resource type="Texture2D" uid="uid://g3joahnx5sya" path="res://sprites/linea.png" id="12_3ls4m"]
 [ext_resource type="Script" uid="uid://cy2lj5e6omkkx" path="res://boton_cerrar.gd" id="12_g7jxm"]
 [ext_resource type="Texture2D" uid="uid://c0p2y1brhhune" path="res://sprites/lineaH.png" id="13_5h80m"]
@@ -411,6 +411,7 @@ button_mask = 3
 flat = true
 
 [node name="InterfazCaja" type="NinePatchRect" parent="Control/NinePatchRect" unique_id=1409570270]
+visible = false
 layout_mode = 0
 offset_left = 2.0
 offset_top = -144.0
@@ -460,100 +461,100 @@ texture = ExtResource("13_5h80m")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/NinePatchRect/InterfazCaja" unique_id=1061978980]
 layout_mode = 0
-offset_left = 68.0
+offset_left = 29.0
 offset_top = 68.0
 offset_right = 253.0
-offset_bottom = 308.0
+offset_bottom = 304.0
 
 [node name="BotonInventario" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=329530467]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 flat = true
 
 [node name="BotonInventario2" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=681962436]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 flat = true
 
 [node name="BotonInventario3" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=2107129315]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 flat = true
 
 [node name="BotonInventario4" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=831118825]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 flat = true
 
 [node name="BotonInventario5" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=234150447]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 flat = true
 
 [node name="BotonInventario6" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=1950226695]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 flat = true
 
 [node name="BotonInventario7" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=1129783274]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 flat = true
 
 [node name="BotonInventario8" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer" unique_id=382556904]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 flat = true
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Control/NinePatchRect/InterfazCaja" unique_id=325794831]
 layout_mode = 0
-offset_left = 335.0
+offset_left = 308.0
 offset_top = 68.0
 offset_right = 522.0
-offset_bottom = 378.0
+offset_bottom = 394.0
 
 [node name="BotonCaja" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1514576301]
-custom_minimum_size = Vector2(0, 29)
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
 [node name="BotonCaja2" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=227876173]
-custom_minimum_size = Vector2(0, 29)
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
 [node name="BotonCaja3" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=903893870]
-custom_minimum_size = Vector2(0, 29)
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
 [node name="BotonCaja4" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1400531426]
-custom_minimum_size = Vector2(0, 29)
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
 [node name="BotonCaja5" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1571735962]
-custom_minimum_size = Vector2(0, 29)
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
 [node name="BotonCaja6" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1888583608]
-custom_minimum_size = Vector2(0, 29)
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
 [node name="BotonCaja7" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=2102550529]
-custom_minimum_size = Vector2(0, 29)
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
 [node name="BotonCaja8" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1800478770]
-custom_minimum_size = Vector2(0, 29)
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
 [node name="BotonCaja9" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1881741348]
-custom_minimum_size = Vector2(0, 29)
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
