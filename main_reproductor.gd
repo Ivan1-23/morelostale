@@ -1,55 +1,62 @@
 extends Node
 
-# Referencia directa al Viewport y su contenedor donde corre el juego
+# Referencias directas a tus nodos
 @onready var sub_viewport = $SubViewportContainer/SubViewport
 @onready var container = $SubViewportContainer
 
 func _ready():
 	add_to_group("reproductor_principal")
 	
-	# Forzar pantalla completa real en celulares (Android / iOS)
+	# Forzar pantalla completa en celulares (Android / iOS)
 	if DisplayServer.get_name() in ["Android", "iOS"]:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 	
-	# Conectar la señal de cambio de tamaño de pantalla (Sintaxis correcta de Godot 4)
+	# Detectar cambios de tamaño de pantalla
 	get_tree().root.size_changed.connect(ajustar_proporcion_pantalla)
 	
-	# Ajustar por primera vez al iniciar el juego
+	# Configurar el contenedor para que no use auto-diseños heredados del celular
+	container.anchors_preset = Control.PRESET_TOP_LEFT
+	
+	# Ajustar por primera vez al iniciar
 	ajustar_proporcion_pantalla()
 	
 	cambiar_escena_interna("res://logo_inicio.tscn")
 
 func ajustar_proporcion_pantalla():
-	# 1. Obtener el tamaño real de la pantalla del dispositivo/celular en pixeles flotantes
+	# 1. Obtener el tamaño de píxeles reales de la pantalla del celular o PC
 	var tamano_pantalla = Vector2(get_window().size)
 	
 	var nuevo_ancho = tamano_pantalla.x
 	var nuevo_alto = tamano_pantalla.y
 	
-	# Proporción exacta de 640x480 (4:3 -> 1.33333)
+	# Proporción exacta de 640x480 (4:3)
 	var proporcion_deseada : float = 640.0 / 480.0
 	
-	# 2. Calcular el tamaño máximo respetando el formato 4:3
-	if (nuevo_ancho / nuevo_alto) > proporcion_deseada: 
-		# La pantalla es más ancha que el juego (típico en celulares horizontales)
+	# 2. Calcular las dimensiones máximas ideales en 4:3
+	if (nuevo_ancho / nuevo_alto) > proporcion_deseada:
 		nuevo_ancho = nuevo_alto * proporcion_deseada
 	else:
-		# La pantalla es más alta o estrecha que el juego
 		nuevo_alto = nuevo_ancho / proporcion_deseada
 	
-	# 3. Forzar el tamaño del contenedor externo al tamaño 4:3 calculado
-	container.size = Vector2(nuevo_ancho, nuevo_alto)
+	# 3. Forzar al SubViewport a medir SIEMPRE 640x480 píxeles exactos
+	# Esto evita que el juego se infle a 1280x720 internamente
+	sub_viewport.size = Vector2i(640, 480)
+	container.size = Vector2(640, 480)
 	
-	# 4. Asegurar que la resolución interna del SubViewport coincida de forma elástica
-	sub_viewport.size = Vector2i(int(nuevo_ancho), int(nuevo_alto))
+	# 4. Calcular el factor de escala necesario para rellenar la pantalla
+	var escala_x : float = nuevo_ancho / 640.0
+	var escala_y : float = nuevo_alto / 480.0
+	var factor_escala = Vector2(escala_x, escala_y)
 	
-	# 5. Congelar de forma estricta el renderizado 2D interno para que no revele más mapa
-	sub_viewport.size_2d_override = Vector2i(640, 480)
-	sub_viewport.size_2d_override_stretch = true
+	# Aplicar la escala al contenedor exterior
+	container.scale = factor_escala
 	
-	container.global_position = (tamano_pantalla - container.size) / 2.0
-# Cambiar escena de forma diferida para evitar bloqueos
+	# 5. Centrado absoluto en la pantalla por código
+	# Calculamos el centro de la pantalla y le restamos la mitad del tamaño escalado
+	var tamano_escalado = container.size * factor_escala
+	container.global_position = (tamano_pantalla - tamano_escalado) / 2.0
 
+# Cambiar escena de forma diferida para evitar bloqueos
 func cambiar_escena_interna(ruta_escena: String):
 	for hijo in sub_viewport.get_children():
 		hijo.queue_free()
