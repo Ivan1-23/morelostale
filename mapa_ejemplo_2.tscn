@@ -54,6 +54,7 @@ position = Vector2(-10, 60)
 [node name="cuadro_dialogo" parent="." unique_id=1836545299 instance=ExtResource("4_wyeen")]
 
 [node name="StaticBody2D" parent="." unique_id=11653250 instance=ExtResource("7_wyeen")]
+y_sort_enabled = true
 position = Vector2(-127, 53)
 
 [node name="objeto_suelto" parent="." unique_id=832773371 instance=ExtResource("4_m8mv3")]
