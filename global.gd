@@ -21,8 +21,8 @@ var ATQ_p1 = 0
 var DEF_p1 = 0
 var ATQ_extra_p1 = 0
 var DEF_extra_p1 = 0
-var arma_p1: String = ""       # ID del arma de Susie
-var armadura_p1: String = ""   # ID de la armadura de Susie
+var arma_p1: String = ""       
+var armadura_p1: String = ""   
 
 # === VARIABLES GLOBALES (HÉROE 2) ===
 var nombre_p2 = "Arisa"

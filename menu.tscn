@@ -10,7 +10,7 @@
 [ext_resource type="Script" uid="uid://2j8igaw7qe60" path="res://stats.gd" id="5_l48gv"]
 [ext_resource type="Script" uid="uid://djui812ppjdxv" path="res://rich_text_label.gd" id="5_ytr4m"]
 [ext_resource type="Script" uid="uid://wpukf6g80caa" path="res://rich_text_label_3.gd" id="6_dwrpx"]
-[ext_resource type="Script" uid="uid://46t5jk4hh67j" path="res://oro.gd" id="7_kk3ma"]
+[ext_resource type="Script" path="res://oro.gd" id="7_kk3ma"]
 [ext_resource type="Texture2D" uid="uid://g3joahnx5sya" path="res://sprites/linea.png" id="12_3ls4m"]
 [ext_resource type="Script" uid="uid://cy2lj5e6omkkx" path="res://boton_cerrar.gd" id="12_g7jxm"]
 [ext_resource type="Texture2D" uid="uid://c0p2y1brhhune" path="res://sprites/lineaH.png" id="13_5h80m"]
@@ -683,6 +683,50 @@ theme_override_font_sizes/normal_font_size = 31
 bbcode_enabled = true
 text = "[color=yellow][Z/ENTER][/color] Transferir     [color=yellow][X/SIHFT][/color] Finalizar"
 
+[node name="CuadroSeleccion" type="NinePatchRect" parent="Control/NinePatchRect" unique_id=1379855155]
+layout_mode = 0
+offset_left = 224.0
+offset_top = -19.0
+offset_right = 424.0
+offset_bottom = 140.0
+texture = ExtResource("4_ecwwl")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/NinePatchRect/CuadroSeleccion" unique_id=117486597]
+layout_mode = 0
+offset_left = 59.0
+offset_top = 26.0
+offset_right = 197.0
+offset_bottom = 147.0
+theme_override_fonts/normal_font = ExtResource("3_ytr4m")
+theme_override_font_sizes/normal_font_size = 35
+text = "SEBO
+SMUFFY
+ARISA"
+
+[node name="Boton_sebo" type="Button" parent="Control/NinePatchRect/CuadroSeleccion" unique_id=2056715414]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 28.0
+offset_right = 167.0
+offset_bottom = 60.0
+flat = true
+
+[node name="Boton_smuffy" type="Button" parent="Control/NinePatchRect/CuadroSeleccion" unique_id=621707600]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 66.0
+offset_right = 157.0
+offset_bottom = 97.0
+flat = true
+
+[node name="Boton_arisa" type="Button" parent="Control/NinePatchRect/CuadroSeleccion" unique_id=1918729551]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 102.0
+offset_right = 164.0
+offset_bottom = 133.0
+flat = true
+
 [node name="BotonCerrar" type="Button" parent="Control" unique_id=364707536]
 z_index = 2
 layout_mode = 1
@@ -788,4 +832,7 @@ max_polyphony = 5
 [connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer2/BotonCajaItem8" to="." method="_on_boton_caja_item_8_pressed"]
 [connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer2/BotonCajaItem9" to="." method="_on_boton_caja_item_9_pressed"]
 [connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer2/BotonCajaItem10" to="." method="_on_boton_caja_item_10_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/CuadroSeleccion/Boton_sebo" to="." method="_on_boton_sebo_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/CuadroSeleccion/Boton_smuffy" to="." method="_on_boton_smuffy_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/CuadroSeleccion/Boton_arisa" to="." method="_on_boton_arisa_pressed"]
 [connection signal="pressed" from="Control/BotonCerrar" to="." method="_on_boton_cerrar_pressed"]

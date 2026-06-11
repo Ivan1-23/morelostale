@@ -29,6 +29,11 @@ var texto_escribiendo = false
 @onready var texto_indicador = $Control/NinePatchRect/InterfazCaja/TextoIndicador
 @onready var lista_caja_inventario = $Control/NinePatchRect/InterfazCaja/ContenedorColumnas/ListaInventario
 @onready var lista_caja_dimensional = $Control/NinePatchRect/InterfazCaja/ContenedorColumnas/ListaCaja
+
+# === NUEVA REFERENCIA PARA TU CUADRO DE SELECCIÓN FLOTANTE ===
+# (Asegúrate de que este nombre y ruta coincidan con tu árbol de escenas)
+@onready var cuadro_seleccion_heroes = $Control/NinePatchRect/CuadroSeleccion
+
 # Variables de Audio
 @onready var sonido_cambio = $sonido_cambio
 @onready var sonido_squeak = $sonido_squeak
@@ -46,13 +51,13 @@ var selected_option2 = 0
 var selected_option3 = 0
 
 # Coordenadas para que el corazón indique el personaje en la pantalla de selección/stats
-var select_x_stats = 45 
-var select_y_stats = [60, 95, 130]
+var select_x_stats = 255 
+var select_y_stats = [18, 53, 88]
+
 # === VARIABLES NUEVAS PARA CONTROL DE TELÉFONO Y CAJAS ===
 var selected_option_telefono: int = 0  # Controla la selección en la pantalla del teléfono
 var caja_actual_referencia: Array = []  # Guarda dinámicamente si usamos caja_a o caja_b
 
-# (Asegúrate de tener también declaradas estas variables de posición si no las tenías)
 var caja_pos_x_mochila: float = 40.0   
 var caja_pos_x_caja: float = 320.0    
 var caja_pos_y_inicio: float = -70.0   
@@ -79,6 +84,7 @@ func _ready():
 	telefono.visible = false
 	info.visible = false
 	if interfaz_caja: interfaz_caja.visible = false
+	if cuadro_seleccion_heroes: cuadro_seleccion_heroes.visible = false
 	
 	select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 	
@@ -130,6 +136,7 @@ func abrir_desde_celular():
 	telefono.visible = false
 	info.visible = false
 	if interfaz_caja: interfaz_caja.visible = false
+	if cuadro_seleccion_heroes: cuadro_seleccion_heroes.visible = false
 	select_arrow.visible = true
 	selected_option = 0
 	select_arrow.position = Vector2(select_x, select_y)
@@ -159,12 +166,19 @@ func regresar_un_paso_atras():
 			telefono.visible = false
 			info.visible = false
 			if interfaz_caja: interfaz_caja.visible = false
+			if cuadro_seleccion_heroes: cuadro_seleccion_heroes.visible = false
 			select_arrow.visible = true
 			select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 			screen_loaded = ScreenLoaded.JUST_MENU
 		ScreenLoaded.OBJETO2:
 			screen_loaded = ScreenLoaded.OBJECTO
 			select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
+		ScreenLoaded.SELECCIONAR_HEROE:
+			if cuadro_seleccion_heroes: cuadro_seleccion_heroes.visible = false
+			if boton_stat_izq: boton_stat_izq.visible = false
+			if boton_stat_der: boton_stat_der.visible = false
+			screen_loaded = ScreenLoaded.OBJETO2
+			select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
 		ScreenLoaded.INFO:
 			cerrar_info_y_restaurar_pantalla()
 		ScreenLoaded.CAJAa, ScreenLoaded.CAJAb:
@@ -247,17 +261,20 @@ func _input(event):
 		ScreenLoaded.SELECCIONAR_HEROE:
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
 				if sonido_cambio: sonido_cambio.play()
-				estadisticas.visible = false
+				if cuadro_seleccion_heroes: cuadro_seleccion_heroes.visible = false
 				objetos.visible = true
 				if boton_stat_izq: boton_stat_izq.visible = false
 				if boton_stat_der: boton_stat_der.visible = false
 				screen_loaded = ScreenLoaded.OBJETO2
 				select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
 				get_viewport().set_input_as_handled()
-			elif event.is_action_pressed("ui_menu_right"):
+				
+			# Ahora en PC cambias de héroe cómodamente de arriba a abajo con las flechas
+			elif event.is_action_pressed("ui_menu_down"):
 				cambiar_personaje_stats(1)
-			elif event.is_action_pressed("ui_menu_left"):
+			elif event.is_action_pressed("ui_menu_up"):
 				cambiar_personaje_stats(-1)
+				
 			elif event.is_action_pressed("acción"):
 				efectuar_curacion_tactil(personaje_seleccionado)
 
@@ -378,31 +395,28 @@ func ejecutar_accion_menu_principal():
 
 func ejecutar_accion_sub_menu_objeto():
 	match selected_option3:
-		0: # USAR OBJETO
+		0: # USAR / EQUIPAR OBJETO
 			objeto_temporal_indice = selected_option2
 			var id_item = diccionario_global.inventario[objeto_temporal_indice]
 			var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {})
 			var tipo_objeto = datos_item.get("tipo", "")
 			
-			if tipo_objeto == "objeto curativo" or tipo_objeto == "objetivo curativo":
+			# Todos los curativos, armas y armaduras abren el cuadro de selección sin ocultar los objetos
+			if tipo_objeto in ["objeto curativo", "objetivo curativo", "Arma", "Armadura"]:
 				if sonido_cambio: sonido_cambio.play()
 				screen_loaded = ScreenLoaded.SELECCIONAR_HEROE
 				personaje_seleccionado = 0
-				objetos.visible = false
-				estadisticas.visible = true
+				objetos.visible = true
+				estadisticas.visible = false
+				if cuadro_seleccion_heroes: cuadro_seleccion_heroes.visible = true
 				select_arrow.visible = true
 				select_arrow.position = Vector2(select_x_stats, select_y_stats[0])
 				
-				var es_movil = DisplayServer.is_touchscreen_available()
-				if boton_stat_izq: boton_stat_izq.visible = es_movil
-				if boton_stat_der: boton_stat_der.visible = es_movil
-				
-				var label_stats = $Control/NinePatchRect/Estadisticas/VBoxContainer/stats
-				if label_stats and label_stats.has_method("actualizar_estadisticas"):
-					label_stats.actualizar_estadisticas(personaje_seleccionado)
+				# CAMBIO: Mantenemos ocultos los botones de cambiar stats aquí
+				if boton_stat_izq: boton_stat_izq.visible = false
+				if boton_stat_der: boton_stat_der.visible = false
 			else:
 				objeto_temporal_indice = -1
-				aplicar_equipamiento_directo(id_item)
 		1: # INFO OBJETO
 			var id_objeto = diccionario_global.inventario[selected_option2]
 			var info_texto = diccionario_global.obtener_info_objeto(id_objeto)
@@ -414,80 +428,114 @@ func ejecutar_accion_sub_menu_objeto():
 			mostrar_texto_animado("* Tiraste " + nombre_objeto + ".")
 			actualizar_visualizacion_inventario()
 
-func aplicar_equipamiento_directo(id_item_nuevo: String):
-	var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item_nuevo, {})
-	var tipo_objeto = datos_item.get("tipo", "")
-	var nombre_objeto = datos_item.get("nombre", "Desconocido")
-	var mensaje = ""
-	
-	if sonido_cambio:
-		sonido_cambio.stream = load("res://audio/Interfaz/snd_item.wav")
-		sonido_cambio.play()
-	
-	if tipo_objeto == "Arma":
-		var id_arma_vieja = Global.arma_equipada
-		Global.arma_equipada = id_item_nuevo
-		mensaje = "* Te equipaste " + nombre_objeto + "."
-		diccionario_global.eliminar_objeto_por_indice(selected_option2)
-		if id_arma_vieja != "" and id_arma_vieja != "Ninguna":
-			diccionario_global.añadir_objeto(id_arma_vieja)
-	elif tipo_objeto == "Armadura":
-		var id_armadura_vieja = Global.armadura_equipada
-		Global.armadura_equipada = id_item_nuevo
-		mensaje = "* Te equipaste " + nombre_objeto + "."
-		diccionario_global.eliminar_objeto_por_indice(selected_option2)
-		if id_armadura_vieja != "" and id_armadura_vieja != "Ninguna":
-			diccionario_global.añadir_objeto(id_armadura_vieja)
-			
-	if Global.has_method("actualizar_equipamiento"): Global.actualizar_equipamiento()
-	if sonido_cambio: sonido_cambio.stream = load("res://audio/Interfaz/undertale-select-sound.wav")
-	
-	mostrar_texto_animado(mensaje)
-	actualizar_visualizacion_inventario()
-
 func efectuar_curacion_tactil(heroe_id: int):
 	if objeto_temporal_indice == -1: return
 	var id_item = diccionario_global.inventario[objeto_temporal_indice]
 	var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {})
-	var puntos_curacion = datos_item.get("hp", 0)
-	var p_nombre = ""
+	var tipo_objeto = datos_item.get("tipo", "")
+	var nombre_objeto = datos_item.get("nombre", "Desconocido")
 	var mensaje = ""
 	
-	if sonido_curacion: sonido_curacion.play()
-	
-	match heroe_id:
-		0:
-			p_nombre = Global.nombre_p0 if "nombre_p0" in Global else Global.nombre
-			var v_actual = Global.vida
-			var v_max = Global.vidaMax
-			if v_actual >= v_max: mensaje = "* El HP de " + p_nombre + " ya está al máximo."
-			else:
-				Global.vida = min(v_actual + puntos_curacion, v_max)
-				mensaje = "* " + p_nombre + " recuperó " + str(puntos_curacion) + " HP."
-				diccionario_global.eliminar_objeto_por_indice(objeto_temporal_indice)
-		1:
-			p_nombre = Global.nombre_p1 if "nombre_p1" in Global else "Susie"
-			var v_actual = Global.vida_p1 if "vida_p1" in Global else 30
-			var v_max = Global.vida_max_p1 if "vida_max_p1" in Global else 30
-			if v_actual >= v_max: mensaje = "* El HP de " + p_nombre + " ya está al máximo."
-			else:
-				if "vida_p1" in Global: Global.vida_p1 = min(v_actual + puntos_curacion, v_max)
-				mensaje = "* " + p_nombre + " recuperó " + str(puntos_curacion) + " HP."
-				diccionario_global.eliminar_objeto_por_indice(objeto_temporal_indice)
-		2:
-			p_nombre = Global.nombre_p2 if "nombre_p2" in Global else "Ralsei"
-			var v_actual = Global.vida_p2 if "vida_p2" in Global else 15
-			var v_max = Global.vida_max_p2 if "vida_max_p2" in Global else 15
-			if v_actual >= v_max: mensaje = "* El HP de " + p_nombre + " ya está al máximo."
-			else:
-				if "vida_p2" in Global: Global.vida_p2 = min(v_actual + puntos_curacion, v_max)
-				mensaje = "* " + p_nombre + " recuperó " + str(puntos_curacion) + " HP."
-				diccionario_global.eliminar_objeto_por_indice(objeto_temporal_indice)
+	# --- LÓGICA DE EQUIPAMIENTO (DETECTA EL HÉROE SELECCIONADO) ---
+	if tipo_objeto in ["Arma", "Armadura"]:
+		if sonido_cambio:
+			sonido_cambio.stream = load("res://audio/Interfaz/snd_item.wav")
+			sonido_cambio.play()
+			
+		if tipo_objeto == "Arma":
+			match heroe_id:
+				0:
+					var id_vieja = Global.arma_equipada if ("arma_equipada" in Global and Global.arma_equipada != "Ninguna" and Global.arma_equipada != "" and Global.arma_equipada != "Lápiz" and Global.arma_equipada != "Lapiz") else ""
+					Global.arma_equipada = id_item
+					if id_vieja != "": diccionario_global.inventario.append(id_vieja)
+				1:
+					var id_vieja = Global.arma_equipada_p1 if ("arma_equipada_p1" in Global and Global.arma_equipada_p1 != "Ninguna" and Global.arma_equipada_p1 != "" and Global.arma_equipada_p1 != "Lápiz" and Global.arma_equipada_p1 != "Lapiz") else ""
+					if "arma_equipada_p1" in Global: Global.arma_equipada_p1 = id_item
+					if id_vieja != "": diccionario_global.inventario.append(id_vieja)
+				2:
+					var id_vieja = Global.arma_equipada_p2 if ("arma_equipada_p2" in Global and Global.arma_equipada_p2 != "Ninguna" and Global.arma_equipada_p2 != "" and Global.arma_equipada_p2 != "Lápiz" and Global.arma_equipada_p2 != "Lapiz") else ""
+					if "arma_equipada_p2" in Global: Global.arma_equipada_p2 = id_item
+					if id_vieja != "": diccionario_global.inventario.append(id_vieja)
+		
+		elif tipo_objeto == "Armadura":
+			match heroe_id:
+				0:
+					var id_vieja = Global.armadura_equipada if ("armadura_equipada" in Global and Global.armadura_equipada != "Ninguna" and Global.armadura_equipada != "" and Global.armadura_equipada != "Borrador") else ""
+					Global.armadura_equipada = id_item
+					if id_vieja != "": diccionario_global.inventario.append(id_vieja)
+				1:
+					var id_vieja = Global.armadura_equipada_p1 if ("armadura_equipada_p1" in Global and Global.armadura_equipada_p1 != "Ninguna" and Global.armadura_equipada_p1 != "" and Global.armadura_equipada_p1 != "Borrador") else ""
+					if "armadura_equipada_p1" in Global: Global.armadura_equipada_p1 = id_item
+					if id_vieja != "": diccionario_global.inventario.append(id_vieja)
+				2:
+					var id_vieja = Global.armadura_equipada_p2 if ("armadura_equipada_p2" in Global and Global.armadura_equipada_p2 != "Ninguna" and Global.armadura_equipada_p2 != "" and Global.armadura_equipada_p2 != "Borrador") else ""
+					if "armadura_equipada_p2" in Global: Global.armadura_equipada_p2 = id_item
+					if id_vieja != "": diccionario_global.inventario.append(id_vieja)
+		
+		# === CAMBIO SOLICITADO: ASIGNAR EL NOMBRE DINÁMICO DE QUIÉN SE LO EQUIPÓ ===
+		var nombre_heroe = ""
+		match heroe_id:
+			0: nombre_heroe = Global.nombre_p0 if "nombre_p0" in Global else Global.nombre
+			1: nombre_heroe = Global.nombre_p1 if "nombre_p1" in Global else "Arisa"
+			2: nombre_heroe = Global.nombre_p2 if "nombre_p2" in Global else "Ralsei"
+			
+		mensaje = "* " + nombre_heroe + " se equipó " + nombre_objeto + "."
+		# =========================================================================
+			
+		diccionario_global.eliminar_objeto_por_indice(objeto_temporal_indice)
+		if Global.has_method("actualizar_equipamiento"): Global.actualizar_equipamiento()
+		if sonido_cambio: sonido_cambio.stream = load("res://audio/Interfaz/undertale-select-sound.wav")
 
+	# --- LÓGICA DE OBJETOS CURATIVOS ---
+	else:
+		var puntos_curacion = datos_item.get("hp", 0)
+		var p_nombre = ""
+		if sonido_curacion: sonido_curacion.play()
+		
+		match heroe_id:
+			0:
+				p_nombre = Global.nombre_p0 if "nombre_p0" in Global else Global.nombre
+				var v_actual = Global.vida
+				var v_max = Global.vidaMax
+				if v_actual >= v_max: mensaje = "* El HP de " + p_nombre + " ya está al máximo."
+				else:
+					Global.vida = min(v_actual + puntos_curacion, v_max)
+					mensaje = "* " + p_nombre + " recuperó " + str(puntos_curacion) + " HP."
+					diccionario_global.eliminar_objeto_por_indice(objeto_temporal_indice)
+			1:
+				p_nombre = Global.nombre_p1 if "nombre_p1" in Global else "Arisa"
+				var v_actual = Global.vida_p1 if "vida_p1" in Global else 30
+				var v_max = Global.vida_max_p1 if "vida_max_p1" in Global else 30
+				if v_actual >= v_max: mensaje = "* El HP de " + p_nombre + " ya está al máximo."
+				else:
+					if "vida_p1" in Global: Global.vida_p1 = min(v_actual + puntos_curacion, v_max)
+					mensaje = "* " + p_nombre + " recuperó " + str(puntos_curacion) + " HP."
+					diccionario_global.eliminar_objeto_por_indice(objeto_temporal_indice)
+			2:
+				p_nombre = Global.nombre_p2 if "nombre_p2" in Global else "Ralsei"
+				var v_actual = Global.vida_p2 if "vida_p2" in Global else 15
+				var v_max = Global.vida_max_p2 if "vida_max_p2" in Global else 15
+				if v_actual >= v_max: mensaje = "* El HP de " + p_nombre + " ya está al máximo."
+				else:
+					if "vida_p2" in Global: Global.vida_p2 = min(v_actual + puntos_curacion, v_max)
+					mensaje = "* " + p_nombre + " recuperó " + str(puntos_curacion) + " HP."
+					diccionario_global.eliminar_objeto_por_indice(objeto_temporal_indice)
+
+	# --- RESTABLECER FLUJO E INTERFAZ ---
 	objeto_temporal_indice = -1
 	estadisticas.visible = false
 	if boton_stat_izq: boton_stat_izq.visible = false
 	if boton_stat_der: boton_stat_der.visible = false
+	
+	# === REFRESH DE COMPONENTES DE TEXTO Y STATS ===
+	var mini_stats = $Control/mini_stats/VBoxContainer/MiniStatsLabel
+	if mini_stats and mini_stats.has_method("actualizar_mini_stats"):
+		mini_stats.actualizar_mini_stats()
+		
+	var label_stats = $Control/NinePatchRect/Estadisticas/VBoxContainer/stats
+	if label_stats and label_stats.has_method("actualizar_estadisticas"):
+		label_stats.actualizar_estadisticas(heroe_id)
+	
 	mostrar_texto_animado(mensaje)
 	actualizar_visualizacion_inventario()
 
@@ -498,6 +546,7 @@ func cerrar_todo_el_menu_de_golpe():
 	telefono.visible = false
 	info.visible = false
 	if interfaz_caja: interfaz_caja.visible = false
+	if cuadro_seleccion_heroes: cuadro_seleccion_heroes.visible = false
 	select_arrow.visible = false
 	if botonCerrar: botonCerrar.visible = false
 	
@@ -576,7 +625,6 @@ func guardar_objeto_en_caja(indice_inventario: int):
 			caja_actual_referencia.append(id_item)
 			diccionario_global.eliminar_objeto_por_indice(indice_inventario)
 			actualizar_visualizacion_inventario()
-			actualizar_visualizacion_caja()
 			if sonido_cambio: sonido_cambio.play()
 			
 			selected_option2 = min(selected_option2, max(0, diccionario_global.inventario.size() - 1))
@@ -589,7 +637,6 @@ func retirar_objeto_de_caja(indice_caja: int):
 			diccionario_global.añadir_objeto(id_item)
 			caja_actual_referencia.remove_at(indice_caja)
 			actualizar_visualizacion_inventario()
-			actualizar_visualizacion_caja()
 			if sonido_cambio: sonido_cambio.play()
 			
 			selected_option2 = min(selected_option2, max(0, caja_actual_referencia.size() - 1))
@@ -598,20 +645,14 @@ func retirar_objeto_de_caja(indice_caja: int):
 func cambiar_personaje_stats(direccion: int):
 	if sonido_squeak: sonido_squeak.play()
 	personaje_seleccionado = (personaje_seleccionado + direccion + 3) % 3
+	
 	var label_stats = $Control/NinePatchRect/Estadisticas/VBoxContainer/stats
 	if label_stats and label_stats.has_method("actualizar_estadisticas"):
 		label_stats.actualizar_estadisticas(personaje_seleccionado)
+		
 	if screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
 		select_arrow.visible = true
 		select_arrow.position = Vector2(select_x_stats, select_y_stats[personaje_seleccionado])
-
-#func reproducir_sonido_seleccion():
-#	if sonido_cambio and sonido_cambio.stream: sonido_cambio.play()
-
-# --- SEÑALES TÁCTILES ---
-func _on_boton_cerrar_pressed():
-	regresar_un_paso_atras()
-
 
 # --- SEÑALES TÁCTILES DEL MENÚ PRINCIPAL ---
 func _on_boton_objeto_pressed():
@@ -629,7 +670,6 @@ func _on_boton_telefono_pressed():
 		selected_option = 2
 		ejecutar_accion_menu_principal()
 
-
 # --- SEÑALES TÁCTILES DEL INVENTARIO ---
 func _on_boton_item_1_pressed(): procesar_toque_item(0)
 func _on_boton_item_2_pressed(): procesar_toque_item(1)
@@ -642,14 +682,14 @@ func _on_boton_item_8_pressed(): procesar_toque_item(7)
 
 func procesar_toque_item(indice: int):
 	if screen_loaded == ScreenLoaded.OBJECTO:
-		if indice < diccionario_global.inventario.size():
-			var id_objeto = diccionario_global.inventario[indice]
-			if id_objeto != "":
-				if sonido_cambio: sonido_cambio.play()
-				selected_option2 = indice
-				screen_loaded = ScreenLoaded.OBJETO2
-				selected_option3 = 0
-				select_arrow.position = Vector2(select_x2 + selected_option3 * 105, 184)
+		var id_objeto = diccionario_global.obtener_objeto_por_indice(indice)
+		if id_objeto != "":
+			if sonido_cambio: sonido_cambio.play()
+			selected_option2 = indice
+			select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
+			screen_loaded = ScreenLoaded.OBJETO2
+			selected_option3 = 0
+			select_arrow.position = Vector2(select_x2 + selected_option3 * 105, 184)
 
 func _on_boton_usar_pressed():
 	if screen_loaded == ScreenLoaded.OBJETO2:
@@ -665,7 +705,6 @@ func _on_boton_tirar_pressed():
 	if screen_loaded == ScreenLoaded.OBJETO2:
 		selected_option3 = 2
 		ejecutar_accion_sub_menu_objeto()
-
 
 # --- BOTONES DE LA CAJA (IZQUIERDA - MOCHILA) ---
 func _on_boton_inventario_pressed() -> void: ejecutar_accion_tactil_caja(0, 0)
@@ -696,14 +735,13 @@ func ejecutar_accion_tactil_caja(fila: int, columna: int):
 		selected_option2 = fila
 		selected_option3 = columna
 		
-		# CORRECCIÓN: Quitamos la sobreescritura forzada de 'screen_loaded' 
-		# para que no interfiera con qué caja (A o B) está leyendo la transferencia
-		actualizar_visualizacion_caja()
 		if selected_option3 == 0:
+			actualizar_visualizacion_caja()
 			guardar_objeto_en_caja(selected_option2)
 		else:
-			retirar_objeto_de_caja(selected_option2)
-
+			if selected_option2 < caja_actual_referencia.size():
+				actualizar_visualizacion_caja()
+				retirar_objeto_de_caja(selected_option2)
 
 # --- REPRODUCCIÓN AUDIO ---
 func reproducir_sonido_seleccion():
@@ -712,7 +750,6 @@ func reproducir_sonido_seleccion():
 		else:
 			sonido_cambio.stream = load("res://audio/Interfaz/undertale-select-sound.wav")
 			sonido_cambio.play()
-
 
 # --- TEXTO INFO ANIMADO ---
 func mostrar_texto_animado(texto_completo: String):
@@ -735,22 +772,31 @@ func mostrar_texto_animado(texto_completo: String):
 	texto_escribiendo = false
 	if sonido_texto: sonido_texto.stop()
 
-
 # --- SEÑALES TÁCTILES PARA CAMBIAR DE PERSONAJE EN MÓVIL ---
 func _on_boton_stats_izquierda_pressed() -> void:
 	if screen_loaded == ScreenLoaded.ESTADISTICAS or screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
 		cambiar_personaje_stats(-1)
 
 func _on_boton_stats_derecha_pressed() -> void:
-	# CORRECCIÓN: Aseguramos una evaluación limpia de estados para móviles
 	if screen_loaded == ScreenLoaded.ESTADISTICAS or screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
 		cambiar_personaje_stats(1)
 
 # --- SEÑAL TÁCTIL PARA CONFIRMAR AL HÉROE SELECCIONADO EN MÓVIL ---
-func _on_boton_confirmar_heroe_tactil_pressed() -> void:
+# --- BOTONES INVISIBLES SOBRE LOS NOMBRES (MÓVIL) ---
+func _on_boton_sebo_pressed() -> void:
 	if screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
-		efectuar_curacion_tactil(personaje_seleccionado)
+		personaje_seleccionado = 0
+		efectuar_curacion_tactil(0)
 
+func _on_boton_arisa_pressed() -> void:
+	if screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
+		personaje_seleccionado = 2
+		efectuar_curacion_tactil(2)
+
+func _on_boton_smuffy_pressed() -> void:
+	if screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
+		personaje_seleccionado = 1
+		efectuar_curacion_tactil(1)
 
 # --- SEÑALES CONECTADAS DESDE EL EDITOR DE NODOS ---
 func _on_boton_caja_a_pressed() -> void:
@@ -763,4 +809,5 @@ func _on_boton_caja_b_pressed() -> void:
 		if sonido_cambio: sonido_cambio.play()
 		abrir_interfaz_caja(ScreenLoaded.CAJAb)
 
-		
+func _on_boton_cerrar_pressed() -> void:
+	regresar_un_paso_atras()
