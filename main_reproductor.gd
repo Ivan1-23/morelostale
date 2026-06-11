@@ -5,9 +5,13 @@ extends Node
 @onready var container = $SubViewportContainer
 
 func _ready():
-	if has_node("touch_button"):
-		$MenuSistema.touch_buttons = $ControlesTactiles
 	add_to_group("reproductor_principal")
+	
+	# === SOLUCCIÓN AL ORDEN DE CARGA ===
+	# Usamos call_deferred para asegurarnos de que esta línea se ejecute 
+	# JUSTO DESPUÉS de que todos los nodos del árbol estén 100% listos.
+	# Cambia "MenuSistema" y "ControlesTactiles" por los nombres EXACTOS de tus nodos.
+	call_deferred("_conectar_controles_tactiles")
 	
 	# Forzar pantalla completa real en celulares (Android / iOS)
 	if DisplayServer.get_name() in ["Android", "iOS"]:
@@ -23,6 +27,15 @@ func _ready():
 	ajustar_proporcion_pantalla()
 	
 	cambiar_escena_interna("res://logo_inicio.tscn")
+
+# Función de apoyo para conectar los nodos de forma segura
+func _conectar_controles_tactiles():
+	# Comprobamos con nombres exactos que existan en el árbol antes de asignar
+	if has_node("MenuSistema") and has_node("ControlesTactiles"):
+		$MenuSistema.touch_buttons = $ControlesTactiles
+	else:
+		# Si tus nodos tienen otros nombres (ej. con minúsculas), pon una alerta en la consola
+		print("Advertencia: No se encontraron los nodos con esos nombres exactos en la raíz.")
 
 func ajustar_proporcion_pantalla():
 	# 1. ¡CLAVE!: Cambiado a visible_rect para que el depurador no lo mande a la derecha
