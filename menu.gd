@@ -316,7 +316,7 @@ func _input(event):
 					texto_escribiendo = false
 				else:
 					if sonido_cambio: sonido_cambio.play()
-					cerrar_info_y_restaurar_pantalla()
+					cerrar_todo_el_menu_de_golpe()
 				get_viewport().set_input_as_handled()
 
 		ScreenLoaded.CAJAa, ScreenLoaded.CAJAb:
@@ -417,9 +417,11 @@ func ejecutar_accion_sub_menu_objeto():
 				if boton_stat_der: boton_stat_der.visible = false
 			else:
 				objeto_temporal_indice = -1
-		1: # INFO OBJETO
+		1: # INFO OBJETO (CORREGIDO)
 			var id_objeto = diccionario_global.inventario[selected_option2]
-			var info_texto = diccionario_global.obtener_info_objeto(id_objeto)
+			var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_objeto, {})
+			# Extrae de forma segura la descripción del diccionario_global sin provocar crash
+			var info_texto = datos_item.get("descripcion", datos_item.get("info", "* No hay información de este objeto."))
 			mostrar_texto_animado(info_texto)
 		2: # TIRAR OBJETO
 			var id_objeto = diccionario_global.inventario[selected_option2]
@@ -442,34 +444,39 @@ func efectuar_curacion_tactil(heroe_id: int):
 			sonido_cambio.stream = load("res://audio/Interfaz/snd_item.wav")
 			sonido_cambio.play()
 			
+		# Cambia esta sección en tu menu.gd dentro de efectuar_curacion_tactil()
 		if tipo_objeto == "Arma":
 			match heroe_id:
 				0:
-					var id_vieja = Global.arma_equipada if ("arma_equipada" in Global and Global.arma_equipada != "Ninguna" and Global.arma_equipada != "" and Global.arma_equipada != "Lápiz" and Global.arma_equipada != "Lapiz") else ""
+					var id_vieja = Global.arma_equipada if ("arma_equipada" in Global and Global.arma_equipada != "Ninguna" and Global.arma_equipada != "") else ""
 					Global.arma_equipada = id_item
 					if id_vieja != "": diccionario_global.inventario.append(id_vieja)
 				1:
-					var id_vieja = Global.arma_equipada_p1 if ("arma_equipada_p1" in Global and Global.arma_equipada_p1 != "Ninguna" and Global.arma_equipada_p1 != "" and Global.arma_equipada_p1 != "Lápiz" and Global.arma_equipada_p1 != "Lapiz") else ""
-					if "arma_equipada_p1" in Global: Global.arma_equipada_p1 = id_item
+					# CORRECCIÓN: Usar arma_p1
+					var id_vieja = Global.arma_p1 if ("arma_p1" in Global and Global.arma_p1 != "Ninguna" and Global.arma_p1 != "") else ""
+					Global.arma_p1 = id_item
 					if id_vieja != "": diccionario_global.inventario.append(id_vieja)
 				2:
-					var id_vieja = Global.arma_equipada_p2 if ("arma_equipada_p2" in Global and Global.arma_equipada_p2 != "Ninguna" and Global.arma_equipada_p2 != "" and Global.arma_equipada_p2 != "Lápiz" and Global.arma_equipada_p2 != "Lapiz") else ""
-					if "arma_equipada_p2" in Global: Global.arma_equipada_p2 = id_item
+					# CORRECCIÓN: Usar arma_p2
+					var id_vieja = Global.arma_p2 if ("arma_p2" in Global and Global.arma_p2 != "Ninguna" and Global.arma_p2 != "") else ""
+					Global.arma_p2 = id_item
 					if id_vieja != "": diccionario_global.inventario.append(id_vieja)
 		
 		elif tipo_objeto == "Armadura":
 			match heroe_id:
 				0:
-					var id_vieja = Global.armadura_equipada if ("armadura_equipada" in Global and Global.armadura_equipada != "Ninguna" and Global.armadura_equipada != "" and Global.armadura_equipada != "Borrador") else ""
+					var id_vieja = Global.armadura_equipada if ("armadura_equipada" in Global and Global.armadura_equipada != "Ninguna" and Global.armadura_equipada != "") else ""
 					Global.armadura_equipada = id_item
 					if id_vieja != "": diccionario_global.inventario.append(id_vieja)
 				1:
-					var id_vieja = Global.armadura_equipada_p1 if ("armadura_equipada_p1" in Global and Global.armadura_equipada_p1 != "Ninguna" and Global.armadura_equipada_p1 != "" and Global.armadura_equipada_p1 != "Borrador") else ""
-					if "armadura_equipada_p1" in Global: Global.armadura_equipada_p1 = id_item
+					# CORRECCIÓN: Usar armadura_p1
+					var id_vieja = Global.armadura_p1 if ("armadura_p1" in Global and Global.armadura_p1 != "Ninguna" and Global.armadura_p1 != "") else ""
+					Global.armadura_p1 = id_item
 					if id_vieja != "": diccionario_global.inventario.append(id_vieja)
 				2:
-					var id_vieja = Global.armadura_equipada_p2 if ("armadura_equipada_p2" in Global and Global.armadura_equipada_p2 != "Ninguna" and Global.armadura_equipada_p2 != "" and Global.armadura_equipada_p2 != "Borrador") else ""
-					if "armadura_equipada_p2" in Global: Global.armadura_equipada_p2 = id_item
+					# CORRECCIÓN: Usar armadura_p2
+					var id_vieja = Global.armadura_p2 if ("armadura_p2" in Global and Global.armadura_p2 != "Ninguna" and Global.armadura_p2 != "") else ""
+					Global.armadura_p2 = id_item
 					if id_vieja != "": diccionario_global.inventario.append(id_vieja)
 		
 		# === CAMBIO SOLICITADO: ASIGNAR EL NOMBRE DINÁMICO DE QUIÉN SE LO EQUIPÓ ===
@@ -532,8 +539,10 @@ func efectuar_curacion_tactil(heroe_id: int):
 	if mini_stats and mini_stats.has_method("actualizar_mini_stats"):
 		mini_stats.actualizar_mini_stats()
 		
+	# Al final de la función, busca donde actualizas label_stats:
 	var label_stats = $Control/NinePatchRect/Estadisticas/VBoxContainer/stats
 	if label_stats and label_stats.has_method("actualizar_estadisticas"):
+# Forzamos que se actualice con el heroe_id actual al que le diste el item
 		label_stats.actualizar_estadisticas(heroe_id)
 	
 	mostrar_texto_animado(mensaje)

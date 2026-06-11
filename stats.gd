@@ -36,27 +36,27 @@ func actualizar_estadisticas(heroe_id: int = 0) -> void:
 			p_def = Global.DEF if "DEF" in Global else 0
 			p_def_extra = Global.DEF_extra if "DEF_extra" in Global else 0
 		1:
-			p_nombre = Global.nombre_p1 if "nombre_p1" in Global else "Susie"
-			p_nv = Global.NV_p1 if "NV_p1" in Global else (Global.NV if "NV" in Global else 1)
+			p_nombre = Global.nombre_p1 if "nombre_p1" in Global else "Smuffy"
+			p_nv = Global.nv_p1 if "nv_p1" in Global else 1
 			p_vida = Global.vida_p1 if "vida_p1" in Global else 30
 			p_vida_max = Global.vida_max_p1 if "vida_max_p1" in Global else 30
 			
-			# === CORRECCIÓN: Apuntar a variables _p1 de Susie ===
-			id_arma = Global.arma_equipada_p1 if "arma_equipada_p1" in Global else "Ninguna"
-			id_armadura = Global.armadura_equipada_p1 if "armadura_equipada_p1" in Global else "Ninguna"
+			# CORRECCIÓN AQUÍ: nombres idénticos a global.gd
+			id_arma = Global.arma_p1 if "arma_p1" in Global else "Ninguna"
+			id_armadura = Global.armadura_p1 if "armadura_p1" in Global else "Ninguna"
 			p_atq = Global.ATQ_p1 if "ATQ_p1" in Global else 14
 			p_atq_extra = Global.ATQ_extra_p1 if "ATQ_extra_p1" in Global else 0
 			p_def = Global.DEF_p1 if "DEF_p1" in Global else 1
 			p_def_extra = Global.DEF_extra_p1 if "DEF_extra_p1" in Global else 0
 		2:
-			p_nombre = Global.nombre_p2 if "nombre_p2" in Global else "Ralsei"
-			p_nv = Global.NV_p2 if "NV_p2" in Global else (Global.NV if "NV" in Global else 1)
+			p_nombre = Global.nombre_p2 if "nombre_p2" in Global else "Arisa"
+			p_nv = Global.nv_p2 if "nv_p2" in Global else 1
 			p_vida = Global.vida_p2 if "vida_p2" in Global else 15
 			p_vida_max = Global.vida_max_p2 if "vida_max_p2" in Global else 15
 			
-			# === CORRECCIÓN: Apuntar a variables _p2 de Ralsei ===
-			id_arma = Global.arma_equipada_p2 if "arma_equipada_p2" in Global else "Ninguna"
-			id_armadura = Global.armadura_equipada_p2 if "armadura_equipada_p2" in Global else "Ninguna"
+			# CORRECCIÓN AQUÍ: nombres idénticos a global.gd
+			id_arma = Global.arma_p2 if "arma_p2" in Global else "Ninguna"
+			id_armadura = Global.armadura_p2 if "armadura_p2" in Global else "Ninguna"
 			p_atq = Global.ATQ_p2 if "ATQ_p2" in Global else 8
 			p_atq_extra = Global.ATQ_extra_p2 if "ATQ_extra_p2" in Global else 0
 			p_def = Global.DEF_p2 if "DEF_p2" in Global else 2
