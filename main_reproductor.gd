@@ -5,6 +5,8 @@ extends Node
 @onready var container = $SubViewportContainer
 
 func _ready():
+	if has_node("touch_button"):
+		$MenuSistema.touch_buttons = $ControlesTactiles
 	add_to_group("reproductor_principal")
 	
 	# Forzar pantalla completa real en celulares (Android / iOS)

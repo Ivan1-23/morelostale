@@ -2,6 +2,7 @@ extends CanvasLayer
 
 # Variables de nodos del menú
 var texto_escribiendo = false
+@onready var touch_buttons: Node = null
 @onready var select_arrow = $Control/NinePatchRect/TextureRect
 @onready var menu = $Control
 @onready var objetos = $Control/NinePatchRect/objeto
@@ -558,6 +559,8 @@ func cerrar_todo_el_menu_de_golpe():
 	if cuadro_seleccion_heroes: cuadro_seleccion_heroes.visible = false
 	select_arrow.visible = false
 	if botonCerrar: botonCerrar.visible = false
+	if touch_buttons and is_instance_valid(touch_buttons):
+		touch_buttons.visible = false
 	
 	var jugador = get_tree().get_first_node_in_group("player")
 	if jugador:
@@ -770,6 +773,8 @@ func mostrar_texto_animado(texto_completo: String):
 	info.visible = true
 	select_arrow.visible = false
 	screen_loaded = ScreenLoaded.INFO
+	if touch_buttons and is_instance_valid(touch_buttons) and DisplayServer.is_touchscreen_available():
+		touch_buttons.visible = true
 	
 	texto_escribiendo = true
 	for i in range(texto_completo.length()):
