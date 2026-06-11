@@ -22,59 +22,63 @@ var texto_escribiendo = false
 @onready var botonUsar = $Control/NinePatchRect/objeto/BotonUsar
 @onready var botonInfo = $Control/NinePatchRect/objeto/BotonInfo
 @onready var botonTirar = $Control/NinePatchRect/objeto/BotonTirar
-
-# === NUEVOS NODOS PARA LAS CAJAS DIMENSIONALES ===
+@onready var lista_inventario = $Control/NinePatchRect/objeto/ListaInventario
 @onready var interfaz_caja = $Control/NinePatchRect/InterfazCaja
-@onready var lista_mochila = $Control/NinePatchRect/InterfazCaja/ContenedorColumnas/ListaInventario
-@onready var lista_caja_dimensional = $Control/NinePatchRect/InterfazCaja/ContenedorColumnas/ListaCaja
+@onready var botonCerrar = $Control/BotonCerrar
 @onready var titulo_caja_label = $Control/NinePatchRect/InterfazCaja/TituloCaja2
 @onready var texto_indicador = $Control/NinePatchRect/InterfazCaja/TextoIndicador
-
-# Sonidos
+@onready var lista_caja_inventario = $Control/NinePatchRect/InterfazCaja/ContenedorColumnas/ListaInventario
+@onready var lista_caja_dimensional = $Control/NinePatchRect/InterfazCaja/ContenedorColumnas/ListaCaja
+# Variables de Audio
 @onready var sonido_cambio = $sonido_cambio
-@onready var sonido_curacion = $sonido_curacion
 @onready var sonido_squeak = $sonido_squeak
 @onready var sonido_texto = $sonido_texto
-@onready var botonCerrar = $Control/BotonCerrar
+@onready var sonido_curacion = $sonido_curacion
 
-@onready var controls = get_tree().current_scene.find_child("touch_button", true, false) if is_inside_tree() else null
-
-# Variables de posicionamiento del corazón (Menú Principal)
-var select_x = 28
-var select_y = 35
+# Variables de posicionamiento de la flecha
+var select_x = 29
+var select_x2 = 175
 var px_d = 33
+var select_y = 35
+var select_y2 = -70
+var selected_option = 0
+var selected_option2 = 0
+var selected_option3 = 0
 
-# Variables de posicionamiento (Inventario / Submenú Teléfono)
-var select_x2 = 176
-var select_y2 = -70 # Mapeado según tu configuración inicial
+# Coordenadas para que el corazón indique el personaje en la pantalla de selección/stats
+var select_x_stats = 45 
+var select_y_stats = [60, 95, 130]
+# === VARIABLES NUEVAS PARA CONTROL DE TELÉFONO Y CAJAS ===
+var selected_option_telefono: int = 0  # Controla la selección en la pantalla del teléfono
+var caja_actual_referencia: Array = []  # Guarda dinámicamente si usamos caja_a o caja_b
 
-# === COORDENADAS REJILLA DE LAS CAJAS (Ajusta estos píxeles si queda desalineado) ===
-var caja_pos_x_mochila: float = 40.0   # Posición X columna Mochila (Izquierda)
-var caja_pos_x_caja: float = 320.0    # Posición X columna Caja (Derecha)
-var caja_pos_y_inicio: float = -70.0   # Posición Y del primer elemento
-var caja_separacion_y: float = 30.0   # Separación vertical por cada salto de renglón
+# (Asegúrate de tener también declaradas estas variables de posición si no las tenías)
+var caja_pos_x_mochila: float = 40.0   
+var caja_pos_x_caja: float = 320.0    
+var caja_pos_y_inicio: float = -70.0   
+var caja_separacion_y: float = 30.0   
 var caja_separacion_y_caja: float = 29
 
-# Estados para el control de la interfaz
-enum ScreenLoaded {NOTHING, JUST_MENU, OBJECTO, ESTADISTICAS, TELEFONO, OBJETO2, INFO, CAJAa, CAJAb}
+# Máscara de estados de pantallas del menú
+enum ScreenLoaded {NOTHING, JUST_MENU, OBJECTO, ESTADISTICAS, TELEFONO, OBJETO2, INFO, CAJAa, CAJAb, SELECCIONAR_HEROE}
 var screen_loaded = ScreenLoaded.NOTHING
 
-var selected_option: int = 0  # Control vertical (Menú Principal)
-var selected_option2: int = 0 # Control vertical (Submenús / Filas de la Caja)
-var selected_option3: int = 0 # Control horizontal (0 = Columna Mochila, 1 = Columna Caja)
+# Variables de control para las páginas de estadísticas y selección de héroes
+var personaje_seleccionado: int = 0
+var objeto_temporal_indice: int = -1
 
-# Array que guardará dinámicamente la referencia a la caja global abierta (A o B)
-var caja_actual_referencia: Array = []
+@onready var boton_stat_izq = $Control/NinePatchRect/Estadisticas/BotonesCambiarPersonajes/BotonStatsIzquierda
+@onready var boton_stat_der = $Control/NinePatchRect/Estadisticas/BotonesCambiarPersonajes/BotonStatsDerecha
 
 func _ready():
 	add_to_group("menu_sistema")
-	
+	process_mode = Node.PROCESS_MODE_ALWAYS # Asegura que el script corra siempre
 	menu.visible = false
 	objetos.visible = false
 	estadisticas.visible = false
 	telefono.visible = false
 	info.visible = false
-	if interfaz_caja: interfaz_caja.visible = false # Oculta por defecto
+	if interfaz_caja: interfaz_caja.visible = false
 	
 	select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 	
@@ -96,15 +100,6 @@ func _ready():
 		botonItem8.visible = false
 		botonUsar.visible = false
 		botonInfo.visible = false
-	
-	if sonido_cambio:
-		sonido_cambio.stream = load("res://audio/Interfaz/undertale-select-sound.wav")
-	if sonido_curacion:
-		sonido_curacion.stream = load("res://audio/Interfaz/snd_heal_c.wav")
-	if sonido_squeak:
-		sonido_squeak.stream = load("res://audio/Interfaz/snd_squeak.wav")
-	if sonido_texto:
-		sonido_texto.stream = load("res://audio/voces/SND_TXT1.wav")
 
 func actualizar_visualizacion_inventario():
 	var lista_botones = [botonItem1, botonItem2, botonItem3, botonItem4, botonItem5, botonItem6, botonItem7, botonItem8]
@@ -121,59 +116,43 @@ func actualizar_visualizacion_inventario():
 			lista_botones[i].text = ""
 			lista_botones[i].visible = false
 
-	var texto_gigante = $Control/NinePatchRect/objeto/VBoxContainer/RichTextLabel
+	var texto_gigante = $Control/NinePatchRect/objeto/ListaInventario/ListaInventario
 	if texto_gigante and texto_gigante.has_method("actualizar_texto_inventario"):
 		texto_gigante.actualizar_texto_inventario()
 
 func abrir_desde_celular():
-	if screen_loaded == ScreenLoaded.NOTHING:
-		menu.visible = true
-		if botonCerrar:
-			botonCerrar.visible = DisplayServer.is_touchscreen_available()
-			
-		objetos.visible = false
-		estadisticas.visible = false
-		telefono.visible = false
-		info.visible = false
-		if interfaz_caja: interfaz_caja.visible = false
-		select_arrow.visible = true
-		screen_loaded = ScreenLoaded.JUST_MENU
+	menu.visible = true
+	if botonCerrar:
+		botonCerrar.visible = DisplayServer.is_touchscreen_available()
 		
-		var jugador = get_tree().get_first_node_in_group("player")
-		if jugador:
-			jugador.puede_moverse = false
-			var anim_actual = jugador.animaciones.animation
-			var direccion = "down"
-			if "right" in anim_actual: direccion = "right"
-			elif "left" in anim_actual: direccion = "left"
-			elif "top" in anim_actual: direccion = "top"
-			jugador.animaciones.play("idle_" + direccion)
-			
-		if not controls:
-			controls = get_tree().current_scene.find_child("touch_button", true, false)
-		if controls:
-			controls.visible = false
-			controls.process_mode = PROCESS_MODE_DISABLED
-		var mini_stats = $Control/mini_stats/VBoxContainer/MiniStatsLabel
-		if mini_stats and mini_stats.has_method("actualizar_mini_stats"):
-			mini_stats.actualizar_mini_stats()
+	objetos.visible = false
+	estadisticas.visible = false
+	telefono.visible = false
+	info.visible = false
+	if interfaz_caja: interfaz_caja.visible = false
+	select_arrow.visible = true
+	selected_option = 0
+	select_arrow.position = Vector2(select_x, select_y)
+	screen_loaded = ScreenLoaded.JUST_MENU
+	
+	var jugador = get_tree().get_first_node_in_group("player")
+	if jugador:
+		jugador.puede_moverse = false
+		var anim_actual = jugador.animaciones.animation if "animaciones" in jugador else ""
+		var direccion = "down"
+		if "right" in anim_actual: direccion = "right"
+		elif "left" in anim_actual: direccion = "left"
+		elif "top" in anim_actual: direccion = "top"
+		if "animaciones" in jugador: jugador.animaciones.play("idle_" + direccion)
+		
+	var mini_stats = $Control/mini_stats/VBoxContainer/MiniStatsLabel
+	if mini_stats and mini_stats.has_method("actualizar_mini_stats"):
+		mini_stats.actualizar_mini_stats()
 
 func regresar_un_paso_atras():
 	match screen_loaded:
 		ScreenLoaded.JUST_MENU:
-			menu.visible = false
-			screen_loaded = ScreenLoaded.NOTHING
-			selected_option = 0
-			select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
-			select_arrow.visible = true
-			
-			var jugador = get_tree().get_first_node_in_group("player")
-			if jugador:
-				jugador.puede_moverse = true
-			if controls:
-				controls.visible = true
-				controls.process_mode = PROCESS_MODE_INHERIT
-				
+			cerrar_todo_el_menu_de_golpe()
 		ScreenLoaded.OBJECTO, ScreenLoaded.ESTADISTICAS, ScreenLoaded.TELEFONO:
 			objetos.visible = false
 			estadisticas.visible = false
@@ -183,24 +162,16 @@ func regresar_un_paso_atras():
 			select_arrow.visible = true
 			select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
 			screen_loaded = ScreenLoaded.JUST_MENU
-			
 		ScreenLoaded.OBJETO2:
 			screen_loaded = ScreenLoaded.OBJECTO
 			select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
-			
 		ScreenLoaded.INFO:
-			info.visible = false
-			select_arrow.visible = true
-			objetos.visible = true
-			select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
-			screen_loaded = ScreenLoaded.OBJETO2
-			
-		# Regresar desde las interfaces de las cajas dimensionales al panel Teléfono
+			cerrar_info_y_restaurar_pantalla()
 		ScreenLoaded.CAJAa, ScreenLoaded.CAJAb:
 			if interfaz_caja: interfaz_caja.visible = false
 			telefono.visible = true
-			# Restaura el índice del teléfono al que pertenecía para que la flecha coincida
-			selected_option2 = 0 if screen_loaded == ScreenLoaded.CAJAa else 1 
+			selected_option_telefono = 0 if screen_loaded == ScreenLoaded.CAJAa else 1
+			selected_option2 = selected_option_telefono
 			selected_option3 = 0
 			select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
 			screen_loaded = ScreenLoaded.TELEFONO
@@ -211,14 +182,13 @@ func _input(event):
 			if event.is_action_pressed("menu"):
 				if sonido_squeak: sonido_squeak.play()
 				abrir_desde_celular()
-				selected_option = 0
-				select_arrow.visible = true
-				select_arrow.position = Vector2(select_x, select_y)
+				get_viewport().set_input_as_handled()
 
 		ScreenLoaded.JUST_MENU:
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
 				if sonido_squeak: sonido_squeak.play()
 				regresar_un_paso_atras()
+				get_viewport().set_input_as_handled()
 			
 			elif event.is_action_pressed("ui_menu_down"):
 				if sonido_squeak: sonido_squeak.play()
@@ -229,20 +199,14 @@ func _input(event):
 				selected_option = (selected_option - 1 + 3) % 3
 				select_arrow.position = Vector2(select_x, select_y + selected_option * px_d)
 				
-			elif event.is_action_pressed("acción") and selected_option == 0:
-				if sonido_cambio: sonido_cambio.play()
-				_on_boton_objeto_pressed()
-			elif event.is_action_pressed("acción") and selected_option == 1:
-				if sonido_cambio: sonido_cambio.play()
-				_on_boton_estadisticas_pressed()
-			elif event.is_action_pressed("acción") and selected_option == 2:
-				if sonido_cambio: sonido_cambio.play()
-				_on_boton_telefono_pressed()
+			elif event.is_action_pressed("acción"):
+				ejecutar_accion_menu_principal()
 
 		ScreenLoaded.OBJECTO:
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
 				if sonido_cambio: sonido_cambio.play()
 				regresar_un_paso_atras()
+				get_viewport().set_input_as_handled()
 			
 			elif event.is_action_pressed("ui_menu_down") and selected_option2 < diccionario_global.inventario.size() - 1:
 				if sonido_squeak: sonido_squeak.play()
@@ -256,20 +220,16 @@ func _input(event):
 			elif event.is_action_pressed("acción"):
 				if selected_option2 < diccionario_global.inventario.size() and diccionario_global.inventario.size() > 0:
 					if sonido_cambio: sonido_cambio.play()
+					selected_option3 = 0
 					select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
 					screen_loaded = ScreenLoaded.OBJETO2
 
 		ScreenLoaded.OBJETO2:
 			if event.is_action_pressed("correr") or event.is_action_pressed("menu"):
 				if sonido_cambio: sonido_cambio.play()
-				cerrar_todo_el_menu_de_golpe()
-				
-			elif event.is_action_pressed("acción") and selected_option3 == 0:
-				_on_boton_usar_pressed()
-			elif event.is_action_pressed("acción") and selected_option3 == 1:
-				_on_boton_info_pressed()
-			elif event.is_action_pressed("acción") and selected_option3 == 2:
-				_on_boton_tirar_pressed()
+				screen_loaded = ScreenLoaded.OBJECTO
+				select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
+				get_viewport().set_input_as_handled()
 				
 			elif event.is_action_pressed("ui_menu_right"):
 				if sonido_squeak: sonido_squeak.play()
@@ -281,44 +241,72 @@ func _input(event):
 				selected_option3 = (selected_option3 - 1 + 3) % 3
 				select_arrow.position = Vector2(select_x2 + selected_option3 * 105, 184)
 
-		ScreenLoaded.INFO:
-			if event.is_action_pressed("correr") or event.is_action_pressed("acción"):
-				texto_escribiendo = false
-				if sonido_texto: sonido_texto.stop()
-				cerrar_todo_el_menu_de_golpe()
+			elif event.is_action_pressed("acción"):
+				ejecutar_accion_sub_menu_objeto()
+
+		ScreenLoaded.SELECCIONAR_HEROE:
+			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
+				if sonido_cambio: sonido_cambio.play()
+				estadisticas.visible = false
+				objetos.visible = true
+				if boton_stat_izq: boton_stat_izq.visible = false
+				if boton_stat_der: boton_stat_der.visible = false
+				screen_loaded = ScreenLoaded.OBJETO2
+				select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184)
+				get_viewport().set_input_as_handled()
+			elif event.is_action_pressed("ui_menu_right"):
+				cambiar_personaje_stats(1)
+			elif event.is_action_pressed("ui_menu_left"):
+				cambiar_personaje_stats(-1)
+			elif event.is_action_pressed("acción"):
+				efectuar_curacion_tactil(personaje_seleccionado)
 
 		ScreenLoaded.ESTADISTICAS:
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
 				if sonido_cambio: sonido_cambio.play()
 				regresar_un_paso_atras()
+				get_viewport().set_input_as_handled()
+			elif event.is_action_pressed("ui_menu_right"):
+				cambiar_personaje_stats(1)
+			elif event.is_action_pressed("ui_menu_left"):
+				cambiar_personaje_stats(-1)
 
-		# Lógica de navegación para elegir Caja A o Caja B en Teléfono
 		ScreenLoaded.TELEFONO:
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
 				if sonido_cambio: sonido_cambio.play()
 				regresar_un_paso_atras()
+				get_viewport().set_input_as_handled()
 			
-			elif event.is_action_pressed("ui_menu_down") and selected_option2 < 1:
+			elif event.is_action_pressed("ui_menu_down") and selected_option_telefono < 1:
 				if sonido_squeak: sonido_squeak.play()
-				selected_option2 += 1
-				select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
-			elif event.is_action_pressed("ui_menu_up") and selected_option2 > 0:
+				selected_option_telefono += 1
+				select_arrow.position = Vector2(select_x2, select_y2 + (selected_option_telefono * 30))
+			elif event.is_action_pressed("ui_menu_up") and selected_option_telefono > 0:
 				if sonido_squeak: sonido_squeak.play()
-				selected_option2 -= 1
-				select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
+				selected_option_telefono -= 1
+				select_arrow.position = Vector2(select_x2, select_y2 + (selected_option_telefono * 30))
 				
 			elif event.is_action_pressed("acción"):
 				if sonido_cambio: sonido_cambio.play()
-				if selected_option2 == 0:
+				if selected_option_telefono == 0:
 					abrir_interfaz_caja(ScreenLoaded.CAJAa)
 				else:
 					abrir_interfaz_caja(ScreenLoaded.CAJAb)
 
-		# Lógica de entrada dentro de las columnas de la caja (Mochila vs Caja Dimensional)
+		ScreenLoaded.INFO:
+			if event.is_action_pressed("correr") or event.is_action_pressed("acción"):
+				if texto_escribiendo:
+					texto_escribiendo = false
+				else:
+					if sonido_cambio: sonido_cambio.play()
+					cerrar_info_y_restaurar_pantalla()
+				get_viewport().set_input_as_handled()
+
 		ScreenLoaded.CAJAa, ScreenLoaded.CAJAb:
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
 				if sonido_cambio: sonido_cambio.play()
 				regresar_un_paso_atras()
+				get_viewport().set_input_as_handled()
 				
 			elif event.is_action_pressed("ui_menu_down"):
 				var limite_maximo = 7 if selected_option3 == 0 else (diccionario_global.MAX_ESPACIO_CAJA - 1)
@@ -335,13 +323,15 @@ func _input(event):
 					
 			elif event.is_action_pressed("ui_menu_right") and selected_option3 == 0:
 				if sonido_squeak: sonido_squeak.play()
-				selected_option3 = 1 # Saltar a la columna derecha (Caja)
+				selected_option3 = 1
+				selected_option2 = min(selected_option2, caja_actual_referencia.size() - 1)
+				if selected_option2 < 0: selected_option2 = 0
 				actualizar_visualizacion_caja()
 				
 			elif event.is_action_pressed("ui_menu_left") and selected_option3 == 1:
 				if sonido_squeak: sonido_squeak.play()
-				selected_option3 = 0 # Saltar a la columna izquierda (Mochila)
-				if selected_option2 > 7: selected_option2 = 7 # Evitar desborde
+				selected_option3 = 0
+				if selected_option2 > 7: selected_option2 = 7
 				actualizar_visualizacion_caja()
 				
 			elif event.is_action_pressed("acción"):
@@ -349,6 +339,157 @@ func _input(event):
 					guardar_objeto_en_caja(selected_option2)
 				else:
 					retirar_objeto_de_caja(selected_option2)
+
+func ejecutar_accion_menu_principal():
+	if sonido_cambio: sonido_cambio.play()
+	match selected_option:
+		0:
+			objetos.visible = true
+			estadisticas.visible = false
+			telefono.visible = false
+			selected_option2 = 0
+			select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
+			screen_loaded = ScreenLoaded.OBJECTO
+			actualizar_visualizacion_inventario()
+		1:
+			personaje_seleccionado = 0
+			objetos.visible = false
+			estadisticas.visible = true
+			telefono.visible = false
+			screen_loaded = ScreenLoaded.ESTADISTICAS
+			select_arrow.visible = true
+			select_arrow.position = Vector2(select_x, select_y + (selected_option * px_d))
+			
+			var es_movil = DisplayServer.is_touchscreen_available()
+			if boton_stat_izq: boton_stat_izq.visible = es_movil
+			if boton_stat_der: boton_stat_der.visible = es_movil
+			
+			var label_stats = $Control/NinePatchRect/Estadisticas/VBoxContainer/stats
+			if label_stats and label_stats.has_method("actualizar_estadisticas"):
+				label_stats.actualizar_estadisticas(personaje_seleccionado)
+		2:
+			objetos.visible = false
+			estadisticas.visible = false
+			telefono.visible = true
+			selected_option_telefono = 0
+			selected_option2 = 0
+			select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
+			screen_loaded = ScreenLoaded.TELEFONO
+
+func ejecutar_accion_sub_menu_objeto():
+	match selected_option3:
+		0: # USAR OBJETO
+			objeto_temporal_indice = selected_option2
+			var id_item = diccionario_global.inventario[objeto_temporal_indice]
+			var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {})
+			var tipo_objeto = datos_item.get("tipo", "")
+			
+			if tipo_objeto == "objeto curativo" or tipo_objeto == "objetivo curativo":
+				if sonido_cambio: sonido_cambio.play()
+				screen_loaded = ScreenLoaded.SELECCIONAR_HEROE
+				personaje_seleccionado = 0
+				objetos.visible = false
+				estadisticas.visible = true
+				select_arrow.visible = true
+				select_arrow.position = Vector2(select_x_stats, select_y_stats[0])
+				
+				var es_movil = DisplayServer.is_touchscreen_available()
+				if boton_stat_izq: boton_stat_izq.visible = es_movil
+				if boton_stat_der: boton_stat_der.visible = es_movil
+				
+				var label_stats = $Control/NinePatchRect/Estadisticas/VBoxContainer/stats
+				if label_stats and label_stats.has_method("actualizar_estadisticas"):
+					label_stats.actualizar_estadisticas(personaje_seleccionado)
+			else:
+				objeto_temporal_indice = -1
+				aplicar_equipamiento_directo(id_item)
+		1: # INFO OBJETO
+			var id_objeto = diccionario_global.inventario[selected_option2]
+			var info_texto = diccionario_global.obtener_info_objeto(id_objeto)
+			mostrar_texto_animado(info_texto)
+		2: # TIRAR OBJETO
+			var id_objeto = diccionario_global.inventario[selected_option2]
+			var nombre_objeto = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_objeto, {}).get("nombre", "Objeto")
+			diccionario_global.eliminar_objeto_por_indice(selected_option2)
+			mostrar_texto_animado("* Tiraste " + nombre_objeto + ".")
+			actualizar_visualizacion_inventario()
+
+func aplicar_equipamiento_directo(id_item_nuevo: String):
+	var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item_nuevo, {})
+	var tipo_objeto = datos_item.get("tipo", "")
+	var nombre_objeto = datos_item.get("nombre", "Desconocido")
+	var mensaje = ""
+	
+	if sonido_cambio:
+		sonido_cambio.stream = load("res://audio/Interfaz/snd_item.wav")
+		sonido_cambio.play()
+	
+	if tipo_objeto == "Arma":
+		var id_arma_vieja = Global.arma_equipada
+		Global.arma_equipada = id_item_nuevo
+		mensaje = "* Te equipaste " + nombre_objeto + "."
+		diccionario_global.eliminar_objeto_por_indice(selected_option2)
+		if id_arma_vieja != "" and id_arma_vieja != "Ninguna":
+			diccionario_global.añadir_objeto(id_arma_vieja)
+	elif tipo_objeto == "Armadura":
+		var id_armadura_vieja = Global.armadura_equipada
+		Global.armadura_equipada = id_item_nuevo
+		mensaje = "* Te equipaste " + nombre_objeto + "."
+		diccionario_global.eliminar_objeto_por_indice(selected_option2)
+		if id_armadura_vieja != "" and id_armadura_vieja != "Ninguna":
+			diccionario_global.añadir_objeto(id_armadura_vieja)
+			
+	if Global.has_method("actualizar_equipamiento"): Global.actualizar_equipamiento()
+	if sonido_cambio: sonido_cambio.stream = load("res://audio/Interfaz/undertale-select-sound.wav")
+	
+	mostrar_texto_animado(mensaje)
+	actualizar_visualizacion_inventario()
+
+func efectuar_curacion_tactil(heroe_id: int):
+	if objeto_temporal_indice == -1: return
+	var id_item = diccionario_global.inventario[objeto_temporal_indice]
+	var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {})
+	var puntos_curacion = datos_item.get("hp", 0)
+	var p_nombre = ""
+	var mensaje = ""
+	
+	if sonido_curacion: sonido_curacion.play()
+	
+	match heroe_id:
+		0:
+			p_nombre = Global.nombre_p0 if "nombre_p0" in Global else Global.nombre
+			var v_actual = Global.vida
+			var v_max = Global.vidaMax
+			if v_actual >= v_max: mensaje = "* El HP de " + p_nombre + " ya está al máximo."
+			else:
+				Global.vida = min(v_actual + puntos_curacion, v_max)
+				mensaje = "* " + p_nombre + " recuperó " + str(puntos_curacion) + " HP."
+				diccionario_global.eliminar_objeto_por_indice(objeto_temporal_indice)
+		1:
+			p_nombre = Global.nombre_p1 if "nombre_p1" in Global else "Susie"
+			var v_actual = Global.vida_p1 if "vida_p1" in Global else 30
+			var v_max = Global.vida_max_p1 if "vida_max_p1" in Global else 30
+			if v_actual >= v_max: mensaje = "* El HP de " + p_nombre + " ya está al máximo."
+			else:
+				if "vida_p1" in Global: Global.vida_p1 = min(v_actual + puntos_curacion, v_max)
+				mensaje = "* " + p_nombre + " recuperó " + str(puntos_curacion) + " HP."
+				diccionario_global.eliminar_objeto_por_indice(objeto_temporal_indice)
+		2:
+			p_nombre = Global.nombre_p2 if "nombre_p2" in Global else "Ralsei"
+			var v_actual = Global.vida_p2 if "vida_p2" in Global else 15
+			var v_max = Global.vida_max_p2 if "vida_max_p2" in Global else 15
+			if v_actual >= v_max: mensaje = "* El HP de " + p_nombre + " ya está al máximo."
+			else:
+				if "vida_p2" in Global: Global.vida_p2 = min(v_actual + puntos_curacion, v_max)
+				mensaje = "* " + p_nombre + " recuperó " + str(puntos_curacion) + " HP."
+				diccionario_global.eliminar_objeto_por_indice(objeto_temporal_indice)
+
+	objeto_temporal_indice = -1
+	estadisticas.visible = false
+	if boton_stat_izq: boton_stat_izq.visible = false
+	if boton_stat_der: boton_stat_der.visible = false
+	mostrar_texto_animado(mensaje)
+	actualizar_visualizacion_inventario()
 
 func cerrar_todo_el_menu_de_golpe():
 	menu.visible = false
@@ -360,31 +501,34 @@ func cerrar_todo_el_menu_de_golpe():
 	select_arrow.visible = false
 	if botonCerrar: botonCerrar.visible = false
 	
-	if controls:
-		controls.visible = true
-		controls.process_mode = PROCESS_MODE_INHERIT
-	
 	var jugador = get_tree().get_first_node_in_group("player")
 	if jugador:
 		jugador.puede_moverse = true
-		if jugador.has_method("set_physics_process"):
-			jugador.set_physics_process(true)
-	
+		
 	selected_option = 0
 	selected_option2 = 0
 	selected_option3 = 0
+	selected_option_telefono = 0
 	screen_loaded = ScreenLoaded.NOTHING
 
-# --- GESTIÓN INTERNA DE LAS CAJAS DIMENSIONALES (COMPARTIDO) ---
+func cerrar_info_y_restaurar_pantalla():
+	info.visible = false
+	menu.visible = true
+	select_arrow.visible = true
+	if objeto_temporal_indice != -1:
+		screen_loaded = ScreenLoaded.SELECCIONAR_HEROE
+		select_arrow.position = Vector2(select_x_stats, select_y_stats[personaje_seleccionado])
+	else:
+		screen_loaded = ScreenLoaded.OBJECTO
+		select_arrow.position = Vector2(select_x2, select_y2 + (selected_option2 * 30))
+
 func abrir_interfaz_caja(tipo_caja):
 	screen_loaded = tipo_caja
-	selected_option2 = 0 # Iniciar arriba (fila 0)
-	selected_option3 = 0 # Iniciar en Mochila (columna 0)
-	
+	selected_option2 = 0 
+	selected_option3 = 0 
 	telefono.visible = false
 	if interfaz_caja: interfaz_caja.visible = true
 	
-	# Mapear título dinámico y referencia global sin duplicar nodos
 	if tipo_caja == ScreenLoaded.CAJAa:
 		caja_actual_referencia = diccionario_global.caja_a
 		if titulo_caja_label: titulo_caja_label.text = " Caja A "
@@ -392,288 +536,174 @@ func abrir_interfaz_caja(tipo_caja):
 		caja_actual_referencia = diccionario_global.caja_b
 		if titulo_caja_label: titulo_caja_label.text = " Caja B "
 		
-	# Configurar el pie de página en amarillo y blanco mediante BBCode
 	if texto_indicador:
 		if DisplayServer.is_touchscreen_available():
 			texto_indicador.text = "[color=#ffff00][Tocar][/color] Guardar o Retirar objeto"
 		else:
 			texto_indicador.text = "[color=#ffff00][Z/ENTER][/color] Transferir      [color=#ffff00][X/SHIFT][/color] Salir"
-			
 	actualizar_visualizacion_caja()
 
 func actualizar_visualizacion_caja():
-	if not lista_mochila or not lista_caja_dimensional:
-		return
-		
+	if not lista_caja_inventario or not lista_caja_dimensional: return
 	select_arrow.visible = true
 	
-	# --- 1. PROCESAR TEXTO MOCHILA (IZQUIERDA) ---
 	var texto_mochila = ""
 	for i in range(8):
-		var nombre_item = ""
 		if i < diccionario_global.inventario.size():
 			var id_item = diccionario_global.inventario[i]
-			nombre_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {}).get("nombre", "Objeto")
+			texto_mochila += diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {}).get("nombre", "Objeto") + "\n"
 		else:
-			nombre_item = "[color=red]------------[/color]"
-		texto_mochila += nombre_item + "\n"
-	lista_mochila.text = texto_mochila
+			texto_mochila += "[color=red]------------[/color]\n"
+	lista_caja_inventario.text = texto_mochila
 
-	# --- 2. PROCESAR TEXTO CAJA DIMENSIONAL ABIERTA (DERECHA) ---
 	var texto_caja = ""
 	for j in range(diccionario_global.MAX_ESPACIO_CAJA):
-		var nombre_item = ""
 		if j < caja_actual_referencia.size():
 			var id_item = caja_actual_referencia[j]
-			nombre_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {}).get("nombre", "Objeto")
+			texto_caja += diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {}).get("nombre", "Objeto") + "\n"
 		else:
-			nombre_item = "[color=red]------------[/color]"
-		texto_caja += nombre_item + "\n"
+			texto_caja += "[color=red]------------[/color]\n"
 	lista_caja_dimensional.text = texto_caja
 
-	# --- 3. REPOSICIONAR LA FLECHA USANDO VALORES SEPARADOS ---
-	var destino_x: float = 0.0
-	var destino_y: float = 0.0
-	
-	if selected_option3 == 0:
-		# Columna Mochila (Izquierda)
-		destino_x = caja_pos_x_mochila
-		destino_y = caja_pos_y_inicio + (selected_option2 * caja_separacion_y)
-	else:
-		# Columna Caja (Derecha) -> Usa el salto más corto para fuente de tamaño 28
-		destino_x = caja_pos_x_caja
-		destino_y = caja_pos_y_inicio + (selected_option2 * caja_separacion_y_caja)
-		
-	select_arrow.position = Vector2(destino_x, destino_y)
+	var destino_x = caja_pos_x_mochila if selected_option3 == 0 else caja_pos_x_caja
+	var sep_y = caja_separacion_y if selected_option3 == 0 else caja_separacion_y_caja
+	select_arrow.position = Vector2(destino_x, caja_pos_y_inicio + (selected_option2 * sep_y))
 
 func guardar_objeto_en_caja(indice_inventario: int):
 	if diccionario_global.inventario.size() > indice_inventario:
 		if caja_actual_referencia.size() < diccionario_global.MAX_ESPACIO_CAJA:
 			var id_item = diccionario_global.inventario[indice_inventario]
-			
 			caja_actual_referencia.append(id_item)
 			diccionario_global.eliminar_objeto_por_indice(indice_inventario)
-			
 			actualizar_visualizacion_inventario()
 			actualizar_visualizacion_caja()
 			if sonido_cambio: sonido_cambio.play()
-		else:
-			print("La caja dimensional seleccionada está llena.")
-	else:
-		print("Ranura vacía en mochila.")
+			
+			selected_option2 = min(selected_option2, max(0, diccionario_global.inventario.size() - 1))
+			actualizar_visualizacion_caja()
 
 func retirar_objeto_de_caja(indice_caja: int):
 	if caja_actual_referencia.size() > indice_caja:
 		if diccionario_global.inventario.size() < 8:
 			var id_item = caja_actual_referencia[indice_caja]
-			
 			diccionario_global.añadir_objeto(id_item)
 			caja_actual_referencia.remove_at(indice_caja)
-			
 			actualizar_visualizacion_inventario()
 			actualizar_visualizacion_caja()
 			if sonido_cambio: sonido_cambio.play()
-		else:
-			print("Mochila llena.")
-	else:
-		print("Ranura vacía en caja.")
+			
+			selected_option2 = min(selected_option2, max(0, caja_actual_referencia.size() - 1))
+			actualizar_visualizacion_caja()
 
-# --- SEÑALES Y BOTONES ---
-func _on_boton_y_pressed() -> void:
-	reproducir_sonido_seleccion()
-	var jugador = get_tree().get_first_node_in_group("player")
-	if menu.visible:
-		menu.visible = false
-		info.visible = false
-		if interfaz_caja: interfaz_caja.visible = false
-		screen_loaded = ScreenLoaded.NOTHING
-		if jugador: jugador.puede_moverse = true
-	else:
-		if jugador and jugador.puede_moverse:
-			menu.visible = true
-			info.visible = false
-			jugador.puede_moverse = false
-			screen_loaded = ScreenLoaded.JUST_MENU
-			selected_option = 0
-			select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
-			get_viewport().set_input_as_handled()
-
-func _on_boton_cerrar_pressed() -> void:
-	reproducir_sonido_seleccion()
-	var estado_antes = screen_loaded
-	regresar_un_paso_atras()
-	
-	if estado_antes == ScreenLoaded.JUST_MENU:
-		menu.visible = false
-		info.visible = false
-		screen_loaded = ScreenLoaded.NOTHING
-		var jugador = get_tree().get_first_node_in_group("player")
-		if jugador: jugador.puede_moverse = true
-		if controls:
-			controls.visible = true
-			controls.process_mode = PROCESS_MODE_INHERIT
-
-func _on_boton_objeto_pressed():
-	reproducir_sonido_seleccion()
-	actualizar_visualizacion_inventario()
-	selected_option = 0
-	selected_option2 = 0
-	objetos.visible = true
-	estadisticas.visible = false
-	telefono.visible = false
-	info.visible = false
-	select_arrow.visible = true
-	select_arrow.position = Vector2(select_x2, select_y2)
-	screen_loaded = ScreenLoaded.OBJECTO
-
-func _on_boton_estadisticas_pressed():
-	reproducir_sonido_seleccion()
-	selected_option = 1
-	objetos.visible = false
-	estadisticas.visible = true
-	telefono.visible = false
-	info.visible = false
-	screen_loaded = ScreenLoaded.ESTADISTICAS
+func cambiar_personaje_stats(direccion: int):
+	if sonido_squeak: sonido_squeak.play()
+	personaje_seleccionado = (personaje_seleccionado + direccion + 3) % 3
 	var label_stats = $Control/NinePatchRect/Estadisticas/VBoxContainer/stats
 	if label_stats and label_stats.has_method("actualizar_estadisticas"):
-		label_stats.actualizar_estadisticas()
-		
+		label_stats.actualizar_estadisticas(personaje_seleccionado)
+	if screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
+		select_arrow.visible = true
+		select_arrow.position = Vector2(select_x_stats, select_y_stats[personaje_seleccionado])
+
+#func reproducir_sonido_seleccion():
+#	if sonido_cambio and sonido_cambio.stream: sonido_cambio.play()
+
+# --- SEÑALES TÁCTILES ---
+func _on_boton_cerrar_pressed():
+	regresar_un_paso_atras()
+
+
+# --- SEÑALES TÁCTILES DEL MENÚ PRINCIPAL ---
+func _on_boton_objeto_pressed():
+	if screen_loaded == ScreenLoaded.JUST_MENU:
+		selected_option = 0
+		ejecutar_accion_menu_principal()
+
+func _on_boton_estadisticas_pressed():
+	if screen_loaded == ScreenLoaded.JUST_MENU:
+		selected_option = 1
+		ejecutar_accion_menu_principal()
+
 func _on_boton_telefono_pressed():
-	reproducir_sonido_seleccion()
-	selected_option = 2
-	selected_option2 = 0 # Inicializar índice del teléfono
-	objetos.visible = false
-	estadisticas.visible = false
-	telefono.visible = true
-	info.visible = false
-	select_arrow.position = Vector2(select_x2, select_y2)
-	screen_loaded = ScreenLoaded.TELEFONO
+	if screen_loaded == ScreenLoaded.JUST_MENU:
+		selected_option = 2
+		ejecutar_accion_menu_principal()
 
-# --- SELECCIÓN DE ITEMS TÁCTILES ---
-func _on_boton_item_1_pressed() -> void:
-	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 0:
-		reproducir_sonido_seleccion(); selected_option2 = 0; selected_option3 = 0
-		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184); screen_loaded = ScreenLoaded.OBJETO2
 
-func _on_boton_item_2_pressed():
-	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 1:
-		reproducir_sonido_seleccion(); selected_option2 = 1; selected_option3 = 0
-		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184); screen_loaded = ScreenLoaded.OBJETO2
+# --- SEÑALES TÁCTILES DEL INVENTARIO ---
+func _on_boton_item_1_pressed(): procesar_toque_item(0)
+func _on_boton_item_2_pressed(): procesar_toque_item(1)
+func _on_boton_item_3_pressed(): procesar_toque_item(2)
+func _on_boton_item_4_pressed(): procesar_toque_item(3)
+func _on_boton_item_5_pressed(): procesar_toque_item(4)
+func _on_boton_item_6_pressed(): procesar_toque_item(5)
+func _on_boton_item_7_pressed(): procesar_toque_item(6)
+func _on_boton_item_8_pressed(): procesar_toque_item(7)
 
-func _on_boton_item_3_pressed() -> void:
-	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 2:
-		reproducir_sonido_seleccion(); selected_option2 = 2; selected_option3 = 0
-		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184); screen_loaded = ScreenLoaded.OBJETO2
+func procesar_toque_item(indice: int):
+	if screen_loaded == ScreenLoaded.OBJECTO:
+		if indice < diccionario_global.inventario.size():
+			var id_objeto = diccionario_global.inventario[indice]
+			if id_objeto != "":
+				if sonido_cambio: sonido_cambio.play()
+				selected_option2 = indice
+				screen_loaded = ScreenLoaded.OBJETO2
+				selected_option3 = 0
+				select_arrow.position = Vector2(select_x2 + selected_option3 * 105, 184)
 
-func _on_boton_item_4_pressed() -> void:
-	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 3:
-		reproducir_sonido_seleccion(); selected_option2 = 3; selected_option3 = 0
-		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184); screen_loaded = ScreenLoaded.OBJETO2
-
-func _on_boton_item_5_pressed() -> void:
-	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 4:
-		reproducir_sonido_seleccion(); selected_option2 = 4; selected_option3 = 0
-		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184); screen_loaded = ScreenLoaded.OBJETO2
-
-func _on_boton_item_6_pressed() -> void:
-	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 5:
-		reproducir_sonido_seleccion(); selected_option2 = 5; selected_option3 = 0
-		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184); screen_loaded = ScreenLoaded.OBJETO2
-
-func _on_boton_item_7_pressed() -> void:
-	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 6:
-		reproducir_sonido_seleccion(); selected_option2 = 6; selected_option3 = 0
-		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184); screen_loaded = ScreenLoaded.OBJETO2
-
-func _on_boton_item_8_pressed() -> void:
-	if screen_loaded == ScreenLoaded.OBJECTO and diccionario_global.inventario.size() > 7:
-		reproducir_sonido_seleccion(); selected_option2 = 7; selected_option3 = 0
-		select_arrow.position = Vector2(select_x2 + (selected_option3 % 3) * 105, 184); screen_loaded = ScreenLoaded.OBJETO2
-
-# --- ACCIONES DE LOS ITEMS ---
 func _on_boton_usar_pressed():
 	if screen_loaded == ScreenLoaded.OBJETO2:
-		var id_item_nuevo = diccionario_global.inventario[selected_option2]
-		var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item_nuevo, {})
-		var tipo_objeto = datos_item.get("tipo", "")
-		var nombre_objeto = datos_item.get("nombre", "Desconocido")
-		
-		var mensaje = ""
-		var es_equipable = false
-		
-		if tipo_objeto == "objeto curativo" or tipo_objeto == "objetivo curativo":
-			es_equipable = true
-			var puntos_curacion = datos_item.get("hp", 0)
-			if sonido_curacion: sonido_curacion.play()
-			
-			if Global.vida >= Global.vidaMax:
-				mensaje = "* Tu HP ya está al máximo."
-			else:
-				Global.vida += puntos_curacion
-				if Global.vida >= Global.vidaMax:
-					Global.vida = Global.vidaMax
-					mensaje = "* Tus HP subieron al máximo."
-				else:
-					mensaje = "* Recuperaste " + str(puntos_curacion) + " HP."
-				diccionario_global.eliminar_objeto_por_indice(selected_option2)
-			
-		elif tipo_objeto == "Arma":
-			es_equipable = true
-			if sonido_cambio:
-				sonido_cambio.stream = load("res://audio/Interfaz/snd_item.wav"); sonido_cambio.play()
-			
-			var id_arma_vieja = Global.arma_equipada
-			Global.arma_equipada = id_item_nuevo
-			mensaje = "* Te equipaste " + nombre_objeto + "."
-			diccionario_global.eliminar_objeto_por_indice(selected_option2)
-			
-			if id_arma_vieja != "" and id_arma_vieja != "Ninguna":
-				diccionario_global.añadir_objeto(id_arma_vieja)
-			if Global.has_method("actualizar_equipamiento"): Global.actualizar_equipamiento()
-			sonido_cambio.stream = load("res://audio/Interfaz/undertale-select-sound.wav")
-				
-		elif tipo_objeto == "Armadura":
-			es_equipable = true
-			if sonido_cambio:
-				sonido_cambio.stream = load("res://audio/Interfaz/snd_item.wav"); sonido_cambio.play()
-			
-			var id_armadura_vieja = Global.armadura_equipada
-			Global.armadura_equipada = id_item_nuevo
-			mensaje = "* Te equipaste " + nombre_objeto + "."
-			diccionario_global.eliminar_objeto_por_indice(selected_option2)
-			
-			if id_armadura_vieja != "" and id_armadura_vieja != "Ninguna":
-				diccionario_global.añadir_objeto(id_armadura_vieja)
-			if Global.has_method("actualizar_equipamiento"): Global.actualizar_equipamiento()
-			sonido_cambio.stream = load("res://audio/Interfaz/undertale-select-sound.wav")
-
-		if es_equipable:
-			mostrar_texto_animado(mensaje)
-			actualizar_visualizacion_inventario()
-			var mini_stats = $Control/mini_stats/VBoxContainer/MiniStatsLabel
-			if mini_stats and mini_stats.has_method("actualizar_mini_stats"): mini_stats.actualizar_mini_stats()
-			var label_stats = $Control/NinePatchRect/Estadisticas/VBoxContainer/stats
-			if label_stats and label_stats.has_method("actualizar_estadisticas"): label_stats.actualizar_estadisticas()
-		else:
-			screen_loaded = ScreenLoaded.NOTHING
-			menu.visible = false; objetos.visible = false; info.visible = false; select_arrow.visible = false
+		selected_option3 = 0
+		ejecutar_accion_sub_menu_objeto()
 
 func _on_boton_info_pressed():
 	if screen_loaded == ScreenLoaded.OBJETO2:
-		var id_item = diccionario_global.inventario[selected_option2]
-		var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {})
-		var descripcion = datos_item.get("descripcion", "* No hay informacion disponible.")
-		mostrar_texto_animado(descripcion)
+		selected_option3 = 1
+		ejecutar_accion_sub_menu_objeto()
 
 func _on_boton_tirar_pressed():
 	if screen_loaded == ScreenLoaded.OBJETO2:
-		var id_item = diccionario_global.inventario[selected_option2]
-		var datos_item = diccionario_global.BASE_DE_DATOS_OBJETOS.get(id_item, {})
-		var nombre_objeto = datos_item.get("nombre", "Objeto")
+		selected_option3 = 2
+		ejecutar_accion_sub_menu_objeto()
+
+
+# --- BOTONES DE LA CAJA (IZQUIERDA - MOCHILA) ---
+func _on_boton_inventario_pressed() -> void: ejecutar_accion_tactil_caja(0, 0)
+func _on_boton_inventario_2_pressed() -> void: ejecutar_accion_tactil_caja(1, 0)
+func _on_boton_inventario_3_pressed() -> void: ejecutar_accion_tactil_caja(2, 0)
+func _on_boton_inventario_4_pressed() -> void: ejecutar_accion_tactil_caja(3, 0)
+func _on_boton_inventario_5_pressed() -> void: ejecutar_accion_tactil_caja(4, 0)
+func _on_boton_inventario_6_pressed() -> void: ejecutar_accion_tactil_caja(5, 0)
+func _on_boton_inventario_7_pressed() -> void: ejecutar_accion_tactil_caja(6, 0)
+func _on_boton_inventario_8_pressed() -> void: ejecutar_accion_tactil_caja(7, 0)
+
+# --- BOTONES DE LA CAJA (DERECHA - CAJA DIMENSIONAL) ---
+func _on_boton_caja_item_1_pressed() -> void: ejecutar_accion_tactil_caja(0, 1)
+func _on_boton_caja_item_2_pressed() -> void: ejecutar_accion_tactil_caja(1, 1)
+func _on_boton_caja_item_3_pressed() -> void: ejecutar_accion_tactil_caja(2, 1)
+func _on_boton_caja_item_4_pressed() -> void: ejecutar_accion_tactil_caja(3, 1)
+func _on_boton_caja_item_5_pressed() -> void: ejecutar_accion_tactil_caja(4, 1)
+func _on_boton_caja_item_6_pressed() -> void: ejecutar_accion_tactil_caja(5, 1)
+func _on_boton_caja_item_7_pressed() -> void: ejecutar_accion_tactil_caja(6, 1)
+func _on_boton_caja_item_8_pressed() -> void: ejecutar_accion_tactil_caja(7, 1)
+func _on_boton_caja_item_9_pressed() -> void: ejecutar_accion_tactil_caja(8, 1)
+func _on_boton_caja_item_10_pressed() -> void: ejecutar_accion_tactil_caja(9, 1)
+
+func ejecutar_accion_tactil_caja(fila: int, columna: int):
+	if screen_loaded == ScreenLoaded.CAJAa or screen_loaded == ScreenLoaded.CAJAb:
+		if sonido_squeak: sonido_squeak.play()
 		
-		diccionario_global.eliminar_objeto_por_indice(selected_option2)
-		mostrar_texto_animado("* El " + nombre_objeto + " ha sido desechado.")
-		actualizar_visualizacion_inventario()
+		selected_option2 = fila
+		selected_option3 = columna
+		
+		# CORRECCIÓN: Quitamos la sobreescritura forzada de 'screen_loaded' 
+		# para que no interfiera con qué caja (A o B) está leyendo la transferencia
+		actualizar_visualizacion_caja()
+		if selected_option3 == 0:
+			guardar_objeto_en_caja(selected_option2)
+		else:
+			retirar_objeto_de_caja(selected_option2)
+
 
 # --- REPRODUCCIÓN AUDIO ---
 func reproducir_sonido_seleccion():
@@ -683,6 +713,8 @@ func reproducir_sonido_seleccion():
 			sonido_cambio.stream = load("res://audio/Interfaz/undertale-select-sound.wav")
 			sonido_cambio.play()
 
+
+# --- TEXTO INFO ANIMADO ---
 func mostrar_texto_animado(texto_completo: String):
 	var label_info = info.get_node_or_null("Label")
 	if not label_info: return
@@ -693,10 +725,6 @@ func mostrar_texto_animado(texto_completo: String):
 	select_arrow.visible = false
 	screen_loaded = ScreenLoaded.INFO
 	
-	if controls:
-		controls.visible = true
-		controls.process_mode = PROCESS_MODE_INHERIT
-	
 	texto_escribiendo = true
 	for i in range(texto_completo.length()):
 		if not texto_escribiendo: break
@@ -706,3 +734,33 @@ func mostrar_texto_animado(texto_completo: String):
 
 	texto_escribiendo = false
 	if sonido_texto: sonido_texto.stop()
+
+
+# --- SEÑALES TÁCTILES PARA CAMBIAR DE PERSONAJE EN MÓVIL ---
+func _on_boton_stats_izquierda_pressed() -> void:
+	if screen_loaded == ScreenLoaded.ESTADISTICAS or screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
+		cambiar_personaje_stats(-1)
+
+func _on_boton_stats_derecha_pressed() -> void:
+	# CORRECCIÓN: Aseguramos una evaluación limpia de estados para móviles
+	if screen_loaded == ScreenLoaded.ESTADISTICAS or screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
+		cambiar_personaje_stats(1)
+
+# --- SEÑAL TÁCTIL PARA CONFIRMAR AL HÉROE SELECCIONADO EN MÓVIL ---
+func _on_boton_confirmar_heroe_tactil_pressed() -> void:
+	if screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
+		efectuar_curacion_tactil(personaje_seleccionado)
+
+
+# --- SEÑALES CONECTADAS DESDE EL EDITOR DE NODOS ---
+func _on_boton_caja_a_pressed() -> void:
+	if screen_loaded == ScreenLoaded.TELEFONO:
+		if sonido_cambio: sonido_cambio.play()
+		abrir_interfaz_caja(ScreenLoaded.CAJAa)
+
+func _on_boton_caja_b_pressed() -> void:
+	if screen_loaded == ScreenLoaded.TELEFONO:
+		if sonido_cambio: sonido_cambio.play()
+		abrir_interfaz_caja(ScreenLoaded.CAJAb)
+
+		

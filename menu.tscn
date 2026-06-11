@@ -10,7 +10,7 @@
 [ext_resource type="Script" uid="uid://2j8igaw7qe60" path="res://stats.gd" id="5_l48gv"]
 [ext_resource type="Script" uid="uid://djui812ppjdxv" path="res://rich_text_label.gd" id="5_ytr4m"]
 [ext_resource type="Script" uid="uid://wpukf6g80caa" path="res://rich_text_label_3.gd" id="6_dwrpx"]
-[ext_resource type="Script" path="res://oro.gd" id="7_kk3ma"]
+[ext_resource type="Script" uid="uid://46t5jk4hh67j" path="res://oro.gd" id="7_kk3ma"]
 [ext_resource type="Texture2D" uid="uid://g3joahnx5sya" path="res://sprites/linea.png" id="12_3ls4m"]
 [ext_resource type="Script" uid="uid://cy2lj5e6omkkx" path="res://boton_cerrar.gd" id="12_g7jxm"]
 [ext_resource type="Texture2D" uid="uid://c0p2y1brhhune" path="res://sprites/lineaH.png" id="13_5h80m"]
@@ -20,6 +20,46 @@
 [ext_resource type="AudioStream" uid="uid://dqbgpt0l1jfyh" path="res://audio/Interfaz/snd_squeak.wav" id="15_gd0jp"]
 [ext_resource type="Script" uid="uid://dk1258a500cfq" path="res://lista_caja.gd" id="15_td6mg"]
 [ext_resource type="AudioStream" uid="uid://eq6jr7bi7kyh" path="res://audio/voces/SND_TXT1.wav" id="16_gd0jp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w25hu"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.99901575, 0.99901587, 0.99901587, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_td6mg"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oil5j"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.9965561, 0.996556, 0.996556, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_guify"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8uog0"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dwrpx"]
 bg_color = Color(0, 0, 0, 1)
@@ -46,6 +86,7 @@ border_width_bottom = 4
 border_color = Color(1, 1, 1, 1)
 
 [node name="menu" type="CanvasLayer" unique_id=166901061]
+process_mode = 3
 script = ExtResource("1_4hy44")
 metadata/_edit_horizontal_guides_ = [94.0]
 
@@ -135,7 +176,6 @@ theme_override_font_sizes/normal_font_size = 29
 text = "TELF"
 
 [node name="objeto" type="NinePatchRect" parent="Control/NinePatchRect" unique_id=2019806032]
-visible = false
 layout_mode = 0
 offset_left = 156.0
 offset_top = -116.0
@@ -147,14 +187,14 @@ patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/NinePatchRect/objeto" unique_id=665378215]
+[node name="ListaInventario" type="VBoxContainer" parent="Control/NinePatchRect/objeto" unique_id=665378215]
 layout_mode = 0
 offset_left = 44.0
 offset_top = 36.0
 offset_right = 328.0
 offset_bottom = 276.0
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Control/NinePatchRect/objeto/VBoxContainer" unique_id=1758196618]
+[node name="ListaInventario" type="RichTextLabel" parent="Control/NinePatchRect/objeto/ListaInventario" unique_id=1758196618]
 custom_minimum_size = Vector2(70, 240)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
@@ -306,10 +346,12 @@ offset_left = 39.0
 offset_top = 41.0
 offset_right = 354.0
 offset_bottom = 361.0
+mouse_filter = 2
 
 [node name="stats" type="RichTextLabel" parent="Control/NinePatchRect/Estadisticas/VBoxContainer" unique_id=658802011]
 custom_minimum_size = Vector2(70, 300)
 layout_mode = 2
+mouse_filter = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
 theme_override_font_sizes/normal_font_size = 29
 bbcode_enabled = true
@@ -318,9 +360,44 @@ script = ExtResource("5_l48gv")
 [node name="oro" type="RichTextLabel" parent="Control/NinePatchRect/Estadisticas/VBoxContainer" unique_id=1381465314]
 custom_minimum_size = Vector2(70, 30)
 layout_mode = 2
+mouse_filter = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
 theme_override_font_sizes/normal_font_size = 29
 script = ExtResource("7_kk3ma")
+
+[node name="BotonesCambiarPersonajes" type="Control" parent="Control/NinePatchRect/Estadisticas" unique_id=1647271905]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BotonStatsIzquierda" type="Button" parent="Control/NinePatchRect/Estadisticas/BotonesCambiarPersonajes" unique_id=1413596055]
+z_index = 1
+layout_mode = 0
+offset_left = -23.0
+offset_top = 159.0
+offset_right = 29.0
+offset_bottom = 218.0
+theme_override_fonts/font = ExtResource("3_ytr4m")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_w25hu")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_td6mg")
+theme_override_styles/hover = SubResource("StyleBoxFlat_oil5j")
+text = "<"
+
+[node name="BotonStatsDerecha" type="Button" parent="Control/NinePatchRect/Estadisticas/BotonesCambiarPersonajes" unique_id=711297996]
+z_index = 1
+layout_mode = 0
+offset_left = 320.0
+offset_top = 159.0
+offset_right = 372.0
+offset_bottom = 218.0
+theme_override_colors/font_pressed_color = Color(1, 1, 0, 1)
+theme_override_fonts/font = ExtResource("3_ytr4m")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_w25hu")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_guify")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8uog0")
+text = ">"
 
 [node name="Telefono" type="NinePatchRect" parent="Control/NinePatchRect" unique_id=1874550849]
 visible = false
@@ -513,52 +590,52 @@ offset_top = 68.0
 offset_right = 522.0
 offset_bottom = 394.0
 
-[node name="BotonCaja" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1514576301]
+[node name="BotonCajaItem1" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1514576301]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
-[node name="BotonCaja2" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=227876173]
+[node name="BotonCajaItem2" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=227876173]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
-[node name="BotonCaja3" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=903893870]
+[node name="BotonCajaItem3" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=903893870]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
-[node name="BotonCaja4" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1400531426]
+[node name="BotonCajaItem4" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1400531426]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
-[node name="BotonCaja5" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1571735962]
+[node name="BotonCajaItem5" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1571735962]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
-[node name="BotonCaja6" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1888583608]
+[node name="BotonCajaItem6" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1888583608]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
-[node name="BotonCaja7" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=2102550529]
+[node name="BotonCajaItem7" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=2102550529]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
-[node name="BotonCaja8" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1800478770]
+[node name="BotonCajaItem8" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1800478770]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
-[node name="BotonCaja9" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1881741348]
+[node name="BotonCajaItem9" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1881741348]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 flat = true
 
-[node name="BotonCaja10" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1868122037]
+[node name="BotonCajaItem10" type="Button" parent="Control/NinePatchRect/InterfazCaja/VBoxContainer2" unique_id=1868122037]
 custom_minimum_size = Vector2(0, 29)
 layout_mode = 2
 flat = true
@@ -569,10 +646,12 @@ offset_left = 68.0
 offset_top = 68.0
 offset_right = 534.0
 offset_bottom = 378.0
+mouse_filter = 2
 
 [node name="ListaInventario" type="RichTextLabel" parent="Control/NinePatchRect/InterfazCaja/ContenedorColumnas" unique_id=1468011540]
 custom_minimum_size = Vector2(185, 0)
 layout_mode = 2
+mouse_filter = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
 theme_override_font_sizes/normal_font_size = 29
 theme_override_font_sizes/bold_font_size = 29
@@ -582,10 +661,12 @@ script = ExtResource("14_w25hu")
 [node name="Control" type="Control" parent="Control/NinePatchRect/InterfazCaja/ContenedorColumnas" unique_id=2107186149]
 custom_minimum_size = Vector2(82, 0)
 layout_mode = 2
+mouse_filter = 2
 
 [node name="ListaCaja" type="RichTextLabel" parent="Control/NinePatchRect/InterfazCaja/ContenedorColumnas" unique_id=431893281]
 custom_minimum_size = Vector2(187, 0)
 layout_mode = 2
+mouse_filter = 2
 theme_override_fonts/normal_font = ExtResource("3_ytr4m")
 theme_override_font_sizes/normal_font_size = 28
 bbcode_enabled = true
@@ -608,10 +689,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = 341.0
-offset_top = 28.0
-offset_right = 447.0
-offset_bottom = 85.0
+offset_left = 465.0
+offset_top = 10.0
+offset_right = 571.0
+offset_bottom = 67.0
 grow_horizontal = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 0, 1)
@@ -629,6 +710,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 
 [node name="info" type="NinePatchRect" parent="Control2" unique_id=2102576365]
 visible = false
@@ -681,7 +763,29 @@ max_polyphony = 5
 [connection signal="pressed" from="Control/NinePatchRect/objeto/BotonUsar" to="." method="_on_boton_usar_pressed"]
 [connection signal="pressed" from="Control/NinePatchRect/objeto/BotonInfo" to="." method="_on_boton_info_pressed"]
 [connection signal="pressed" from="Control/NinePatchRect/objeto/BotonTirar" to="." method="_on_boton_tirar_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/Estadisticas/BotonesCambiarPersonajes/BotonStatsIzquierda" to="." method="_on_boton_stats_izquierda_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/Estadisticas/BotonesCambiarPersonajes/BotonStatsDerecha" to="." method="_on_boton_stats_derecha_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/Telefono/BotonCajaA" to="." method="_on_boton_caja_a_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/Telefono/BotonCajaB" to="." method="_on_boton_caja_b_pressed"]
 [connection signal="pressed" from="Control/NinePatchRect/BotonObjeto" to="." method="_on_boton_objeto_pressed"]
 [connection signal="pressed" from="Control/NinePatchRect/BotonEstadisticas" to="." method="_on_boton_estadisticas_pressed"]
 [connection signal="pressed" from="Control/NinePatchRect/BotonTelefono" to="." method="_on_boton_telefono_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer/BotonInventario" to="." method="_on_boton_inventario_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer/BotonInventario2" to="." method="_on_boton_inventario_2_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer/BotonInventario3" to="." method="_on_boton_inventario_3_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer/BotonInventario4" to="." method="_on_boton_inventario_4_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer/BotonInventario5" to="." method="_on_boton_inventario_5_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer/BotonInventario6" to="." method="_on_boton_inventario_6_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer/BotonInventario7" to="." method="_on_boton_inventario_7_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer/BotonInventario8" to="." method="_on_boton_inventario_8_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer2/BotonCajaItem1" to="." method="_on_boton_caja_item_1_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer2/BotonCajaItem2" to="." method="_on_boton_caja_item_2_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer2/BotonCajaItem3" to="." method="_on_boton_caja_item_3_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer2/BotonCajaItem4" to="." method="_on_boton_caja_item_4_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer2/BotonCajaItem5" to="." method="_on_boton_caja_item_5_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer2/BotonCajaItem6" to="." method="_on_boton_caja_item_6_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer2/BotonCajaItem7" to="." method="_on_boton_caja_item_7_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer2/BotonCajaItem8" to="." method="_on_boton_caja_item_8_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer2/BotonCajaItem9" to="." method="_on_boton_caja_item_9_pressed"]
+[connection signal="pressed" from="Control/NinePatchRect/InterfazCaja/VBoxContainer2/BotonCajaItem10" to="." method="_on_boton_caja_item_10_pressed"]
 [connection signal="pressed" from="Control/BotonCerrar" to="." method="_on_boton_cerrar_pressed"]
