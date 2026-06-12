@@ -200,6 +200,7 @@ func _input(event):
 				get_viewport().set_input_as_handled()
 
 		ScreenLoaded.JUST_MENU:
+			#touch_buttons.visible = false
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
 				if sonido_squeak: sonido_squeak.play()
 				regresar_un_paso_atras()
