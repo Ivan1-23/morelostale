@@ -77,35 +77,46 @@ var objeto_temporal_indice: int = -1
 @onready var boton_stat_der = $Control/NinePatchRect/Estadisticas/BotonesCambiarPersonajes/BotonStatsDerecha
 
 func _ready():
-	add_to_group("menu_sistema")
-	process_mode = Node.PROCESS_MODE_ALWAYS # Asegura que el script corra siempre
-	menu.visible = false
-	objetos.visible = false
-	estadisticas.visible = false
-	telefono.visible = false
-	info.visible = false
-	if interfaz_caja: interfaz_caja.visible = false
-	if cuadro_seleccion_heroes: cuadro_seleccion_heroes.visible = false
+	add_to_group("menu_sistema") 
+	process_mode = Node.PROCESS_MODE_ALWAYS # Asegura que el script corra siempre 
+	menu.visible = false 
+	objetos.visible = false 
+	estadisticas.visible = false 
+	telefono.visible = false 
+	info.visible = false 
 	
-	select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d)
+	# === LÍNEAS CORREGIDAS (Separadas correctamente sin caracteres extraños) ===
+	if interfaz_caja:
+		interfaz_caja.visible = false
+	if cuadro_seleccion_heroes:
+		cuadro_seleccion_heroes.visible = false 
 	
+	select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d) 
+	
+	# === CORRECCIÓN DE CONFIGURACIÓN DE FILTROS DE RATÓN ===
 	if menu:
 		menu.mouse_filter = Control.MOUSE_FILTER_PASS
+	if objetos:
+		objetos.mouse_filter = Control.MOUSE_FILTER_PASS
+	if interfaz_caja:
+		interfaz_caja.mouse_filter = Control.MOUSE_FILTER_PASS
 
-	if not DisplayServer.is_touchscreen_available():
-		if botonCerrar: botonCerrar.visible = false
-		botonObjeto.visible = false
-		botonEstadisticas.visible = false
-		botonTelefono.visible = false
-		botonItem1.visible = false
-		botonItem2.visible = false
-		botonItem3.visible = false
-		botonItem4.visible = false
-		botonItem5.visible = false
-		botonItem6.visible = false
-		botonItem7.visible = false
-		botonItem8.visible = false
-		botonUsar.visible = false
+	# === BLOQUE UNIFICADO PARA PC (Ocultar todo si NO hay pantalla táctil) ===
+	if not DisplayServer.is_touchscreen_available(): 
+		if botonCerrar: 
+			botonCerrar.visible = false
+		botonObjeto.visible = false 
+		botonEstadisticas.visible = false 
+		botonTelefono.visible = false 
+		botonItem1.visible = false 
+		botonItem2.visible = false 
+		botonItem3.visible = false 
+		botonItem4.visible = false 
+		botonItem5.visible = false 
+		botonItem6.visible = false 
+		botonItem7.visible = false 
+		botonItem8.visible = false 
+		botonUsar.visible = false 
 		botonInfo.visible = false
 
 func actualizar_visualizacion_inventario():
@@ -200,7 +211,7 @@ func _input(event):
 				get_viewport().set_input_as_handled()
 
 		ScreenLoaded.JUST_MENU:
-			#touch_buttons.visible = false
+				#touch_buttons.visible = false
 			if event.is_action_pressed("menu") or event.is_action_pressed("correr"):
 				if sonido_squeak: sonido_squeak.play()
 				regresar_un_paso_atras()
@@ -798,6 +809,8 @@ func _on_boton_stats_derecha_pressed() -> void:
 
 # --- SEÑAL TÁCTIL PARA CONFIRMAR AL HÉROE SELECCIONADO EN MÓVIL ---
 # --- BOTONES INVISIBLES SOBRE LOS NOMBRES (MÓVIL) ---
+
+# --- CORRECCIÓN DE BOTONES INVISIBLES SOBRE LOS NOMBRES (MÓVIL) ---
 func _on_boton_sebo_pressed() -> void:
 	if screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
 		personaje_seleccionado = 0
@@ -805,13 +818,13 @@ func _on_boton_sebo_pressed() -> void:
 
 func _on_boton_arisa_pressed() -> void:
 	if screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
-		personaje_seleccionado = 2
-		efectuar_curacion_tactil(2)
+		personaje_seleccionado = 1 # CORREGIDO: Arisa es el ID 1 en Global
+		efectuar_curacion_tactil(1)
 
 func _on_boton_smuffy_pressed() -> void:
 	if screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
-		personaje_seleccionado = 1
-		efectuar_curacion_tactil(1)
+		personaje_seleccionado = 2 # CORREGIDO: Smuffy/Ralsei es el ID 2 en Global
+		efectuar_curacion_tactil(2)
 
 # --- SEÑALES CONECTADAS DESDE EL EDITOR DE NODOS ---
 func _on_boton_caja_a_pressed() -> void:
