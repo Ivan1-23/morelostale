@@ -3,7 +3,7 @@ extends CharacterBody2D
 # Ajustamos las velocidades exactas que definiste
 @export var velocidad_caminar: float = 60.0
 @export var velocidad_correr: float = 120.0
-
+var en_dialogo: bool = false
 @onready var animaciones = $CollisionShape2D/AnimatedSprite2D
 
 # --- TU RAYCAST EXISTENTE ---
@@ -30,10 +30,7 @@ func _physics_process(_delta):
 	
 	if direccion != Vector2.ZERO:
 		direccion = direccion.normalized()
-		
-		# Detectamos si está corriendo
 		var es_corriendo = Input.is_action_pressed("correr")
-		# Aplicamos tus velocidades exactas (60 o 120)
 		var velocidad_actual = velocidad_correr if es_corriendo else velocidad_caminar
 			
 		velocity = direccion * velocidad_actual
@@ -67,21 +64,33 @@ func _physics_process(_delta):
 			
 	move_and_slide()
 
-	# --- INTERACCIÓN MODIFICADA (LETREROS Y OBJETOS DEL SUELO) ---
 	if Input.is_action_just_pressed("acción"):
 		if detector.is_colliding():
 			var objeto_chocado = detector.get_collider()
 			
 			if objeto_chocado:
-				# CASO 1: Es un objeto recolectable (como el dulce)
+				# === FUNCIÓN INTERNA PARA DETENER LA ANIMACIÓN EN IDLE ===
+				var frenar_animacion_en_idle = func():
+					puede_moverse = false
+					en_dialogo = true
+					
+					# Detectamos qué animación de movimiento o carrera tenía puesta para mantener la dirección
+					if animaciones.animation.begins_with("mov_") or animaciones.animation.begins_with("run_"):
+						var direccion_actual = animaciones.animation.split("_")[1] # Extrae 'down', 'left', 'right' o 'top'
+						animaciones.play("idle_" + direccion_actual)
+					else:
+						# Si por alguna razón la animación ya era un idle o algo raro, aseguramos que no se mueva
+						animaciones.stop()
+
+				# CASO 1: Es un objeto recolectable 
 				if objeto_chocado.has_method("interactuar"):
-					# Buscamos el cuadro de diálogo para asegurar la conexión de cierre
 					var cuadro_dialogo = owner.get_node_or_null("cuadro_dialogo")
 					if not cuadro_dialogo:
 						cuadro_dialogo = get_tree().get_first_node_in_group("dialogo")
 						
 					if cuadro_dialogo:
-						# Nos conectamos a la señal para saber cuándo reactivar al jugador al terminar
+						frenar_animacion_en_idle.call() # <--- Pone al personaje en idle_dirección y bloquea el movimiento
+						
 						if not cuadro_dialogo.dialogo_terminado.is_connected(_on_dialogo_terminado):
 							cuadro_dialogo.dialogo_terminado.connect(_on_dialogo_terminado)
 						
@@ -94,15 +103,15 @@ func _physics_process(_delta):
 						cuadro_dialogo = get_tree().get_first_node_in_group("dialogo")
 					
 					if cuadro_dialogo:
-						puede_moverse = false 
+						frenar_animacion_en_idle.call() # <--- Pone al personaje en idle_dirección y bloquea el movimiento
 						
 						if not cuadro_dialogo.dialogo_terminado.is_connected(_on_dialogo_terminado):
 							cuadro_dialogo.dialogo_terminado.connect(_on_dialogo_terminado)
 						
 						cuadro_dialogo.iniciar_dialogo(objeto_chocado.hablar())
 
-
-# --- FUNCIÓN DE RETORNO (CALLBACK) ---
+# Modificamos tu función de cierre para avisar que el diálogo terminó:
 func _on_dialogo_terminado():
 	await get_tree().create_timer(0.15).timeout
 	puede_moverse = true
+	en_dialogo = false

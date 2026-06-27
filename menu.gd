@@ -85,7 +85,6 @@ func _ready():
 	telefono.visible = false 
 	info.visible = false 
 	
-	# === LÍNEAS CORREGIDAS (Separadas correctamente sin caracteres extraños) ===
 	if interfaz_caja:
 		interfaz_caja.visible = false
 	if cuadro_seleccion_heroes:
@@ -93,7 +92,6 @@ func _ready():
 	
 	select_arrow.position = Vector2(select_x, select_y + (selected_option % 3) * px_d) 
 	
-	# === CORRECCIÓN DE CONFIGURACIÓN DE FILTROS DE RATÓN ===
 	if menu:
 		menu.mouse_filter = Control.MOUSE_FILTER_PASS
 	if objetos:
@@ -101,7 +99,6 @@ func _ready():
 	if interfaz_caja:
 		interfaz_caja.mouse_filter = Control.MOUSE_FILTER_PASS
 
-	# === BLOQUE UNIFICADO PARA PC (Ocultar todo si NO hay pantalla táctil) ===
 	if not DisplayServer.is_touchscreen_available(): 
 		if botonCerrar: 
 			botonCerrar.visible = false
@@ -139,6 +136,11 @@ func actualizar_visualizacion_inventario():
 		texto_gigante.actualizar_texto_inventario()
 
 func abrir_desde_celular():
+	# === BLOQUEO DE DIÁLOGO ===
+	# Buscamos al jugador por su grupo global
+	var jugador = get_tree().get_first_node_in_group("player")
+	if jugador and jugador.en_dialogo:
+		return
 	menu.visible = true
 	if botonCerrar:
 		botonCerrar.visible = DisplayServer.is_touchscreen_available()
@@ -154,7 +156,6 @@ func abrir_desde_celular():
 	select_arrow.position = Vector2(select_x, select_y)
 	screen_loaded = ScreenLoaded.JUST_MENU
 	
-	var jugador = get_tree().get_first_node_in_group("player")
 	if jugador:
 		jugador.puede_moverse = false
 		var anim_actual = jugador.animaciones.animation if "animaciones" in jugador else ""
@@ -206,6 +207,9 @@ func _input(event):
 	match screen_loaded:
 		ScreenLoaded.NOTHING:
 			if event.is_action_pressed("menu"):
+				var jugador = get_tree().get_first_node_in_group("player")
+				if jugador and jugador.en_dialogo:
+					return
 				if sonido_squeak: sonido_squeak.play()
 				abrir_desde_celular()
 				get_viewport().set_input_as_handled()
@@ -798,7 +802,6 @@ func mostrar_texto_animado(texto_completo: String):
 	texto_escribiendo = false
 	if sonido_texto: sonido_texto.stop()
 
-# --- SEÑALES TÁCTILES PARA CAMBIAR DE PERSONAJE EN MÓVIL ---
 func _on_boton_stats_izquierda_pressed() -> void:
 	if screen_loaded == ScreenLoaded.ESTADISTICAS or screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
 		cambiar_personaje_stats(-1)
@@ -807,10 +810,6 @@ func _on_boton_stats_derecha_pressed() -> void:
 	if screen_loaded == ScreenLoaded.ESTADISTICAS or screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
 		cambiar_personaje_stats(1)
 
-# --- SEÑAL TÁCTIL PARA CONFIRMAR AL HÉROE SELECCIONADO EN MÓVIL ---
-# --- BOTONES INVISIBLES SOBRE LOS NOMBRES (MÓVIL) ---
-
-# --- CORRECCIÓN DE BOTONES INVISIBLES SOBRE LOS NOMBRES (MÓVIL) ---
 func _on_boton_sebo_pressed() -> void:
 	if screen_loaded == ScreenLoaded.SELECCIONAR_HEROE:
 		personaje_seleccionado = 0
@@ -826,7 +825,6 @@ func _on_boton_smuffy_pressed() -> void:
 		personaje_seleccionado = 2 # CORREGIDO: Smuffy/Ralsei es el ID 2 en Global
 		efectuar_curacion_tactil(2)
 
-# --- SEÑALES CONECTADAS DESDE EL EDITOR DE NODOS ---
 func _on_boton_caja_a_pressed() -> void:
 	if screen_loaded == ScreenLoaded.TELEFONO:
 		if sonido_cambio: sonido_cambio.play()
