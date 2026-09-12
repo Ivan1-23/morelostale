@@ -5,8 +5,8 @@ extends CharacterBody2D
 @export var velocidad_correr: float = 120.0
 var en_dialogo: bool = false
 @onready var animaciones = $CollisionShape2D/AnimatedSprite2D
-
-# --- TU RAYCAST EXISTENTE ---
+var historial_pasos: Array = []
+const MAX_HISTORIAL = 100
 @onready var detector = $CollisionShape2D/RayCast2D 
 
 # Esta es la variable clave que lee el menú y controla el estado del juego
@@ -63,7 +63,18 @@ func _physics_process(_delta):
 			animaciones.play("idle_" + direccion_actual)
 			
 	move_and_slide()
-
+	# Si el jugador se está moviendo, guardamos su posición y su animación actual
+	if velocity != Vector2.ZERO:
+		historial_pasos.insert(0, {"pos": global_position, "anim": animaciones.animation})
+		
+		# Evitamos que la lista crezca infinitamente
+		if historial_pasos.size() > MAX_HISTORIAL:
+			historial_pasos.pop_back()
+	else:
+		# Si se detiene, le avisamos al historial que guarde su estado quieto (idle)
+		if historial_pasos.size() > 0 and not historial_pasos[0]["anim"].begins_with("idle_"):
+			var direccion_actual = animaciones.animation.split("_")[1] if "_" in animaciones.animation else "down"
+			historial_pasos.insert(0, {"pos": global_position, "anim": "idle_" + direccion_actual})
 	if Input.is_action_just_pressed("acción"):
 		if detector.is_colliding():
 			var objeto_chocado = detector.get_collider()

@@ -1,6 +1,6 @@
 extends Node2D
  
-@onready var camera = $Node2D/player/CollisionShape2D/Camera2D
+@onready var camera = $player/CollisionShape2D/Camera2D
 @onready var global = $"/root/Global"
 func _ready():
 	camera.limit_left = -265

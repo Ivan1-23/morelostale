@@ -7,12 +7,15 @@
 [ext_resource type="PackedScene" uid="uid://byiyxq1tmuggv" path="res://objeto_suelo.tscn" id="4_m8mv3"]
 [ext_resource type="PackedScene" uid="uid://cqn82hrcqlf1j" path="res://cuadro_dialogo.tscn" id="4_wyeen"]
 [ext_resource type="PackedScene" uid="uid://d32bww5ccae5h" path="res://letrero_ejemplo.tscn" id="7_wyeen"]
+[ext_resource type="PackedScene" uid="uid://c0xwbsgc2p15" path="res://Arisa.tscn" id="8_m8mv3"]
+[ext_resource type="PackedScene" uid="uid://b341sfxxxk17o" path="res://smuffy.tscn" id="9_jbkb7"]
 
 [node name="mapa ejemplo 2" type="Node2D" unique_id=701696987]
 y_sort_enabled = true
 script = ExtResource("1_r3vdj")
 
 [node name="mapa" type="Node2D" parent="." unique_id=1668685004]
+y_sort_enabled = true
 
 [node name="colisiones del mapa" type="StaticBody2D" parent="mapa" unique_id=1943093117]
 
@@ -39,19 +42,25 @@ position = Vector2(-127, 46.249996)
 scale = Vector2(1, 1.2)
 texture = ExtResource("2_nk6g5")
 
-[node name="Node2D" type="Node2D" parent="." unique_id=1633740440]
-y_sort_enabled = true
+[node name="cuadro_dialogo" parent="." unique_id=1836545299 instance=ExtResource("4_wyeen")]
 
-[node name="player" parent="Node2D" unique_id=1006129407 instance=ExtResource("3_r3vdj")]
+[node name="player" parent="." unique_id=1006129407 instance=ExtResource("3_r3vdj")]
 z_index = 1
 position = Vector2(-131, 148)
 collision_layer = 3
 collision_mask = 3
 
-[node name="StaticBody2D" parent="Node2D" unique_id=11653250 instance=ExtResource("7_wyeen")]
+[node name="StaticBody2D" parent="." unique_id=11653250 instance=ExtResource("7_wyeen")]
+z_index = 1
 position = Vector2(-127, 53)
 
-[node name="objeto_suelto" parent="Node2D" unique_id=832773371 instance=ExtResource("4_m8mv3")]
+[node name="objeto_suelto" parent="." unique_id=832773371 instance=ExtResource("4_m8mv3")]
 position = Vector2(401, 129)
 
-[node name="cuadro_dialogo" parent="." unique_id=1836545299 instance=ExtResource("4_wyeen")]
+[node name="CharacterBody2D" parent="." unique_id=2105441655 instance=ExtResource("8_m8mv3")]
+position = Vector2(-46, 117)
+
+[node name="Smuffy" parent="." unique_id=1665333901 instance=ExtResource("9_jbkb7")]
+position = Vector2(-47, 98)
+collision_layer = 4
+collision_mask = 248

@@ -37,7 +37,7 @@ const BASE_DE_DATOS_OBJETOS = {
 		"def": 0,
 		"precio": 30,
 		"tipo": "Arma",
-		"descripcion": "Arma (ATQ +4).\nUna pluma ligera."
+		"descripcion": "Arma (ATQ +4).\nNo te manches la bolsillo."
 	},
 	"borrador": {
 		"nombre": "Borrador",
@@ -73,7 +73,7 @@ const BASE_DE_DATOS_OBJETOS = {
 		"hp": 18,
 		"precio": 20,
 		"tipo": "objeto curativo",
-		"descripcion": "Cura 18 HP.\nHuele algo extraño."
+		"descripcion": "Cura 18 HP.\nEs radioactivo... Cómo cura?."
 	},
 	"tijeras_escolares": {
 		"nombre": "TijerasEscolares",
@@ -89,7 +89,7 @@ const BASE_DE_DATOS_OBJETOS = {
 		"def": 20,
 		"precio": 150,
 		"tipo": "Armadura",
-		"descripcion": "Armadura (DEF +20).\nCómoda y abrigadora."
+		"descripcion": "Armadura (DEF +20).\nNo se ve limpia."
 	},
 	"chicle": {
 		"nombre": "Chicle",
@@ -103,7 +103,7 @@ const BASE_DE_DATOS_OBJETOS = {
 		"hp": 14,
 		"precio": 20,
 		"tipo": "objeto curativo",
-		"descripcion": "Cura 14 HP\nCrujientes papitas"
+		"descripcion": "Cura 14 HP\nPapus... a no, papas"
 	},
 	"plumon_negro": {
 		"nombre": "PlumónNegro",
@@ -111,7 +111,7 @@ const BASE_DE_DATOS_OBJETOS = {
 		"def": 0,
 		"precio": 35,
 		"tipo": "Arma",
-		"descripcion": "Arma (ATQ +5)\nTinta permanente"
+		"descripcion": "Arma (ATQ +5)\nTinta permanente, esta prohibido en el Cbtis"
 	},
 	"gorra_ilegal": {
 		"nombre": "GorraIlegal",

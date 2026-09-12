@@ -320,7 +320,9 @@ y_sort_enabled = true
 texture_filter = 1
 position = Vector2(0, -3.5)
 sprite_frames = SubResource("SpriteFrames_pylmc")
-animation = &"idle_top"
+animation = &"run_right"
+frame = 1
+frame_progress = 0.44085163
 
 [node name="RayCast2D" type="RayCast2D" parent="CollisionShape2D" unique_id=1263007441]
 target_position = Vector2(0, -20)
