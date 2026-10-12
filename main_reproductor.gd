@@ -38,38 +38,30 @@ func _conectar_controles_tactiles():
 		print("Advertencia: No se encontraron los nodos con esos nombres exactos en la raíz.")
 
 func ajustar_proporcion_pantalla():
-	# 1. ¡CLAVE!: Cambiado a visible_rect para que el depurador no lo mande a la derecha
-	var tamano_pantalla = get_viewport().get_visible_rect().size
+	var tamano_pantalla = get_tree().root.get_visible_rect().size
 	
 	var nuevo_ancho = tamano_pantalla.x
 	var nuevo_alto = tamano_pantalla.y
 	
-	# Proporción exacta de 3:4 (640x480)
 	var proporcion_deseada : float = 640.0 / 480.0
 	
-	# 2. Calcular las dimensiones máximas ideales en 3:4
 	if (nuevo_ancho / nuevo_alto) > proporcion_deseada:
 		nuevo_ancho = nuevo_alto * proporcion_deseada
 	else:
 		nuevo_alto = nuevo_ancho / proporcion_deseada
 	
-	# 3. Forzar al SubViewport a medir SIEMPRE 640x480 píxeles exactos
 	var base_x = 640.0
 	var base_y = 480.0
 	
 	sub_viewport.size = Vector2i(int(base_x), int(base_y))
 	container.size = Vector2(base_x, base_y)
 	
-	# 4. Calcular el factor de escala elástico y fluido
 	var escala_x : float = nuevo_ancho / base_x
 	var escala_y : float = nuevo_alto / base_y
 	var factor_escala = Vector2(escala_x, escala_y)
 	
-	# Aplicar la escala al contenedor exterior
 	container.scale = factor_escala
 	
-	# 5. CENTRADO ABSOLUTO UNIFICADO (PC y Celular)
-	# Esto calcula el centro real libre de los botones táctiles y clava el juego ahí
 	var tamano_escalado = container.size * factor_escala
 	container.global_position = (tamano_pantalla - tamano_escalado) / 2.0
 

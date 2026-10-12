@@ -106,47 +106,6 @@ func _actualizar_orientacion_raycast(direccion: String) -> void:
 		"down": detector.target_position = Vector2(0, 15)
 		"top": detector.target_position = Vector2(0, -15)
 
-# --- SISTEMA DE DIÁLOGO ---
-func hablar() -> Array:
-	var jugador = get_tree().get_first_node_in_group("player")
-	if jugador:
-		var dir_relativa = jugador.global_position - global_position
-		var dir_mirar = "down"
-		if abs(dir_relativa.x) > abs(dir_relativa.y):
-			dir_mirar = "right" if dir_relativa.x > 0 else "left"
-		else:
-			dir_mirar = "down" if dir_relativa.y > 0 else "top"
-			
-		_detener_en_idle_con_direccion(dir_mirar)
-		_actualizar_orientacion_raycast(dir_mirar)
-
-	var cuadro_dialogo = owner.get_node_or_null("cuadro_dialogo")
-	if not cuadro_dialogo:
-		cuadro_dialogo = get_tree().get_first_node_in_group("dialogo")
-
-	if cuadro_dialogo and not ya_se_unio:
-		if not cuadro_dialogo.respuesta_pregunta.is_connected(_on_respuesta_recibida):
-			cuadro_dialogo.respuesta_pregunta.connect(_on_respuesta_recibida, CONNECT_ONE_SHOT)
-
-	if not ya_se_unio:
-		return [
-			{
-				"texto": "* ¡Hola Sebo!\n(¿Quieres que me una al equipo?)\n            SÍ              NO",
-				"retrato": null,
-				"voz": null,
-				"es_pregunta": true
-			}
-		]
-	else:
-		return [
-			{
-				"texto": "* Arisa está en el equipo.",
-				"retrato": null,
-				"voz": null,
-				"es_pregunta": false
-			}
-		]
-
 func _on_respuesta_recibida(acepto: bool) -> void:
 	if acepto and not ya_se_unio:
 		ya_se_unio = true
