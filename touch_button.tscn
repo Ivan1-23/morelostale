@@ -8,11 +8,12 @@
 [ext_resource type="Texture2D" uid="uid://dr5yf715ibclm" path="res://sprites/button_texture-Sheet (5).png" id="4_5gowg"]
 [ext_resource type="Texture2D" uid="uid://blvn6jiymyy36" path="res://sprites/button_texture-Sheet (6).png" id="6_df6t0"]
 [ext_resource type="Script" uid="uid://bb5yyrw5rjijl" path="res://y.gd" id="8_nwf1f"]
+[ext_resource type="Texture2D" uid="uid://0k5pro3be7au" path="res://sprites/button_texture-Sheet (1) (7).png" id="9_egfa4"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ur3y5"]
 load_path = "res://.godot/imported/button_texture-Sheet (3).png-a83dda7344199856d125cd3b1d2b0a26.ctex"
 
-[node name="touch_button" type="CanvasLayer" unique_id=230050980]
+[node name="touch_button" type="CanvasLayer" unique_id=230050980 groups=["touch_ui"]]
 script = ExtResource("1_nwf1f")
 
 [node name="Control" type="Control" parent="." unique_id=73866901]
@@ -84,5 +85,47 @@ scale = Vector2(4, 4)
 texture_normal = SubResource("CompressedTexture2D_ur3y5")
 texture_pressed = ExtResource("6_df6t0")
 script = ExtResource("8_nwf1f")
+
+[node name="Control3" type="Control" parent="." unique_id=1120844766]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="up" type="TouchScreenButton" parent="Control3" unique_id=369451297]
+self_modulate = Color(1, 1, 1, 0.34117648)
+position = Vector2(198, 273)
+scale = Vector2(-4.5048738, 4.68367)
+texture_normal = ExtResource("9_egfa4")
+texture_pressed = ExtResource("9_egfa4")
+action = "ui_menu_up"
+
+[node name="down" type="TouchScreenButton" parent="Control3" unique_id=509122704]
+self_modulate = Color(1, 1, 1, 0.34117648)
+position = Vector2(70, 568.00006)
+rotation = 3.1503193
+scale = Vector2(-4.5048738, 4.68367)
+texture_normal = ExtResource("9_egfa4")
+texture_pressed = ExtResource("9_egfa4")
+action = "ui_menu_down"
+
+[node name="left" type="TouchScreenButton" parent="Control3" unique_id=1188637666]
+self_modulate = Color(1, 1, 1, 0.34117648)
+position = Vector2(-27, 353)
+rotation = -1.5742869
+scale = Vector2(-4.5048738, 4.68367)
+texture_normal = ExtResource("9_egfa4")
+texture_pressed = ExtResource("9_egfa4")
+action = "ui_menu_left"
+
+[node name="right" type="TouchScreenButton" parent="Control3" unique_id=1344897823]
+self_modulate = Color(1, 1, 1, 0.34117648)
+position = Vector2(303, 483.99997)
+rotation = 1.5707964
+scale = Vector2(-4.5048738, 4.68367)
+texture_normal = ExtResource("9_egfa4")
+texture_pressed = ExtResource("9_egfa4")
+action = "ui_menu_right"
 
 [connection signal="pressed" from="Control2/Y" to="." method="_on_y_pressed"]

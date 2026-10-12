@@ -29,7 +29,7 @@ func _physics_process(_delta: float) -> void:
 	if not esta_siguiendo or not objetivo:
 		return
 
-	# 1. DISTANCIA DE FRENADO SEGURO: Aumentada a 20.0 para que jamás se pegue ni golpee a Sebo
+	# 1. DISTANCIA DE FRENADO SEGURO
 	var distancia_al_lider = global_position.distance_to(objetivo.global_position)
 	if distancia_al_lider < 20.0:
 		velocity = Vector2.ZERO
@@ -47,18 +47,20 @@ func _physics_process(_delta: float) -> void:
 		var es_corriendo = animacion_objetivo.begins_with("run_")
 		var distancia_al_paso = global_position.distance_to(posicion_destino)
 
-		# Margen de 4.0 para evitar que tiemble/se trabe cuando llega al punto exacto
 		if distancia_al_paso > 4.0:
-			# === SOLUCIÓN AL PROBLEMA 1: Velocidad adaptativa ===
-			# Si el jugador está corriendo, el seguidor acelera para no quedar atrás
 			var velocidad_actual = velocidad_correr if es_corriendo else velocidad_caminar
 			
-			# Si por alguna razón se está quedando MUY atrás (más de 50px), le damos un impulso extra
 			if distancia_al_paso > 50.0:
 				velocidad_actual *= 1.3
 
+			# === CORRECCIÓN ANTI-ATASCOS EN PAREDES ===
+			# En lugar de apuntar milimétricamente al centro del punto, 
+			# permitimos que el movimiento deslice con suavidad si choca con la geometría
 			var dir_movimiento = global_position.direction_to(posicion_destino)
 			velocity = dir_movimiento * velocidad_actual
+			
+			# move_and_slide maneja las colisiones por defecto, pero si se atascan 
+			# contra una pared debido al desvío, la velocidad se ajusta para deslizarse
 			move_and_slide()
 
 			# Control de animaciones
@@ -71,12 +73,10 @@ func _physics_process(_delta: float) -> void:
 			
 			_actualizar_orientacion_raycast(direccion)
 
-			# Guardar en su historial
 			historial_pasos.insert(0, {"pos": global_position, "anim": animaciones.animation})
 			if historial_pasos.size() > MAX_HISTORIAL:
 				historial_pasos.pop_back()
 		else:
-			# Al estar lo suficientemente cerca del paso destino, frena limpiamente
 			velocity = Vector2.ZERO
 			move_and_slide()
 			_detener_en_idle_con_direccion(direccion)
@@ -84,6 +84,7 @@ func _physics_process(_delta: float) -> void:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		_detener_en_idle()
+
 
 func _detener_en_idle() -> void:
 	if animaciones.animation.begins_with("mov_") or animaciones.animation.begins_with("run_"):
@@ -154,9 +155,21 @@ func hablar() -> Array:
 func _on_respuesta_recibida(acepto: bool) -> void:
 	if acepto and not ya_se_unio:
 		ya_se_unio = true
+		
+		# 1. Smuffy empieza a seguir a Sebo (el jugador)
 		var jugador = get_tree().get_first_node_in_group("player")
 		if jugador:
 			empezar_a_seguir(jugador)
+		
+		# 2. Buscamos a Arisa en la escena y hacemos que siga a Smuffy
+		var arisa = owner.get_node_or_null("Arisa") # Cambia "Arisa" por el nombre exacto de su nodo en la escena
+		if not arisa:
+			arisa = get_tree().get_first_node_in_group("arisa") # O si prefieres buscarla por grupo
+			
+		if arisa and arisa.has_method("empezar_a_seguir"):
+			arisa.ya_se_unio = true
+			arisa.empezar_a_seguir(self) # Arisa sigue a Smuffy (self)
+
 
 func empezar_a_seguir(nuevo_objetivo: Node2D) -> void:
 	objetivo = nuevo_objetivo

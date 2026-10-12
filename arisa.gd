@@ -1,90 +1,128 @@
 extends CharacterBody2D
 
 # --- CONFIGURACIÓN DEL PERSONAJE ---
-@export var nombre_personaje: String = "Coprotagonista"
-@export var retraso_pasos: int = 18 # Separación con el líder de enfrente
+@export var nombre_personaje: String = "Arisa"
+@export var sufijo_animacion: String = "_arisa"
+@export var retraso_pasos: int = 38 # Un poco más de margen para evitar que se pegue
 @export var esta_siguiendo: bool = false
 @export var objetivo: Node2D = null
+
+# Ajusta estas velocidades para que coincidan con las de tu jugador
+@export var velocidad_caminar: float = 60.0
+@export var velocidad_correr: float = 120.0
 
 # --- REFERENCIAS A NODOS ---
 @onready var animaciones: AnimatedSprite2D = $CollisionShape2D/AnimatedSprite2D
 @onready var detector: RayCast2D = $CollisionShape2D/RayCast2D
 @onready var colision: CollisionShape2D = $CollisionShape2D
 
-# --- HISTORIAL PROPIO (Para que otros seguidores puedan seguir a este personaje) ---
+# --- HISTORIAL PROPIO ---
 var historial_pasos: Array = []
 const MAX_HISTORIAL: int = 100
 var ya_se_unio: bool = false
 
 func _ready() -> void:
-	# Aseguramos que el RayCast empiece apuntando hacia abajo
 	if detector:
 		detector.target_position = Vector2(0, 15)
-
 func _physics_process(_delta: float) -> void:
 	if not esta_siguiendo or not objetivo:
 		return
 
-	# Leemos el historial de pasos del personaje de enfrente
+	# 1. DISTANCIA DE FRENADO SEGURO
+	var distancia_al_lider = global_position.distance_to(objetivo.global_position)
+	if distancia_al_lider < 40.0:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		_detener_en_idle()
+		return
+
+	# 2. LECTURA DEL HISTORIAL
 	if "historial_pasos" in objetivo and objetivo.historial_pasos.size() > retraso_pasos:
 		var paso_guardado = objetivo.historial_pasos[retraso_pasos]
 		var posicion_destino: Vector2 = paso_guardado["pos"]
-		var animacion_destino: String = paso_guardado["anim"]
+		var animacion_objetivo: String = paso_guardado["anim"]
 
-		# Si hay distancia, el seguidor camina hacia ese punto
-		if global_position.distance_to(posicion_destino) > 2.0:
-			global_position = posicion_destino
-			animaciones.play(animacion_destino)
+		var direccion = _extraer_direccion(animacion_objetivo)
+		var es_corriendo = animacion_objetivo.begins_with("run_")
+		var distancia_al_paso = global_position.distance_to(posicion_destino)
+
+		if distancia_al_paso > 4.0:
+			var velocidad_actual = velocidad_correr if es_corriendo else velocidad_caminar
 			
-			# Orientamos el RayCast dinámicamente según la animación actual
-			_actualizar_orientacion_raycast(animacion_destino)
+			if distancia_al_paso > 50.0:
+				velocidad_actual *= 1.3
 
-			# Guardamos nuestra propia posición y animación para el siguiente seguidor
+			# === CORRECCIÓN ANTI-ATASCOS EN PAREDES ===
+			# En lugar de apuntar milimétricamente al centro del punto, 
+			# permitimos que el movimiento deslice con suavidad si choca con la geometría
+			var dir_movimiento = global_position.direction_to(posicion_destino)
+			velocity = dir_movimiento * velocidad_actual
+			
+			# move_and_slide maneja las colisiones por defecto, pero si se atascan 
+			# contra una pared debido al desvío, la velocidad se ajusta para deslizarse
+			move_and_slide()
+
+			# Control de animaciones
+			var prefijo = "run_" if es_corriendo else "mov_"
+			var animacion_propia = prefijo + direccion + sufijo_animacion
+			
+			if animaciones.sprite_frames.has_animation(animacion_propia):
+				if animaciones.animation != animacion_propia:
+					animaciones.play(animacion_propia)
+			
+			_actualizar_orientacion_raycast(direccion)
+
 			historial_pasos.insert(0, {"pos": global_position, "anim": animaciones.animation})
 			if historial_pasos.size() > MAX_HISTORIAL:
 				historial_pasos.pop_back()
 		else:
-			# Al llegar al punto, cambia a animación idle manteniendo la dirección
-			if animaciones.animation.begins_with("mov_") or animaciones.animation.begins_with("run_"):
-				var dir_actual = animaciones.animation.split("_")[1]
-				animaciones.play("idle_" + dir_actual)
+			velocity = Vector2.ZERO
+			move_and_slide()
+			_detener_en_idle_con_direccion(direccion)
+	else:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		_detener_en_idle()
 
-# --- ROTACIÓN DINÁMICA DEL RAYCAST ---
-func _actualizar_orientacion_raycast(nombre_anim: String) -> void:
-	if not detector:
-		return
-	
-	if "right" in nombre_anim:
-		detector.target_position = Vector2(15, 0)
-	elif "left" in nombre_anim:
-		detector.target_position = Vector2(-15, 0)
-	elif "down" in nombre_anim:
-		detector.target_position = Vector2(0, 15)
-	elif "top" in nombre_anim:
-		detector.target_position = Vector2(0, -15)
+func _detener_en_idle() -> void:
+	if animaciones.animation.begins_with("mov_") or animaciones.animation.begins_with("run_"):
+		var dir = _extraer_direccion(animaciones.animation)
+		_detener_en_idle_con_direccion(dir)
 
-# --- SISTEMA DE DIÁLOGO (Llamado por player.gd) ---
+func _detener_en_idle_con_direccion(direccion: String) -> void:
+	var anim_idle = "idle_" + direccion + sufijo_animacion
+	if animaciones.sprite_frames.has_animation(anim_idle):
+		if animaciones.animation != anim_idle:
+			animaciones.play(anim_idle)
+
+func _extraer_direccion(nombre_anim: String) -> String:
+	if "right" in nombre_anim: return "right"
+	if "left" in nombre_anim: return "left"
+	if "top" in nombre_anim: return "top"
+	return "down"
+
+func _actualizar_orientacion_raycast(direccion: String) -> void:
+	if not detector: return
+	match direccion:
+		"right": detector.target_position = Vector2(15, 0)
+		"left": detector.target_position = Vector2(-15, 0)
+		"down": detector.target_position = Vector2(0, 15)
+		"top": detector.target_position = Vector2(0, -15)
+
+# --- SISTEMA DE DIÁLOGO ---
 func hablar() -> Array:
-	# 1. Girar al personaje hacia Sebo antes de hablar
 	var jugador = get_tree().get_first_node_in_group("player")
 	if jugador:
 		var dir_relativa = jugador.global_position - global_position
+		var dir_mirar = "down"
 		if abs(dir_relativa.x) > abs(dir_relativa.y):
-			if dir_relativa.x > 0:
-				animaciones.play("idle_right")
-				if detector: detector.target_position = Vector2(15, 0)
-			else:
-				animaciones.play("idle_left")
-				if detector: detector.target_position = Vector2(-15, 0)
+			dir_mirar = "right" if dir_relativa.x > 0 else "left"
 		else:
-			if dir_relativa.y > 0:
-				animaciones.play("idle_down")
-				if detector: detector.target_position = Vector2(0, 15)
-			else:
-				animaciones.play("idle_top")
-				if detector: detector.target_position = Vector2(0, -15)
+			dir_mirar = "down" if dir_relativa.y > 0 else "top"
+			
+		_detener_en_idle_con_direccion(dir_mirar)
+		_actualizar_orientacion_raycast(dir_mirar)
 
-	# 2. Conectar las señales con el cuadro de diálogo
 	var cuadro_dialogo = owner.get_node_or_null("cuadro_dialogo")
 	if not cuadro_dialogo:
 		cuadro_dialogo = get_tree().get_first_node_in_group("dialogo")
@@ -93,7 +131,6 @@ func hablar() -> Array:
 		if not cuadro_dialogo.respuesta_pregunta.is_connected(_on_respuesta_recibida):
 			cuadro_dialogo.respuesta_pregunta.connect(_on_respuesta_recibida, CONNECT_ONE_SHOT)
 
-	# 3. Retornar el diálogo interactivo
 	if not ya_se_unio:
 		return [
 			{
@@ -106,19 +143,16 @@ func hablar() -> Array:
 	else:
 		return [
 			{
-				"texto": "* Arisa y Smuffy se unen al equipo",
+				"texto": "* Smuffy está en el equipo.",
 				"retrato": null,
 				"voz": null,
 				"es_pregunta": false
 			}
 		]
 
-# --- RESPUESTA DEL DIÁLOGO Y ACTIVACIÓN ---
 func _on_respuesta_recibida(acepto: bool) -> void:
 	if acepto and not ya_se_unio:
 		ya_se_unio = true
-		
-		# Buscar a quién debe seguir
 		var jugador = get_tree().get_first_node_in_group("player")
 		if jugador:
 			empezar_a_seguir(jugador)
@@ -126,7 +160,3 @@ func _on_respuesta_recibida(acepto: bool) -> void:
 func empezar_a_seguir(nuevo_objetivo: Node2D) -> void:
 	objetivo = nuevo_objetivo
 	esta_siguiendo = true
-	
-	# Desactivar colisión física para evitar colisiones y bloqueos
-	if colision:
-		colision.disabled = true

@@ -4,25 +4,9 @@
 [ext_resource type="Script" uid="uid://c5670pgeqt3k6" path="res://arisa.gd" id="1_wchdc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wchdc"]
-size = Vector2(4, 5)
+size = Vector2(23.14286, 24.821432)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_avuyo"]
-atlas = ExtResource("1_aq2xm")
-region = Rect2(0, 2, 32, 34)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_hayxe"]
-atlas = ExtResource("1_aq2xm")
-region = Rect2(0, 70, 32, 34)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_s5jy6"]
-atlas = ExtResource("1_aq2xm")
-region = Rect2(0, 36, 32, 34)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_k8ygx"]
-atlas = ExtResource("1_aq2xm")
-region = Rect2(0, 104, 32, 34)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xr4lm"]
 atlas = ExtResource("1_aq2xm")
 region = Rect2(0, 2, 32, 34)
 
@@ -38,7 +22,7 @@ region = Rect2(64, 2, 32, 34)
 atlas = ExtResource("1_aq2xm")
 region = Rect2(96, 2, 32, 34)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_nb4m8"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_hayxe"]
 atlas = ExtResource("1_aq2xm")
 region = Rect2(0, 70, 32, 34)
 
@@ -54,7 +38,7 @@ region = Rect2(64, 70, 32, 34)
 atlas = ExtResource("1_aq2xm")
 region = Rect2(96, 70, 32, 34)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dg20w"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_s5jy6"]
 atlas = ExtResource("1_aq2xm")
 region = Rect2(0, 36, 32, 34)
 
@@ -70,7 +54,7 @@ region = Rect2(64, 36, 32, 34)
 atlas = ExtResource("1_aq2xm")
 region = Rect2(96, 36, 32, 34)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_7guts"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_k8ygx"]
 atlas = ExtResource("1_aq2xm")
 region = Rect2(0, 104, 32, 34)
 
@@ -86,37 +70,89 @@ region = Rect2(64, 104, 32, 34)
 atlas = ExtResource("1_aq2xm")
 region = Rect2(96, 104, 32, 34)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_xr4lm"]
+atlas = ExtResource("1_aq2xm")
+region = Rect2(0, 2, 32, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nb4m8"]
+atlas = ExtResource("1_aq2xm")
+region = Rect2(0, 70, 32, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dg20w"]
+atlas = ExtResource("1_aq2xm")
+region = Rect2(0, 36, 32, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7guts"]
+atlas = ExtResource("1_aq2xm")
+region = Rect2(0, 104, 32, 34)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_atwku"]
 animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_avuyo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6onxc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eijko")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bmiyv")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_down_arisa",
 "speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_hayxe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a4a7s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qhyy7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rknqc")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_left_arisa",
 "speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_s5jy6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_htwdb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ee2er")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7rjcy")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_right_arisa",
 "speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_k8ygx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b6hhi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_516ug")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wmcv8")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_top_arisa",
 "speed": 5.0
 }, {
@@ -133,7 +169,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_bmiyv")
 }],
-"loop": true,
+"loop": 1,
 "name": &"mov_down_arisa",
 "speed": 7.0
 }, {
@@ -150,7 +186,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_rknqc")
 }],
-"loop": true,
+"loop": 1,
 "name": &"mov_left_arisa",
 "speed": 8.0
 }, {
@@ -167,7 +203,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_7rjcy")
 }],
-"loop": true,
+"loop": 1,
 "name": &"mov_right_arisa",
 "speed": 8.0
 }, {
@@ -184,22 +220,24 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_wmcv8")
 }],
-"loop": true,
+"loop": 1,
 "name": &"mov_top_arisa",
 "speed": 7.0
 }]
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=2105441655]
+y_sort_enabled = true
 scale = Vector2(0.7, 0.7)
 script = ExtResource("1_wchdc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1719865310]
+position = Vector2(-4.7683716e-07, 0)
+scale = Vector2(0.99999976, 0.99999976)
 shape = SubResource("RectangleShape2D_wchdc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CollisionShape2D" unique_id=294990264]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_atwku")
-animation = &"mov_left_arisa"
-frame_progress = 0.5249548
+animation = &"idle_left_arisa"
 
 [node name="RayCast2D" type="RayCast2D" parent="CollisionShape2D" unique_id=1492807894]
