@@ -64,11 +64,11 @@ position = Vector2(401, 129)
 [node name="CharacterBody2D" parent="." unique_id=2105441655 instance=ExtResource("8_m8mv3")]
 z_index = 1
 position = Vector2(-46, 117)
-collision_layer = 4
-collision_mask = 248
+collision_layer = 7
+collision_mask = 255
 
 [node name="Smuffy" parent="." unique_id=1665333901 instance=ExtResource("9_jbkb7")]
 z_index = 1
 position = Vector2(-47, 98)
-collision_layer = 4
-collision_mask = 248
+collision_layer = 7
+collision_mask = 255

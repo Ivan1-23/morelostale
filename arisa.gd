@@ -3,7 +3,7 @@ extends CharacterBody2D
 # --- CONFIGURACIÓN DEL PERSONAJE ---
 @export var nombre_personaje: String = "Arisa"
 @export var sufijo_animacion: String = "_arisa"
-@export var retraso_pasos: int = 38 # Un poco más de margen para evitar que se pegue
+@export var retraso_pasos: int = 18 
 @export var esta_siguiendo: bool = false
 @export var objetivo: Node2D = null
 
@@ -16,27 +16,29 @@ extends CharacterBody2D
 @onready var detector: RayCast2D = $CollisionShape2D/RayCast2D
 @onready var colision: CollisionShape2D = $CollisionShape2D
 
-# --- HISTORIAL PROPIO ---
+# --- HISTORIAL PROPIO (Vital para que Arisa guarde sus pasos) ---
 var historial_pasos: Array = []
 const MAX_HISTORIAL: int = 100
 var ya_se_unio: bool = false
 
 func _ready() -> void:
+	add_to_group("arisa") # <--- ¡Añade esta línea aquí!
 	if detector:
 		detector.target_position = Vector2(0, 15)
+
 func _physics_process(_delta: float) -> void:
 	if not esta_siguiendo or not objetivo:
 		return
 
 	# 1. DISTANCIA DE FRENADO SEGURO
 	var distancia_al_lider = global_position.distance_to(objetivo.global_position)
-	if distancia_al_lider < 40.0:
+	if distancia_al_lider < 20.0:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		_detener_en_idle()
 		return
 
-	# 2. LECTURA DEL HISTORIAL
+	# 2. LECTURA DEL HISTORIAL (Del objetivo que tenga asignado, en este caso Smuffy)
 	if "historial_pasos" in objetivo and objetivo.historial_pasos.size() > retraso_pasos:
 		var paso_guardado = objetivo.historial_pasos[retraso_pasos]
 		var posicion_destino: Vector2 = paso_guardado["pos"]
@@ -52,14 +54,8 @@ func _physics_process(_delta: float) -> void:
 			if distancia_al_paso > 50.0:
 				velocidad_actual *= 1.3
 
-			# === CORRECCIÓN ANTI-ATASCOS EN PAREDES ===
-			# En lugar de apuntar milimétricamente al centro del punto, 
-			# permitimos que el movimiento deslice con suavidad si choca con la geometría
 			var dir_movimiento = global_position.direction_to(posicion_destino)
 			velocity = dir_movimiento * velocidad_actual
-			
-			# move_and_slide maneja las colisiones por defecto, pero si se atascan 
-			# contra una pared debido al desvío, la velocidad se ajusta para deslizarse
 			move_and_slide()
 
 			# Control de animaciones
@@ -72,6 +68,7 @@ func _physics_process(_delta: float) -> void:
 			
 			_actualizar_orientacion_raycast(direccion)
 
+			# --- GUARDAR EN SU HISTORIAL PROPIO ---
 			historial_pasos.insert(0, {"pos": global_position, "anim": animaciones.animation})
 			if historial_pasos.size() > MAX_HISTORIAL:
 				historial_pasos.pop_back()
@@ -134,7 +131,7 @@ func hablar() -> Array:
 	if not ya_se_unio:
 		return [
 			{
-				"texto": "* ¡Hola Sebo!\n(¿Quieres que se unan al equipo?)\n            SÍ              NO",
+				"texto": "* ¡Hola Sebo!\n(¿Quieres que me una al equipo?)\n            SÍ              NO",
 				"retrato": null,
 				"voz": null,
 				"es_pregunta": true
@@ -143,7 +140,7 @@ func hablar() -> Array:
 	else:
 		return [
 			{
-				"texto": "* Smuffy está en el equipo.",
+				"texto": "* Arisa está en el equipo.",
 				"retrato": null,
 				"voz": null,
 				"es_pregunta": false
@@ -153,10 +150,13 @@ func hablar() -> Array:
 func _on_respuesta_recibida(acepto: bool) -> void:
 	if acepto and not ya_se_unio:
 		ya_se_unio = true
-		var jugador = get_tree().get_first_node_in_group("player")
-		if jugador:
-			empezar_a_seguir(jugador)
+		var smuffy = owner.get_node_or_null("Smuffy") # O busca a Smuffy en la escena
+		if smuffy:
+			empezar_a_seguir(smuffy)
 
 func empezar_a_seguir(nuevo_objetivo: Node2D) -> void:
 	objetivo = nuevo_objetivo
 	esta_siguiendo = true
+	
+	if colision:
+		colision.disabled = true

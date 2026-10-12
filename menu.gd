@@ -112,8 +112,9 @@ func abrir_desde_celular():
 	if interfaz_caja: interfaz_caja.visible = false
 	if cuadro_seleccion_heroes: cuadro_seleccion_heroes.visible = false
 	select_arrow.visible = true
-	controles.get_node("Control").visible = false
-	controles.get_node("Control3").visible = true
+	if OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios") or DisplayServer.is_touchscreen_available():
+		controles.get_node("Control").visible = false
+		controles.get_node("Control3").visible = true
 	selected_option = 0
 	select_arrow.position = Vector2(select_x, select_y)
 	screen_loaded = ScreenLoaded.JUST_MENU
@@ -352,6 +353,7 @@ func ejecutar_accion_menu_principal():
 			select_arrow.visible = true
 			select_arrow.position = Vector2(select_x, select_y + (selected_option * px_d))
 			
+			@warning_ignore("unused_variable")
 			var es_movil = DisplayServer.is_touchscreen_available()
 			
 			var label_stats = $Control/NinePatchRect/Estadisticas/VBoxContainer/stats
@@ -520,8 +522,9 @@ func cerrar_todo_el_menu_de_golpe():
 	objetos.visible = false
 	estadisticas.visible = false
 	telefono.visible = false
-	controles.get_node("Control").visible = true
-	controles.get_node("Control3").visible = false
+	if OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios") or DisplayServer.is_touchscreen_available():
+		controles.get_node("Control").visible = true
+		controles.get_node("Control3").visible = false
 	info.visible = false
 	if interfaz_caja: interfaz_caja.visible = false
 	if cuadro_seleccion_heroes: cuadro_seleccion_heroes.visible = false

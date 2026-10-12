@@ -2,6 +2,7 @@ extends CanvasLayer
 
 @onready var controles = $Control
 @onready var controles2 = $Control2
+@onready var controles3 = $Control3
 var proxima_posicion_jugador: Vector2 = Vector2.ZERO
 
 func _ready():
@@ -15,6 +16,7 @@ func _ready():
 		get_tree().root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
 		controles.visible = false
 		controles2.visible = false
+		controles3.visible = false
 
 # Función antigua/duplicada por seguridad la dejamos con un aviso
 func _on_boton_y_pressed():

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dek5s1n23cfwq" path="res://sprites/smuffy_final_design.png" id="1_r4yj5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dp7mf"]
-size = Vector2(20, 26)
+size = Vector2(20, 13)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iolfn"]
 atlas = ExtResource("1_r4yj5")
@@ -148,7 +148,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_iolfn")
 }],
-"loop": 1,
+"loop": true,
 "name": &"idle_down_smuffy",
 "speed": 5.0
 }, {
@@ -156,7 +156,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_0kj1l")
 }],
-"loop": 1,
+"loop": true,
 "name": &"idle_left_smuffy",
 "speed": 5.0
 }, {
@@ -164,7 +164,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_bwbod")
 }],
-"loop": 1,
+"loop": true,
 "name": &"idle_right_smuffy",
 "speed": 5.0
 }, {
@@ -172,7 +172,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_e5lic")
 }],
-"loop": 1,
+"loop": true,
 "name": &"idle_top_smuffy",
 "speed": 5.0
 }, {
@@ -189,7 +189,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_aw3cx")
 }],
-"loop": 1,
+"loop": true,
 "name": &"mov_down_smuffy",
 "speed": 5.0
 }, {
@@ -200,7 +200,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_b51yl")
 }],
-"loop": 1,
+"loop": true,
 "name": &"mov_left_smuffy",
 "speed": 5.0
 }, {
@@ -211,7 +211,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ctpge")
 }],
-"loop": 1,
+"loop": true,
 "name": &"mov_right_smuffy",
 "speed": 5.0
 }, {
@@ -228,7 +228,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vpl03")
 }],
-"loop": 1,
+"loop": true,
 "name": &"mov_top_smuffy",
 "speed": 5.0
 }, {
@@ -251,7 +251,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_g3sa7")
 }],
-"loop": 1,
+"loop": true,
 "name": &"run_down_smuffy",
 "speed": 8.0
 }, {
@@ -265,7 +265,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_csbl4")
 }],
-"loop": 1,
+"loop": true,
 "name": &"run_left_smuffy",
 "speed": 8.0
 }, {
@@ -279,7 +279,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_opodc")
 }],
-"loop": 1,
+"loop": true,
 "name": &"run_right_smuffy",
 "speed": 8.0
 }, {
@@ -302,7 +302,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_bbup2")
 }],
-"loop": 1,
+"loop": true,
 "name": &"run_top_smuffy",
 "speed": 8.0
 }]
@@ -312,13 +312,14 @@ y_sort_enabled = true
 script = ExtResource("1_mfl1w")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1217217171]
-position = Vector2(1, 0)
+position = Vector2(0, 6.5)
 shape = SubResource("RectangleShape2D_dp7mf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CollisionShape2D" unique_id=898522165]
 texture_filter = 1
-position = Vector2(0, -1)
+position = Vector2(0, -9.5)
 sprite_frames = SubResource("SpriteFrames_3uqut")
 animation = &"idle_left_smuffy"
 
 [node name="RayCast2D" type="RayCast2D" parent="CollisionShape2D" unique_id=633152655]
+position = Vector2(0, -8.5)

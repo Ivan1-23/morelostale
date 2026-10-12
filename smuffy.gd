@@ -161,16 +161,15 @@ func _on_respuesta_recibida(acepto: bool) -> void:
 		if jugador:
 			empezar_a_seguir(jugador)
 		
-		# 2. Buscamos a Arisa en la escena y hacemos que siga a Smuffy
-		var arisa = owner.get_node_or_null("Arisa") # Cambia "Arisa" por el nombre exacto de su nodo en la escena
-		if not arisa:
-			arisa = get_tree().get_first_node_in_group("arisa") # O si prefieres buscarla por grupo
-			
+		# 2. Buscamos a Arisa mediante su grupo de forma segura
+		var arisa = get_tree().get_first_node_in_group("arisa")
 		if arisa and arisa.has_method("empezar_a_seguir"):
 			arisa.ya_se_unio = true
-			arisa.empezar_a_seguir(self) # Arisa sigue a Smuffy (self)
+			arisa.empezar_a_seguir(self) # Arisa empieza a seguir a Smuffy
 
 
 func empezar_a_seguir(nuevo_objetivo: Node2D) -> void:
 	objetivo = nuevo_objetivo
 	esta_siguiendo = true
+	if colision:
+		colision.disabled = true
