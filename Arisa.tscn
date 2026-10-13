@@ -101,7 +101,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_bmiyv")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_down_arisa",
 "speed": 5.0
 }, {
@@ -118,7 +118,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_rknqc")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_left_arisa",
 "speed": 5.0
 }, {
@@ -135,7 +135,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_7rjcy")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_right_arisa",
 "speed": 5.0
 }, {
@@ -152,7 +152,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_wmcv8")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_top_arisa",
 "speed": 5.0
 }, {
@@ -169,7 +169,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_bmiyv")
 }],
-"loop": true,
+"loop": 1,
 "name": &"mov_down_arisa",
 "speed": 7.0
 }, {
@@ -186,7 +186,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_rknqc")
 }],
-"loop": true,
+"loop": 1,
 "name": &"mov_left_arisa",
 "speed": 8.0
 }, {
@@ -203,7 +203,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_7rjcy")
 }],
-"loop": true,
+"loop": 1,
 "name": &"mov_right_arisa",
 "speed": 8.0
 }, {
@@ -220,7 +220,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_wmcv8")
 }],
-"loop": true,
+"loop": 1,
 "name": &"mov_top_arisa",
 "speed": 7.0
 }]

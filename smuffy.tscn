@@ -148,7 +148,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_iolfn")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_down_smuffy",
 "speed": 5.0
 }, {
@@ -156,7 +156,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_0kj1l")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_left_smuffy",
 "speed": 5.0
 }, {
@@ -164,7 +164,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_bwbod")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_right_smuffy",
 "speed": 5.0
 }, {
@@ -172,7 +172,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_e5lic")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_top_smuffy",
 "speed": 5.0
 }, {
@@ -189,7 +189,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_aw3cx")
 }],
-"loop": true,
+"loop": 1,
 "name": &"mov_down_smuffy",
 "speed": 5.0
 }, {
@@ -200,7 +200,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_b51yl")
 }],
-"loop": true,
+"loop": 1,
 "name": &"mov_left_smuffy",
 "speed": 5.0
 }, {
@@ -211,7 +211,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ctpge")
 }],
-"loop": true,
+"loop": 1,
 "name": &"mov_right_smuffy",
 "speed": 5.0
 }, {
@@ -228,7 +228,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vpl03")
 }],
-"loop": true,
+"loop": 1,
 "name": &"mov_top_smuffy",
 "speed": 5.0
 }, {
@@ -251,7 +251,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_g3sa7")
 }],
-"loop": true,
+"loop": 1,
 "name": &"run_down_smuffy",
 "speed": 8.0
 }, {
@@ -265,7 +265,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_csbl4")
 }],
-"loop": true,
+"loop": 1,
 "name": &"run_left_smuffy",
 "speed": 8.0
 }, {
@@ -279,7 +279,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_opodc")
 }],
-"loop": true,
+"loop": 1,
 "name": &"run_right_smuffy",
 "speed": 8.0
 }, {
@@ -302,7 +302,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_bbup2")
 }],
-"loop": true,
+"loop": 1,
 "name": &"run_top_smuffy",
 "speed": 8.0
 }]

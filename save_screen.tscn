@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://dska6p0punso8"]
+
+[ext_resource type="Texture2D" uid="uid://bll6rtr7cwkjf" path="res://sprites/textura_menu2.png" id="1_bxsd8"]
+[ext_resource type="Script" uid="uid://xvkcw8qri065" path="res://save_screen.gd" id="1_v5bit"]
+[ext_resource type="FontFile" uid="uid://bh72o0b2molck" path="res://fonts/8bitoperator_jve.ttf" id="2_3n4uj"]
+[ext_resource type="Script" uid="uid://bvvk4evwj64i4" path="res://label_save.gd" id="3_ytvio"]
+[ext_resource type="Texture2D" uid="uid://kai3owmaaunr" path="res://sprites/almaRoja.png" id="4_oyyac"]
+
+[node name="save_screen" type="Control" unique_id=1839474368]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_v5bit")
+metadata/_edit_vertical_guides_ = [-7148.0]
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=1936682301]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -265.0
+offset_top = -136.0
+offset_right = 275.0
+offset_bottom = 133.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_bxsd8")
+patch_margin_left = 1
+patch_margin_right = 1
+
+[node name="name" type="Label" parent="NinePatchRect" unique_id=241010998]
+layout_mode = 0
+offset_left = 55.0
+offset_top = 50.5
+offset_right = 192.0
+offset_bottom = 120.5
+theme_override_fonts/font = ExtResource("2_3n4uj")
+theme_override_font_sizes/font_size = 45
+script = ExtResource("3_ytvio")
+
+[node name="TextureRect" type="TextureRect" parent="NinePatchRect" unique_id=1832869647]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 210.0
+offset_right = 68.0
+offset_bottom = 235.0
+texture = ExtResource("4_oyyac")
