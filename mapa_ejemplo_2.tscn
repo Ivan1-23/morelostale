@@ -74,4 +74,4 @@ collision_layer = 7
 collision_mask = 255
 
 [node name="save_point" parent="." unique_id=2059964909 instance=ExtResource("10_m0h6e")]
-position = Vector2(400, 75)
+position = Vector2(409, 43)

@@ -4,8 +4,8 @@ extends StaticBody2D
 @export var escena_pantalla_guardado: PackedScene = preload("res://save_screen.tscn") # Ajusta la ruta a tu .tscn
 
 # 2. Textos editables directamente desde el Inspector para cada punto de guardado del juego
-@export var nombre_zona: String = "Ruinas"
-@export var nombre_subzona: String = "Pasillo Principal"
+@export var nombre_zona: String = "Debug"
+@export var nombre_subzona: String = "Debug Room"
 @onready var sprite_animado: AnimatedSprite2D = $CollisionShape2D/AnimatedSprite2D # Ajusta la ruta a tu nodo
 
 func _ready() -> void:

@@ -2,11 +2,11 @@ extends Control
 
 var opcion_seleccionada = 0 # 0 = Begin Game, 1 = Settings
 
-@onready var label_jugar = $"Opciones/Begin Game"
-@onready var label_settings = $"Opciones/Settings"
-@onready var btn_jugar = $"VBoxContainer2/jugar"
-@onready var btn_configuraciones = $"VBoxContainer2/configuración"
-@onready var sonido_seleccion = $"selección"
+@onready var label_jugar = $"menu1/Opciones/Begin Game"
+@onready var label_settings = $"menu1/Opciones/Settings"
+@onready var btn_jugar = $"menu1/VBoxContainer2/jugar"
+@onready var btn_configuraciones = $"menu1/VBoxContainer2/configuración"
+@onready var sonido_seleccion = $"menu1/selección"
 
 func _ready():
 	if OS.has_feature("windows") or OS.has_feature("web_windows"):

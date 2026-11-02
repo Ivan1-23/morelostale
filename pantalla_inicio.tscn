@@ -17,7 +17,16 @@ grow_vertical = 2
 script = ExtResource("1_a64v5")
 metadata/_edit_vertical_guides_ = [103.0]
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=696669108]
+[node name="menu1" type="Control" parent="." unique_id=1261083876]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="menu1" unique_id=696669108]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,33 +35,29 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="." unique_id=1342181576]
+[node name="Label" type="Label" parent="menu1" unique_id=1342181576]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.1
 anchor_right = 0.5
-anchor_bottom = 0.1
-offset_left = -10.0
-offset_top = -11.5
-offset_right = 26.0
-offset_bottom = 11.5
+offset_left = -219.0
+offset_right = 219.0
+offset_bottom = 41.0
 grow_horizontal = 2
-grow_vertical = 2
 theme_override_colors/font_color = Color(0.41589385, 0.4158938, 0.4158938, 1)
 theme_override_fonts/font = ExtResource("1_70vh5")
 theme_override_font_sizes/font_size = 40
 text = "------Instrucciones------"
 horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1278089366]
+[node name="VBoxContainer" type="VBoxContainer" parent="menu1" unique_id=1278089366]
 layout_mode = 0
 offset_left = 60.0
 offset_top = 70.0
 offset_right = 641.0
 offset_bottom = 370.0
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=2088272381]
+[node name="RichTextLabel" type="RichTextLabel" parent="menu1/VBoxContainer" unique_id=2088272381]
 custom_minimum_size = Vector2(70, 300)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.41568628, 0.41568628, 0.41568628, 1)
@@ -65,7 +70,7 @@ text = "[Z,  ENTER or     ] Confirmar
 Mantener[Esc] Salir(solo Windows)
 Si tú hp llega a 0 pierdes"
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=189747013]
+[node name="TextureRect" type="TextureRect" parent="menu1" unique_id=189747013]
 self_modulate = Color(1, 1, 1, 0.627451)
 layout_mode = 0
 offset_left = 246.0
@@ -75,7 +80,7 @@ offset_bottom = 119.0
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("2_s0td0")
 
-[node name="TextureRect2" type="TextureRect" parent="." unique_id=1483125738]
+[node name="TextureRect2" type="TextureRect" parent="menu1" unique_id=1483125738]
 self_modulate = Color(1, 1, 1, 0.627451)
 layout_mode = 0
 offset_left = 243.0
@@ -85,7 +90,7 @@ offset_bottom = 158.0
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("3_a64v5")
 
-[node name="TextureRect3" type="TextureRect" parent="." unique_id=881081402]
+[node name="TextureRect3" type="TextureRect" parent="menu1" unique_id=881081402]
 self_modulate = Color(1, 1, 1, 0.627451)
 layout_mode = 0
 offset_left = 285.0
@@ -95,20 +100,20 @@ offset_bottom = 200.0
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("4_5cuhc")
 
-[node name="Opciones" type="VBoxContainer" parent="." unique_id=933643578]
+[node name="Opciones" type="VBoxContainer" parent="menu1" unique_id=933643578]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -137.5
+offset_left = -176.75
 offset_top = -106.0
-offset_right = 216.0
+offset_right = 176.75
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="Begin Game" type="RichTextLabel" parent="Opciones" unique_id=1978851137]
+[node name="Begin Game" type="RichTextLabel" parent="menu1/Opciones" unique_id=1978851137]
 custom_minimum_size = Vector2(30, 51)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("1_70vh5")
@@ -116,7 +121,7 @@ theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
 text = "JUGAR"
 
-[node name="Settings" type="RichTextLabel" parent="Opciones" unique_id=598933835]
+[node name="Settings" type="RichTextLabel" parent="menu1/Opciones" unique_id=598933835]
 custom_minimum_size = Vector2(0, 51)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("1_70vh5")
@@ -124,34 +129,42 @@ theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
 text = "CONFIGURACIONES "
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=1993870071]
+[node name="VBoxContainer2" type="VBoxContainer" parent="menu1" unique_id=1993870071]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -234.0
-offset_top = -110.0
-offset_right = 239.0
-offset_bottom = 18.0
+offset_left = 258.0
+offset_top = 426.0
+offset_right = 731.0
+offset_bottom = 554.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 15
 
-[node name="jugar" type="Button" parent="VBoxContainer2" unique_id=877738349]
+[node name="jugar" type="Button" parent="menu1/VBoxContainer2" unique_id=877738349]
 custom_minimum_size = Vector2(0, 51)
 layout_mode = 2
 flat = true
 
-[node name="configuración" type="Button" parent="VBoxContainer2" unique_id=505582062]
+[node name="configuración" type="Button" parent="menu1/VBoxContainer2" unique_id=505582062]
 custom_minimum_size = Vector2(0, 51)
 layout_mode = 2
 flat = true
 
-[node name="selección" type="AudioStreamPlayer2D" parent="." unique_id=575018077]
+[node name="selección" type="AudioStreamPlayer2D" parent="menu1" unique_id=575018077]
 stream = ExtResource("6_5cuhc")
 max_polyphony = 4
 
-[connection signal="pressed" from="VBoxContainer2/jugar" to="." method="_on_jugar_pressed"]
-[connection signal="pressed" from="VBoxContainer2/configuración" to="." method="_on_configuración_pressed"]
+[node name="menu2" type="Control" parent="." unique_id=871543912]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="pressed" from="menu1/VBoxContainer2/jugar" to="." method="_on_jugar_pressed"]
+[connection signal="pressed" from="menu1/VBoxContainer2/configuración" to="." method="_on_configuración_pressed"]

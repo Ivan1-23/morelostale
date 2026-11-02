@@ -105,7 +105,6 @@ func _actualizar_orientacion_raycast(direccion: String) -> void:
 		"left": detector.target_position = Vector2(-15, 0)
 		"down": detector.target_position = Vector2(0, 15)
 		"top": detector.target_position = Vector2(0, -15)
-
 func _on_respuesta_recibida(acepto: bool) -> void:
 	if acepto and not ya_se_unio:
 		ya_se_unio = true
